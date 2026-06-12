@@ -4,7 +4,7 @@ function entrar() {
 
   if (usuario === "admin" && senha === "1234") {
     alert("Login realizado com sucesso!");
-    window.location.href = "dashboard.html";
+    window.location.href = "painel.html";
   } else {
     alert("Usuário ou senha incorretos.");
   }
