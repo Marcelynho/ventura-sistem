@@ -9,3 +9,23 @@ function entrar() {
     alert("Usuário ou senha incorretos.");
   }
 }
+function salvarCliente() {
+  const nome = document.querySelectorAll("input")[0].value;
+  const telefone = document.querySelectorAll("input")[1].value;
+  const receita = document.querySelectorAll("input")[2].value;
+  const observacoes = document.querySelector("textarea").value;
+
+  let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+
+  clientes.push({
+    nome,
+    telefone,
+    receita,
+    observacoes
+  });
+
+  localStorage.setItem("clientes", JSON.stringify(clientes));
+alert("Cliente salvo com sucesso!");
+}
+  alert("Cliente salvo com sucesso!");
+}
