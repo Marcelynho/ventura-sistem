@@ -16,17 +16,37 @@ function salvarCliente() {
   const receita = document.querySelectorAll("input")[2].value;
   const observacoes = document.querySelector("textarea").value;
 
-  const lista = document.getElementById("listaClientes");
+  const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
 
-  lista.innerHTML += `
-    <p>
-      <strong>${nome}</strong><br>
-      Telefone: ${telefone}<br>
-      Receita: ${receita}<br>
-      Obs: ${observacoes}
-    </p>
-    <hr>
-  `;
+  clientes.push({ nome, telefone, receita, observacoes });
+
+  localStorage.setItem("clientes", JSON.stringify(clientes));
+
+  mostrarClientes();
 
   alert("Cliente salvo com sucesso!");
 }
+
+function mostrarClientes() {
+  const lista = document.getElementById("listaClientes");
+
+  if (!lista) return;
+
+  const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+
+  lista.innerHTML = "";
+
+  clientes.forEach(function(cliente) {
+    lista.innerHTML += `
+      <p>
+        <strong>${cliente.nome}</strong><br>
+        Telefone: ${cliente.telefone}<br>
+        Receita: ${cliente.receita}<br>
+        Obs: ${cliente.observacoes}
+      </p>
+      <hr>
+    `;
+  });
+}
+
+mostrarClientes();
