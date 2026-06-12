@@ -50,3 +50,4 @@ function mostrarClientes() {
 }
 
 mostrarClientes();
+window.onload = mostrarClientes;
