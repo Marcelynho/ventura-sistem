@@ -122,3 +122,24 @@ function atualizarFinanceiro() {
 }
 
 atualizarFinanceiro();
+function carregarFinanceiro() {
+    const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+    let total = 0;
+
+    pedidos.forEach(function(pedido) {
+        total += Number(pedido.valor);
+    });
+
+    const totalFinanceiro = document.getElementById("totalFinanceiro");
+    const totalPedidos = document.getElementById("totalPedidos");
+
+    if (totalFinanceiro) {
+        totalFinanceiro.textContent = total;
+    }
+
+    if (totalPedidos) {
+        totalPedidos.textContent = pedidos.length;
+    }
+}
+
+carregarFinanceiro();
