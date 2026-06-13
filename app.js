@@ -43,6 +43,7 @@ function mostrarClientes() {
         Telefone: ${cliente.telefone}<br>
         Receita: ${cliente.receita}<br>
         Obs: ${cliente.observacoes}
+        <button onclick="excluirCliente('${cliente.telefone}')">Excluir</button>
       </p>
       <hr>
     `;
