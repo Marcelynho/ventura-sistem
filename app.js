@@ -1,3 +1,9 @@
+if (
+    !window.location.href.includes("login.html") &&
+    localStorage.getItem("logado") !== "sim"
+) {
+    window.location.href = "login.html";
+}
 function entrar() {
   const usuario = document.querySelector('input[type="text"]').value;
   const senha = document.querySelector('input[type="password"]').value;
@@ -154,7 +160,17 @@ function excluirPedido(nome) {
     pedidos = pedidos.filter(function(pedido) {
         return pedido.nome !== nome;
     });
+function fazerLogin() {
+    const usuario = document.getElementById("usuario").value;
+    const senha = document.getElementById("senha").value;
 
+    if (usuario === "ventura" && senha === "123456") {
+        localStorage.setItem("logado", "sim");
+        window.location.href = "dashboard.html";
+    } else {
+        alert("Usuário ou senha incorretos!");
+    }
+}
     localStorage.setItem("pedidos", JSON.stringify(pedidos));
 
     mostrarPedidos();
