@@ -122,3 +122,13 @@ function atualizarFinanceiro() {
 }
 
 atualizarFinanceiro();
+function atualizarDashboard() {
+    const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+    const totalClientes = document.getElementById("totalClientes");
+
+    if (totalClientes) {
+        totalClientes.textContent = clientes.length;
+    }
+}
+
+atualizarDashboard();
