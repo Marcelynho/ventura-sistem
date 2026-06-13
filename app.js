@@ -218,7 +218,7 @@ ctx.font = "14px Arial";
 ctx.textAlign = "center";
 
 const nomes = ["Clientes", "Pedidos", "Financeiro"];
-ctx.fillText(nomes[i], 50 + (i * 120) + larguraBarra / 2, 175);
+ctx.fillText(nomes[i], 50 + (i * 120) + larguraBarra / 2, 205);
     });
 }
 
