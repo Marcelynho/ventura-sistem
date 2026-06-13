@@ -147,3 +147,8 @@ th, td {
     box-shadow: 0 8px 25px rgba(0,0,0,0.12);
     text-align: center;
 }
+.sidebar {
+    position: sticky;
+    top: 20px;
+    z-index: 10;
+}
