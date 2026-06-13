@@ -69,7 +69,8 @@ function salvarPedido() {
 
     const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
 
-    pedidos.push({ nome, produto, valor });
+    const data = new Date().toLocaleDateString("pt-BR");
+pedidos.push({ nome, produto, valor, data });
 
     localStorage.setItem("pedidos", JSON.stringify(pedidos));
 
@@ -89,7 +90,8 @@ function mostrarPedidos() {
             <p>
                 <strong>${pedido.nome}</strong><br>
                 Produto: ${pedido.produto}<br>
-                Valor: R$ ${pedido.valor}
+                Valor: R$ ${pedido.valor}<br>
+Data: ${pedido.data}
                 <button onclick="excluirPedido('${pedido.nome}')">Excluir</button>
             </p>
             <hr>
