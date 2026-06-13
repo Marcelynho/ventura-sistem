@@ -160,6 +160,11 @@ function excluirPedido(nome) {
     pedidos = pedidos.filter(function(pedido) {
         return pedido.nome !== nome;
     });
+localStorage.setItem("pedidos", JSON.stringify(pedidos));
+mostrarPedidos();
+atualizarPedidosDashboard();
+atualizarFinanceiro();
+}
 function fazerLogin() {
     const usuario = document.getElementById("usuario").value;
     const senha = document.getElementById("senha").value;
@@ -171,9 +176,4 @@ function fazerLogin() {
         alert("Usuário ou senha incorretos!");
     }
 }
-    localStorage.setItem("pedidos", JSON.stringify(pedidos));
-
-    mostrarPedidos();
-    atualizarPedidosDashboard();
-    atualizarFinanceiro();
-}
+    
