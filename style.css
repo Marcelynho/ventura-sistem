@@ -12,9 +12,10 @@ align-items: center;
 }
 
 h1 {
-  font-size: 42px;
-  margin-bottom: 20px;
-  color: #0b3d91;
+    font-size: 42px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #0b3d91;
 }
 
 h2 {
@@ -149,8 +150,13 @@ th, td {
 }
 .sidebar {
     position: sticky;
-    top: 20px;
+    top: 10px;
     z-index: 10;
+    width: 650px;
+    margin: 0 auto 20px auto;
+}
+.sidebar h2 {
+    margin-bottom: 15px;
 }
 body {
     padding-top: 40px;
