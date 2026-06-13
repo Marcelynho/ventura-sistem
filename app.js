@@ -213,6 +213,12 @@ function desenharGrafico() {
         let altura = valor > 100 ? 120 : valor * 40;
         ctx.fillStyle = cores[i];
         ctx.fillRect(50 + (i * 120), 150 - altura, larguraBarra, altura);
+        ctx.fillStyle = "#0b3d91";
+ctx.font = "14px Arial";
+ctx.textAlign = "center";
+
+const nomes = ["Clientes", "Pedidos", "Financeiro"];
+ctx.fillText(nomes[i], 50 + (i * 120) + larguraBarra / 2, 175);
     });
 }
 
