@@ -96,3 +96,13 @@ function mostrarPedidos() {
 }
 
 mostrarPedidos();
+function atualizarPedidosDashboard() {
+    const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+    const totalPedidos = document.getElementById("totalPedidos");
+
+    if (totalPedidos) {
+        totalPedidos.textContent = pedidos.length;
+    }
+}
+
+atualizarPedidosDashboard();
