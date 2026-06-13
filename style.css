@@ -121,3 +121,16 @@ th, td {
   height: 48px;
   font-size: 16px;
 }
+.card {
+  border-radius: 24px;
+  padding: 35px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.22);
+}
