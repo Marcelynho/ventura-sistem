@@ -4,6 +4,11 @@ body {
   font-family: Arial, sans-serif;
   background: linear-gradient(135deg, #eaf4ff, #ffffff);
   color: #1a1a1a;
+display: flex;
+flex-direction: column;
+justify-content: center;
+
+  
 }
 
 h1 {
