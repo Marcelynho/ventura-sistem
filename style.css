@@ -109,3 +109,15 @@ th, td {
   text-align: center;
   border-bottom: 1px solid #eee;
 }
+.sidebar {
+  max-width: 720px;
+  width: 90%;
+  margin-bottom: 40px;
+  border: 1px solid rgba(0,123,255,0.15);
+}
+
+.sidebar button {
+  min-width: 120px;
+  height: 48px;
+  font-size: 16px;
+}
