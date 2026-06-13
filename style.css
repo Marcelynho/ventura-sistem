@@ -69,3 +69,6 @@ input, textarea, select {
   font-weight: bold;
   cursor: pointer;
 }
+body {
+    margin-left: 240px;
+}
