@@ -1,41 +1,43 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #003b8f, #00a6ff);
-  color: white;
-  padding: 40px;
+  background: #f4f7fb;
+  color: #111827;
 }
 
 h1 {
   font-size: 36px;
-}
-
-input, textarea {
-  width: 280px;
-  padding: 12px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
 button {
-  padding: 12px 22px;
+  padding: 14px 24px;
   border: none;
-  border-radius: 8px;
-  background: #ffffff;
-  color: #003b8f;
+  border-radius: 12px;
+  background: #005bea;
+  color: white;
   font-weight: bold;
   cursor: pointer;
+  margin: 6px;
 }
 
 button:hover {
-  background: #e6e6e6;
+  background: #003b8f;
 }
 
-#listaClientes p {
-  background: white;
-  color: #333;
-  padding: 15px;
-  border-radius: 10px;
+input, textarea, select {
   width: 320px;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+#listaClientes, #listaPedidos {
+  background: white;
+  color: #111827;
+  padding: 20px;
+  border-radius: 16px;
+  max-width: 500px;
 }
