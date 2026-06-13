@@ -161,3 +161,19 @@ th, td {
 body {
     padding-top: 40px;
 }
+.btn-salvar {
+    padding: 14px 28px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #007bff, #00bfff);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0,123,255,0.25);
+    transition: 0.3s;
+}
+
+.btn-salvar:hover {
+    transform: translateY(-3px);
+}
