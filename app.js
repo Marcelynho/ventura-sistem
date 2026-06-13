@@ -61,3 +61,38 @@ function atualizarDashboard() {
 }
 
 atualizarDashboard();
+function salvarPedido() {
+    const nome = document.querySelectorAll("input")[0].value;
+    const produto = document.querySelectorAll("input")[1].value;
+    const valor = document.querySelectorAll("input")[2].value;
+
+    const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+
+    pedidos.push({ nome, produto, valor });
+
+    localStorage.setItem("pedidos", JSON.stringify(pedidos));
+
+    mostrarPedidos();
+}
+
+function mostrarPedidos() {
+    const lista = document.getElementById("listaPedidos");
+    if (!lista) return;
+
+    lista.innerHTML = "";
+
+    const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+
+    pedidos.forEach(function(pedido) {
+        lista.innerHTML += `
+            <p>
+                <strong>${pedido.nome}</strong><br>
+                Produto: ${pedido.produto}<br>
+                Valor: R$ ${pedido.valor}
+            </p>
+            <hr>
+        `;
+    });
+}
+
+mostrarPedidos();
