@@ -1,75 +1,48 @@
 body {
   margin: 0;
-  margin-left: 240px;
+  padding: 30px;
   font-family: Arial, sans-serif;
-  background: #f4f7fb;
-  color: #111827;
+  background: linear-gradient(135deg, #eaf4ff, #ffffff);
+  color: #1a1a1a;
 }
 
 h1 {
-  font-size: 36px;
-  margin-bottom: 10px;
+  font-size: 42px;
+  margin-bottom: 20px;
+  color: #0b3d91;
+}
+
+h2 {
+  color: #0b3d91;
 }
 
 button {
-  padding: 14px 24px;
+  padding: 14px 28px;
   border: none;
   border-radius: 12px;
-  background: #005bea;
+  background: linear-gradient(90deg, #007bff, #00bfff);
   color: white;
   font-weight: bold;
   cursor: pointer;
-  margin: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 button:hover {
-  background: #003b8f;
+  transform: scale(1.03);
 }
 
-input, textarea, select {
+input, textarea {
   width: 320px;
-  padding: 12px;
+  padding: 14px;
   margin: 8px 0;
-  border: 1px solid #d1d5db;
+  border: 1px solid #ccc;
   border-radius: 10px;
-  font-size: 16px;
 }
 
-#listaClientes, #listaPedidos {
+p {
   background: white;
-  color: #111827;
-  padding: 20px;
-  border-radius: 16px;
-  max-width: 500px;
-}
-.sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 220px;
-  height: 100%;
-  background: #001f4d;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.sidebar h2 {
-  color: white;
-  margin-bottom: 30px;
-}
-
-.sidebar button {
-  display: block;
-  width: 100%;
-  margin-bottom: 15px;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: #0a66ff;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
-body {
-    margin-left: 240px;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  width: fit-content;
 }
