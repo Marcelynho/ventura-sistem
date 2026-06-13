@@ -106,3 +106,19 @@ function atualizarPedidosDashboard() {
 }
 
 atualizarPedidosDashboard();
+function atualizarFinanceiro() {
+    const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+    const totalFinanceiro = document.getElementById("totalFinanceiro");
+
+    let soma = 0;
+
+    pedidos.forEach(function(pedido) {
+        soma += Number(pedido.valor);
+    });
+
+    if (totalFinanceiro) {
+        totalFinanceiro.textContent = soma;
+    }
+}
+
+atualizarFinanceiro();
