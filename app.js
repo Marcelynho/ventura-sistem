@@ -59,12 +59,23 @@ function mostrarClientes() {
 mostrarClientes();
 window.onload = mostrarClientes;
 function atualizarDashboard() {
-  const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-  const totalClientes = document.getElementById("totalClientes");
+    const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+    const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
 
-  if (totalClientes) {
-    totalClientes.textContent = clientes.length;
-  }
+    const totalClientes = document.getElementById("totalClientes");
+    const totalPedidos = document.getElementById("totalPedidos");
+    const totalFinanceiro = document.getElementById("totalFinanceiro");
+
+    if (totalClientes) totalClientes.textContent = clientes.length;
+    if (totalPedidos) totalPedidos.textContent = pedidos.length;
+
+    if (totalFinanceiro) {
+        let soma = 0;
+        pedidos.forEach(function(pedido) {
+            soma += Number(pedido.receita || 0);
+        });
+        totalFinanceiro.textContent = soma;
+    }
 }
 
 atualizarDashboard();
