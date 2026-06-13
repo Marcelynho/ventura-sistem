@@ -90,6 +90,7 @@ function mostrarPedidos() {
                 <strong>${pedido.nome}</strong><br>
                 Produto: ${pedido.produto}<br>
                 Valor: R$ ${pedido.valor}
+                <button onclick="excluirPedido('${pedido.nome}')">Excluir</button>
             </p>
             <hr>
         `;
@@ -144,4 +145,17 @@ function excluirCliente(telefone) {
 
     mostrarClientes();
     atualizarDashboard();
+}
+function excluirPedido(nome) {
+    let pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+
+    pedidos = pedidos.filter(function(pedido) {
+        return pedido.nome !== nome;
+    });
+
+    localStorage.setItem("pedidos", JSON.stringify(pedidos));
+
+    mostrarPedidos();
+    atualizarPedidosDashboard();
+    atualizarFinanceiro();
 }
