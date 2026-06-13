@@ -84,7 +84,26 @@ table {
   padding: 15px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
+.sidebar {
+  max-width: 620px;
+  width: 90%;
+  margin-bottom: 35px;
+}
 
+.sidebar h2 {
+  margin-bottom: 18px;
+}
+
+.sidebar button {
+  min-width: 110px;
+  font-size: 15px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+}
+
+.sidebar button:hover {
+  transform: translateY(-3px);
+  opacity: 0.95;
+}
 th, td {
   padding: 12px;
   text-align: center;
