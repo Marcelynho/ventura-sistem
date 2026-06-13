@@ -133,3 +133,15 @@ function atualizarDashboard() {
 }
 
 atualizarDashboard();
+function excluirCliente(telefone) {
+    let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+
+    clientes = clientes.filter(function(cliente) {
+        return cliente.telefone !== telefone;
+    });
+
+    localStorage.setItem("clientes", JSON.stringify(clientes));
+
+    mostrarClientes();
+    atualizarDashboard();
+}
