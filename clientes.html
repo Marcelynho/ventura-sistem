@@ -8,15 +8,27 @@
 <body>
   <h1>Cadastro de Clientes</h1>
 
-  <input type="text" placeholder="Nome do cliente"><br><br>
-  <input type="text" placeholder="Telefone"><br><br>
-  <input type="text" placeholder="Receita / Grau"><br><br>
-  <textarea placeholder="Observações"></textarea><br><br>
+  <input id="nomeCliente" type="text" placeholder="Nome do cliente"><br><br>
 
-  <button onclick="salvarCliente()">Salvar Cliente</button>
+<input id="telefoneCliente" type="text" placeholder="Telefone"><br><br>
 
-  <h2>Clientes cadastrados</h2>
-  <div id="listaClientes"></div>
+<input id="receitaCliente" type="text" placeholder="Receita / Grau"><br><br>
+
+<textarea id="obsCliente" placeholder="Observações"></textarea><br><br>
+
+<button onclick="salvarCliente()">Salvar Cliente</button>
+
+<h2>Clientes cadastrados</h2>
+
+<table id="listaClientes" style="width:100%; margin-top:20px;">
+  <tr>
+    <th>Nome</th>
+    <th>Telefone</th>
+    <th>Receita / Grau</th>
+    <th>Observações</th>
+    <th>Ações</th>
+  </tr>
+</table>
 
   <script src="app.js"></script>
 </body>
