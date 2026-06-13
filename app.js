@@ -196,3 +196,27 @@ function logout() {
     localStorage.removeItem("logado");
     window.location.href = "login.html";
 }
+function desenharGrafico() {
+    const canvas = document.getElementById("graficoVendas");
+
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const valores = [2, 1, 5000];
+    const cores = ["#00c6ff", "#0072ff", "#28a745"];
+    const larguraBarra = 80;
+
+    valores.forEach((valor, i) => {
+        let altura = valor > 100 ? 120 : valor * 40;
+        ctx.fillStyle = cores[i];
+        ctx.fillRect(50 + (i * 120), 150 - altura, larguraBarra, altura);
+    });
+}
+
+window.onload = function () {
+    mostrarClientes();
+    desenharGrafico();
+};
