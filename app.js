@@ -228,7 +228,13 @@ function imprimirReceita() {
     const dnp = document.getElementById("dnp").value;
     const altura = document.getElementById("altura").value;
     const observacoes = document.getElementById("obsReceita").value;
+const odLongeEsferico = document.getElementById("odLongeEsferico").value;
+const odLongeCilindrico = document.getElementById("odLongeCilindrico").value;
+const odLongeEixo = document.getElementById("odLongeEixo").value;
 
+const oeLongeEsferico = document.getElementById("oeLongeEsferico").value;
+const oeLongeCilindrico = document.getElementById("oeLongeCilindrico").value;
+const oeLongeEixo = document.getElementById("oeLongeEixo").value;
     const conteudo = `
     <html>
     <head>
@@ -256,9 +262,12 @@ function imprimirReceita() {
     </head>
     <body>
         <h1>Óticas Ventura</h1>
-        <h2>Receituário</h2>
+<h2>Receituário</h2>
 
-        <div class="box">
+<p><b>OD Longe:</b> ${odLongeEsferico} / ${odLongeCilindrico} / ${odLongeEixo}</p>
+<p><b>OE Longe:</b> ${oeLongeEsferico} / ${oeLongeCilindrico} / ${oeLongeEixo}</p>
+
+<div class="box">
             <p><b>Cliente:</b> ${cliente}</p>
             <p><b>Telefone:</b> ${telefone}</p>
             <p><b>Adição:</b> ${adicao}</p>
