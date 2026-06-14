@@ -1,185 +1,25 @@
+// CONFIG FIREBASE
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "ventura-system.firebaseapp.com",
+  projectId: "ventura-system",
+  storageBucket: "ventura-system.firebasestorage.app",
+  messagingSenderId: "302438886661",
+  appId: "SEU_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// PROTEÇÃO DE LOGIN
 if (
     !window.location.href.includes("login.html") &&
     localStorage.getItem("logado") !== "sim"
 ) {
     window.location.href = "login.html";
 }
-function entrar() {
-  const usuario = document.querySelector('input[type="text"]').value;
-  const senha = document.querySelector('input[type="password"]').value;
 
-  if (usuario === "admin" && senha === "1234") {
-    alert("Login realizado com sucesso!");
-    window.location.href = "dashboard.html";
-  } else {
-    alert("Usuário ou senha incorretos.");
-  }
-}
-
-function salvarCliente() {
-    const nome = document.getElementById("nomeCliente").value;
-    const telefone = document.getElementById("telefoneCliente").value;
-    const receita = document.getElementById("receitaCliente").value;
-    const observacoes = document.getElementById("obsCliente").value;
-
-    const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-
-    clientes.push({ nome, telefone, receita, observacoes });
-
-    localStorage.setItem("clientes", JSON.stringify(clientes));
-
-    mostrarClientes();
-    atualizarDashboard();
-
-    alert("Cliente salvo com sucesso!");
-}
-
-function mostrarClientes() {
-  const lista = document.getElementById("listaClientes");
-
-  if (!lista) return;
-
-  const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-
-  lista.innerHTML = "";
-
-  clientes.forEach(function(cliente) {
-    lista.innerHTML += `
-<tr>
-    <td>${cliente.nome}</td>
-    <td>${cliente.telefone}</td>
-    <td>${cliente.receita}</td>
-    <td>${cliente.observacoes}</td>
-    <td>
-        <button onclick="excluirCliente('${cliente.telefone}')">
-            Excluir
-        </button>
-    </td>
-</tr>
-`;
-  });
-}
-
-mostrarClientes();
-window.onload = mostrarClientes;
-function atualizarDashboard() {
-    const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-    const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
-
-    const totalClientes = document.getElementById("totalClientes");
-    const totalPedidos = document.getElementById("totalPedidos");
-    const totalFinanceiro = document.getElementById("totalFinanceiro");
-
-    if (totalClientes) totalClientes.textContent = clientes.length;
-    if (totalPedidos) totalPedidos.textContent = pedidos.length;
-
-    if (totalFinanceiro) {
-        let soma = 0;
-        pedidos.forEach(function(pedido) {
-            soma += Number(pedido.receita || 0);
-        });
-        totalFinanceiro.textContent = soma;
-    }
-}
-
-atualizarDashboard();
-function salvarPedido() {
-    const nome = document.querySelectorAll("input")[0].value;
-    const produto = document.querySelectorAll("input")[1].value;
-    const valor = document.querySelectorAll("input")[2].value;
-
-    const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
-
-    const data = new Date().toLocaleDateString("pt-BR");
-pedidos.push({ nome, produto, valor, data });
-
-    localStorage.setItem("pedidos", JSON.stringify(pedidos));
-
-    mostrarPedidos();
-}
-
-function mostrarPedidos() {
-    const lista = document.getElementById("listaPedidos");
-    if (!lista) return;
-
-    lista.innerHTML = "";
-
-    const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
-
-    pedidos.forEach(function(pedido) {
-        lista.innerHTML += `
-            <p>
-                <strong>${pedido.nome}</strong><br>
-                Produto: ${pedido.produto}<br>
-                Valor: R$ ${pedido.valor}<br>
-Data: ${pedido.data}
-                <button onclick="excluirPedido('${pedido.nome}')">Excluir</button>
-            </p>
-            <hr>
-        `;
-    });
-}
-
-mostrarPedidos();
-function atualizarPedidosDashboard() {
-    const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
-    const totalPedidos = document.getElementById("totalPedidos");
-
-    if (totalPedidos) {
-        totalPedidos.textContent = pedidos.length;
-    }
-}
-
-atualizarPedidosDashboard();
-function atualizarFinanceiro() {
-    const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
-    const totalFinanceiro = document.getElementById("totalFinanceiro");
-
-    let soma = 0;
-
-    pedidos.forEach(function(pedido) {
-        soma += Number(pedido.valor);
-    });
-
-    if (totalFinanceiro) {
-        totalFinanceiro.textContent = soma;
-    }
-}
-
-atualizarFinanceiro();
-function atualizarDashboard() {
-    const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-    const totalClientes = document.getElementById("totalClientes");
-
-    if (totalClientes) {
-        totalClientes.textContent = clientes.length;
-    }
-}
-
-atualizarDashboard();
-function excluirCliente(telefone) {
-    let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-
-    clientes = clientes.filter(function(cliente) {
-        return cliente.telefone !== telefone;
-    });
-
-    localStorage.setItem("clientes", JSON.stringify(clientes));
-
-    mostrarClientes();
-    atualizarDashboard();
-}
-function excluirPedido(nome) {
-    let pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
-
-    pedidos = pedidos.filter(function(pedido) {
-        return pedido.nome !== nome;
-    });
-localStorage.setItem("pedidos", JSON.stringify(pedidos));
-mostrarPedidos();
-atualizarPedidosDashboard();
-atualizarFinanceiro();
-}
+// LOGIN
 function fazerLogin() {
     const usuario = document.getElementById("usuario").value;
     const senha = document.getElementById("senha").value;
@@ -191,18 +31,142 @@ function fazerLogin() {
         alert("Usuário ou senha incorretos!");
     }
 }
-    
+
 function logout() {
     localStorage.removeItem("logado");
     window.location.href = "login.html";
 }
+
+// CLIENTES
+async function salvarCliente() {
+    const nome = document.getElementById("nomeCliente").value;
+    const telefone = document.getElementById("telefoneCliente").value;
+    const receita = document.getElementById("receitaCliente").value;
+    const observacoes = document.getElementById("obsCliente").value;
+
+    await db.collection("clientes").add({
+        nome,
+        telefone,
+        receita,
+        observacoes
+    });
+
+    mostrarClientes();
+    alert("Cliente salvo com sucesso!");
+}
+
+async function mostrarClientes() {
+    const lista = document.getElementById("listaClientes");
+    if (!lista) return;
+
+    lista.innerHTML = `
+        <tr>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Receita</th>
+            <th>Observações</th>
+            <th>Ações</th>
+        </tr>
+    `;
+
+    const snapshot = await db.collection("clientes").get();
+
+    snapshot.forEach(doc => {
+        const cliente = doc.data();
+
+        lista.innerHTML += `
+        <tr>
+            <td>${cliente.nome}</td>
+            <td>${cliente.telefone}</td>
+            <td>${cliente.receita}</td>
+            <td>${cliente.observacoes}</td>
+            <td>
+                <button onclick="excluirCliente('${doc.id}')">
+                    Excluir
+                </button>
+            </td>
+        </tr>
+        `;
+    });
+}
+
+async function excluirCliente(id) {
+    await db.collection("clientes").doc(id).delete();
+    mostrarClientes();
+}
+
+// PEDIDOS
+async function salvarPedido() {
+    const nome = document.querySelectorAll("input")[0].value;
+    const produto = document.querySelectorAll("input")[1].value;
+    const valor = document.querySelectorAll("input")[2].value;
+    const data = new Date().toLocaleDateString("pt-BR");
+
+    await db.collection("pedidos").add({
+        nome,
+        produto,
+        valor,
+        data
+    });
+
+    mostrarPedidos();
+}
+
+async function mostrarPedidos() {
+    const lista = document.getElementById("listaPedidos");
+    if (!lista) return;
+
+    lista.innerHTML = "";
+
+    const snapshot = await db.collection("pedidos").get();
+
+    snapshot.forEach(doc => {
+        const pedido = doc.data();
+
+        lista.innerHTML += `
+            <p>
+                <strong>${pedido.nome}</strong><br>
+                Produto: ${pedido.produto}<br>
+                Valor: R$ ${pedido.valor}<br>
+                Data: ${pedido.data}
+                <button onclick="excluirPedido('${doc.id}')">Excluir</button>
+            </p>
+            <hr>
+        `;
+    });
+}
+
+async function excluirPedido(id) {
+    await db.collection("pedidos").doc(id).delete();
+    mostrarPedidos();
+}
+
+// DASHBOARD
+async function atualizarDashboard() {
+    const clientesSnap = await db.collection("clientes").get();
+    const pedidosSnap = await db.collection("pedidos").get();
+
+    const totalClientes = document.getElementById("totalClientes");
+    const totalPedidos = document.getElementById("totalPedidos");
+    const totalFinanceiro = document.getElementById("totalFinanceiro");
+
+    if (totalClientes) totalClientes.textContent = clientesSnap.size;
+    if (totalPedidos) totalPedidos.textContent = pedidosSnap.size;
+
+    let soma = 0;
+    pedidosSnap.forEach(doc => {
+        soma += Number(doc.data().valor || 0);
+    });
+
+    if (totalFinanceiro) totalFinanceiro.textContent = soma;
+}
+
+// GRÁFICO
 function desenharGrafico() {
     const canvas = document.getElementById("graficoVendas");
-
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const valores = [2, 1, 5000];
@@ -213,16 +177,19 @@ function desenharGrafico() {
         let altura = valor > 100 ? 120 : valor * 40;
         ctx.fillStyle = cores[i];
         ctx.fillRect(50 + (i * 120), 150 - altura, larguraBarra, altura);
-        ctx.fillStyle = "#0b3d91";
-ctx.font = "14px Arial";
-ctx.textAlign = "center";
 
-const nomes = ["Clientes", "Pedidos", "Financeiro"];
-ctx.fillText(nomes[i], 50 + (i * 120) + larguraBarra / 2, 205);
+        ctx.fillStyle = "#0b3d91";
+        ctx.font = "14px Arial";
+        ctx.textAlign = "center";
+
+        const nomes = ["Clientes", "Pedidos", "Financeiro"];
+        ctx.fillText(nomes[i], 50 + (i * 120) + larguraBarra / 2, 205);
     });
 }
 
 window.onload = function () {
     mostrarClientes();
+    mostrarPedidos();
+    atualizarDashboard();
     desenharGrafico();
 };
