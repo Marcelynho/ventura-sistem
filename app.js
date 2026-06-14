@@ -218,3 +218,22 @@ async function salvarReceituario() {
 
     alert("Receituário salvo com sucesso!");
 }
+async function salvarReceituario() {
+  const cliente = document.getElementById("clienteReceita").value;
+  const telefone = document.getElementById("telefoneReceita").value;
+  const adicao = document.getElementById("adicao").value;
+  const dnp = document.getElementById("dnp").value;
+  const altura = document.getElementById("altura").value;
+  const observacoes = document.getElementById("obsReceita").value;
+
+  await db.collection("receituarios").add({
+    cliente,
+    telefone,
+    adicao,
+    dnp,
+    altura,
+    observacoes
+  });
+
+  alert("Receituário salvo com sucesso!");
+}
