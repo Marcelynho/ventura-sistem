@@ -260,6 +260,16 @@ h1, h2 {
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
+.logo-box {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+}
 p {
     font-size: 20px;
     margin: 12px 0;
@@ -287,8 +297,12 @@ p {
         </style>
     </head>
     <body>
-        <h1>Óticas Ventura</h1>
-<h2>Receituário</h2>
+    <div class="logo-box">
+        <img src="WhatsApp Image 2026-06-14 at 19.34.42.jpeg" class="logo">
+    </div>
+
+    <h1>Óticas Ventura</h1>
+    <h2>Receituário</h2>
 
 <p><b>OD Longe:</b> ${odLongeEsferico} / ${odLongeCilindrico} / ${odLongeEixo}</p>
 <p><b>OE Longe:</b> ${oeLongeEsferico} / ${oeLongeCilindrico} / ${oeLongeEixo}</p>
