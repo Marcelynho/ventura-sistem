@@ -40,16 +40,21 @@ function logout() {
 // CLIENTES
 async function salvarCliente() {
     const nome = document.getElementById("nomeCliente").value;
-    const telefone = document.getElementById("telefoneCliente").value;
-    const receita = document.getElementById("receitaCliente").value;
-    const observacoes = document.getElementById("obsCliente").value;
-
+const telefone = document.getElementById("telefoneCliente").value;
+const endereco = document.getElementById("enderecoCliente").value;
+const bairro = document.getElementById("bairroCliente").value;
+const cidade = document.getElementById("cidadeCliente").value;
+const nascimento = document.getElementById("nascimentoCliente").value;
+const observacoes = document.getElementById("obsCliente").value;
     await db.collection("clientes").add({
-        nome,
-        telefone,
-        receita,
-        observacoes
-    });
+    nome,
+    telefone,
+    endereco,
+    bairro,
+    cidade,
+    nascimento,
+    observacoes
+});
 
     mostrarClientes();
     alert("Cliente salvo com sucesso!");
@@ -62,10 +67,11 @@ async function mostrarClientes() {
     lista.innerHTML = `
         <tr>
             <th>Nome</th>
-            <th>Telefone</th>
-            <th>Receita</th>
-            <th>Observações</th>
-            <th>Ações</th>
+<th>Telefone</th>
+<th>Endereço</th>
+<th>Bairro</th>
+<th>Cidade</th>
+<th>Ações</th>
         </tr>
     `;
 
@@ -78,8 +84,10 @@ async function mostrarClientes() {
         <tr>
             <td>${cliente.nome}</td>
             <td>${cliente.telefone}</td>
-            <td>${cliente.receita}</td>
-            <td>${cliente.observacoes}</td>
+            <td>${cliente.endereco || ""}</td>
+<td>${cliente.bairro || ""}</td>
+<td>${cliente.cidade || ""}</td>
+
             <td>
                 <button onclick="excluirCliente('${doc.id}')">
                     Excluir
