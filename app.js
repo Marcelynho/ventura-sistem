@@ -258,6 +258,9 @@ h1, h2 {
     margin-top: 20px;
     background: white;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+max-width: 700px;
+margin-left: auto;
+margin-right: auto;
 }
 
 .logo-box {
