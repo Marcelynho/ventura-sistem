@@ -212,3 +212,28 @@ input, textarea {
     border: 1px solid #ddd;
     margin-bottom: 15px;
 }
+#listaClientes {
+    width: 90%;
+    margin: 30px auto;
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+#listaClientes th {
+    background: #eaf7ff;
+    color: #0b3d91;
+    font-weight: bold;
+}
+
+#listaClientes td,
+#listaClientes th {
+    padding: 16px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+#listaClientes tr:hover {
+    background: #f5fbff;
+}
