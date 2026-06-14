@@ -205,3 +205,10 @@ th {
     margin: 20px auto;
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
+input, textarea {
+    width: 80%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+}
