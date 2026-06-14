@@ -196,3 +196,12 @@ th {
     color: #0b3d91;
     font-weight: bold;
 }
+.form-box {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
