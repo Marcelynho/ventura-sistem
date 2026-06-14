@@ -201,23 +201,7 @@ window.onload = function () {
     atualizarDashboard();
     desenharGrafico();
 };
-async function salvarReceituario() {
-    const nome = document.getElementById("nomeReceita").value;
-    const esferico = document.getElementById("esferico").value;
-    const cilindrico = document.getElementById("cilindrico").value;
-    const eixo = document.getElementById("eixo").value;
-    const observacoes = document.getElementById("obsReceita").value;
 
-    await db.collection("receituarios").add({
-        nome: nome,
-        esferico: esferico,
-        cilindrico: cilindrico,
-        eixo: eixo,
-        observacoes: observacoes
-    });
-
-    alert("Receituário salvo com sucesso!");
-}
 async function salvarReceituario() {
   const cliente = document.getElementById("clienteReceita").value;
   const telefone = document.getElementById("telefoneReceita").value;
