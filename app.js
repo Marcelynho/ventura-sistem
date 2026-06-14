@@ -266,9 +266,9 @@ p {
 }
 
 .assinatura {
-    margin-top: 60px;
+    margin-top:100px;
     text-align: center;
-    font-size: 18px;
+    font-size: 30px;
 }
             h1, h2 {
                 text-align: center;
