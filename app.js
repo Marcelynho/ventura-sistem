@@ -269,8 +269,8 @@ margin-right: auto;
 }
 
 .logo {
-   width: 180px;
-   height: 180px;
+   width: 160px;
+   height: 160px;
    border-radius: 50%;
    display: block;
    margin: 0 auto;
