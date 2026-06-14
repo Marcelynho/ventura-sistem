@@ -266,9 +266,11 @@ h1, h2 {
 }
 
 .logo {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
+   width: 120px;
+   height: 120px;
+   border-radius: 50%;
+   display: block;
+   margin: 0 auto;
 }
 p {
     font-size: 20px;
@@ -298,7 +300,7 @@ p {
     </head>
     <body>
     <div class="logo-box">
-        <img src="WhatsApp Image 2026-06-14 at 19.34.42.jpeg" class="logo">
+        <img src="./WhatsApp%20Image%202026-06-14%20at%2019.34.42.jpeg" class="logo">
     </div>
 
     <h1>Óticas Ventura</h1>
