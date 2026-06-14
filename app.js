@@ -230,14 +230,44 @@ function imprimirReceita() {
     const observacoes = document.getElementById("obsReceita").value;
 
     const conteudo = `
+    <html>
+    <head>
+        <title>Receituário</title>
+        <style>
+            body {
+                font-family: Arial;
+                padding: 40px;
+            }
+            h1, h2 {
+                text-align: center;
+                color: #0b3d91;
+            }
+            .box {
+                border: 2px solid #0b3d91;
+                border-radius: 12px;
+                padding: 20px;
+                margin-top: 20px;
+            }
+            p {
+                font-size: 20px;
+                margin: 12px 0;
+            }
+        </style>
+    </head>
+    <body>
         <h1>Óticas Ventura</h1>
         <h2>Receituário</h2>
-        <p><b>Cliente:</b> ${cliente}</p>
-        <p><b>Telefone:</b> ${telefone}</p>
-        <p><b>Adição:</b> ${adicao}</p>
-        <p><b>DNP / DP:</b> ${dnp}</p>
-        <p><b>Altura:</b> ${altura}</p>
-        <p><b>Observações:</b> ${observacoes}</p>
+
+        <div class="box">
+            <p><b>Cliente:</b> ${cliente}</p>
+            <p><b>Telefone:</b> ${telefone}</p>
+            <p><b>Adição:</b> ${adicao}</p>
+            <p><b>DNP / DP:</b> ${dnp}</p>
+            <p><b>Altura:</b> ${altura}</p>
+            <p><b>Observações:</b> ${observacoes}</p>
+        </div>
+    </body>
+    </html>
     `;
 
     const janela = window.open("", "_blank");
