@@ -10,38 +10,45 @@
 <div class="caixa-login">
 <h1>Receituário</h1>
 
-<input type="text" placeholder="Nome do Cliente"><br><br>
+<input id="clienteReceita" type="text" placeholder="Nome do Cliente"><br><br>
+<input id="telefoneReceita" type="text" placeholder="Telefone"><br><br>
 
 <h2>Longe</h2>
+
 <p><b>OD</b></p>
-<input placeholder="Esférico">
-<input placeholder="Cilíndrico">
-<input placeholder="Eixo"><br><br>
+<input id="odLongeEsferico" placeholder="Esférico">
+<input id="odLongeCilindrico" placeholder="Cilíndrico">
+<input id="odLongeEixo" placeholder="Eixo"><br><br>
 
 <p><b>OE</b></p>
-<input placeholder="Esférico">
-<input placeholder="Cilíndrico">
-<input placeholder="Eixo"><br><br>
+<input id="oeLongeEsferico" placeholder="Esférico">
+<input id="oeLongeCilindrico" placeholder="Cilíndrico">
+<input id="oeLongeEixo" placeholder="Eixo"><br><br>
 
 <h2>Perto</h2>
+
 <p><b>OD</b></p>
-<input placeholder="Esférico">
-<input placeholder="Cilíndrico">
-<input placeholder="Eixo"><br><br>
+<input id="odPertoEsferico" placeholder="Esférico">
+<input id="odPertoCilindrico" placeholder="Cilíndrico">
+<input id="odPertoEixo" placeholder="Eixo"><br><br>
 
 <p><b>OE</b></p>
-<input placeholder="Esférico">
-<input placeholder="Cilíndrico">
-<input placeholder="Eixo"><br><br>
+<input id="oePertoEsferico" placeholder="Esférico">
+<input id="oePertoCilindrico" placeholder="Cilíndrico">
+<input id="oePertoEixo" placeholder="Eixo"><br><br>
 
-<input placeholder="Adição"><br><br>
-<input placeholder="DNP / DP"><br><br>
-<input placeholder="Altura"><br><br>
+<input id="adicao" placeholder="Adição"><br><br>
+<input id="dnp" placeholder="DNP / DP"><br><br>
+<input id="altura" placeholder="Altura"><br><br>
 
-<textarea placeholder="Observações"></textarea><br><br>
+<textarea id="obsReceita" placeholder="Observações"></textarea><br><br>
 
-<button>Salvar Receituário</button>
+<button onclick="salvarReceituario()">Salvar Receituário</button>
 </div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
