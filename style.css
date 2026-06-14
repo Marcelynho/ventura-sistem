@@ -237,3 +237,14 @@ input, textarea {
 #listaClientes tr:hover {
     background: #f5fbff;
 }
+#listaClientes tr:first-child {
+    background: #dff4ff !important;
+}
+
+#listaClientes th {
+    color: #0b3d91 !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+    display: table-cell !important;
+    padding: 18px !important;
+}
