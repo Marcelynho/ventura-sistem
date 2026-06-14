@@ -221,3 +221,26 @@ async function salvarReceituario() {
 
   alert("Receituário salvo com sucesso!");
 }
+function imprimirReceita() {
+    const cliente = document.getElementById("clienteReceita").value;
+    const telefone = document.getElementById("telefoneReceita").value;
+    const adicao = document.getElementById("adicao").value;
+    const dnp = document.getElementById("dnp").value;
+    const altura = document.getElementById("altura").value;
+    const observacoes = document.getElementById("obsReceita").value;
+
+    const conteudo = `
+        <h1>Óticas Ventura</h1>
+        <h2>Receituário</h2>
+        <p><b>Cliente:</b> ${cliente}</p>
+        <p><b>Telefone:</b> ${telefone}</p>
+        <p><b>Adição:</b> ${adicao}</p>
+        <p><b>DNP / DP:</b> ${dnp}</p>
+        <p><b>Altura:</b> ${altura}</p>
+        <p><b>Observações:</b> ${observacoes}</p>
+    `;
+
+    const janela = window.open("", "_blank");
+    janela.document.write(conteudo);
+    janela.print();
+}
