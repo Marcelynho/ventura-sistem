@@ -6,14 +6,21 @@
   <title>Financeiro</title>
 </head>
 <body>
-  <h1>Financeiro</h1>
+  <div class="sidebar">
+    <h2>Óticas Ventura</h2>
+    <button onclick="window.location.href='dashboard.html'">Dashboard</button>
+    <button onclick="window.location.href='clientes.html'">Clientes</button>
+    <button onclick="window.location.href='pedidos.html'">Pedidos</button>
+    <button>Financeiro</button>
+    <button onclick="window.location.href='index.html'">Sair</button>
+</div>
 
-  <h2>Total vendido: R$ <span id="totalFinanceiro">0</span></h2>
-  <h2>Total de pedidos: <span id="totalPedidos">0</span></h2>
+<div class="form-box">
+    <h1>Financeiro</h1>
 
-  <br>
-  <button onclick="window.location.href='dashboard.html'">Voltar ao Dashboard</button>
-
+    <h2>Total vendido: R$ <span id="totalFinanceiro">0</span></h2>
+    <h2>Total de pedidos: <span id="totalPedidos">0</span></h2>
+</div>
   <script src="app.js"></script>
 </body>
 </html>
