@@ -1,36 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Receituários - Óticas Ventura</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Receituário - Óticas Ventura</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="caixa-login">
-    <h1>Receituários</h1>
+<div class="caixa-login">
+<h1>Receituário</h1>
 
-    <input id="nomeReceita" placeholder="Nome do cliente">
-    <br><br>
+<input type="text" placeholder="Nome do Cliente"><br><br>
 
-    <input id="esferico" placeholder="Grau esférico">
-    <br><br>
+<h2>Longe</h2>
+<p><b>OD</b></p>
+<input placeholder="Esférico">
+<input placeholder="Cilíndrico">
+<input placeholder="Eixo"><br><br>
 
-    <input id="cilindrico" placeholder="Grau cilíndrico">
-    <br><br>
+<p><b>OE</b></p>
+<input placeholder="Esférico">
+<input placeholder="Cilíndrico">
+<input placeholder="Eixo"><br><br>
 
-    <input id="eixo" placeholder="Eixo">
-    <br><br>
+<h2>Perto</h2>
+<p><b>OD</b></p>
+<input placeholder="Esférico">
+<input placeholder="Cilíndrico">
+<input placeholder="Eixo"><br><br>
 
-    <textarea id="obsReceita" placeholder="Observações"></textarea>
-    <br><br>
+<p><b>OE</b></p>
+<input placeholder="Esférico">
+<input placeholder="Cilíndrico">
+<input placeholder="Eixo"><br><br>
 
-    <button onclick="salvarReceituario()">Salvar Receituário</button>
-  </div>
+<input placeholder="Adição"><br><br>
+<input placeholder="DNP / DP"><br><br>
+<input placeholder="Altura"><br><br>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="app.js"></script>
+<textarea placeholder="Observações"></textarea><br><br>
+
+<button>Salvar Receituário</button>
+</div>
 
 </body>
 </html>
