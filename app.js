@@ -1,11 +1,11 @@
 // CONFIG FIREBASE
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
+  apiKey: "AIzaSyDkKbihoymG4pYzlZWSknXtn6xqhZumbNk",
   authDomain: "ventura-system.firebaseapp.com",
   projectId: "ventura-system",
   storageBucket: "ventura-system.firebasestorage.app",
   messagingSenderId: "302438886661",
-  appId: "SEU_APP_ID"
+  appId: "1:302438886661:web:8c5ce0f51c9a71e4e35b6c"
 };
 
 firebase.initializeApp(firebaseConfig);
