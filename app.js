@@ -241,9 +241,35 @@ const oeLongeEixo = document.getElementById("oeLongeEixo").value;
         <title>Receituário</title>
         <style>
             body {
-                font-family: Arial;
-                padding: 40px;
-            }
+    font-family: Arial, sans-serif;
+    padding: 30px;
+    background: #f5f7fb;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #0b3d91;
+}
+
+.box {
+    border: 2px solid #0b3d91;
+    border-radius: 15px;
+    padding: 25px;
+    margin-top: 20px;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+p {
+    font-size: 20px;
+    margin: 12px 0;
+}
+
+.assinatura {
+    margin-top: 60px;
+    text-align: center;
+    font-size: 18px;
+}
             h1, h2 {
                 text-align: center;
                 color: #0b3d91;
@@ -275,6 +301,7 @@ const oeLongeEixo = document.getElementById("oeLongeEixo").value;
             <p><b>Altura:</b> ${altura}</p>
             <p><b>Observações:</b> ${observacoes}</p>
         </div>
+        <div class="assinatura">_________________________<br>Assinatura do responsável</div>
     </body>
     </html>
     `;
