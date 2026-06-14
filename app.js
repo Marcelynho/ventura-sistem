@@ -266,8 +266,8 @@ h1, h2 {
 }
 
 .logo {
-   width: 120px;
-   height: 120px;
+   width: 180px;
+   height: 180px;
    border-radius: 50%;
    display: block;
    margin: 0 auto;
