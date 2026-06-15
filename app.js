@@ -329,3 +329,19 @@ p {
     janela.document.write(conteudo);
     janela.print();
 }
+document.getElementById("buscarCliente")?.addEventListener("input", function () {
+    let busca = this.value.toLowerCase();
+    let linhas = document.querySelectorAll("#listaClientes tr");
+
+    linhas.forEach((linha, index) => {
+        if (index === 0) return; // cabeçalho da tabela
+
+        let texto = linha.innerText.toLowerCase();
+
+        if (texto.includes(busca)) {
+            linha.style.display = "";
+        } else {
+            linha.style.display = "none";
+        }
+    });
+});
