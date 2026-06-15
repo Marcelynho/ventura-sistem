@@ -89,6 +89,10 @@ async function mostrarClientes() {
 <td>${cliente.cidade || ""}</td>
 
             <td>
+            <button onclick="abrirWhatsApp('${cliente.telefone}')">
+    WhatsApp
+</button>
+<br><br>
                 <button onclick="excluirCliente('${doc.id}')">
                     Excluir
                 </button>
@@ -100,9 +104,12 @@ async function mostrarClientes() {
 
 async function excluirCliente(id) {
     await db.collection("clientes").doc(id).delete();
-    mostrarClientes();
+    mostrarClientes();  
 }
-
+function abrirWhatsApp(telefone) {
+    let numero = telefone.replace(/\D/g, "");
+    window.open("https://wa.me/55" + numero, "_blank");
+}
 // PEDIDOS
 async function salvarPedido() {
     const nome = document.querySelectorAll("input")[0].value;
