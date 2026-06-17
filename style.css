@@ -92,7 +92,9 @@ table {
 
 
 .sidebar h2 {
-  margin-bottom: 18px;
+  color: white;
+font-size: 28px;
+margin-bottom: 30px;
 }
 
 .sidebar button {
