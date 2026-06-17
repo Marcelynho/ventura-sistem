@@ -148,7 +148,7 @@ th, td {
     text-align: center;
 }
 .sidebar {
-    .sidebar {
+
     position: fixed;
     left: 0;
     top: 0;
@@ -164,6 +164,7 @@ th, td {
 }
 body {
     padding-top: 40px;
+    padding-left: 260px;
 }
 .btn-salvar {
     padding: 14px 28px;
