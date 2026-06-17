@@ -85,13 +85,7 @@ table {
   padding: 15px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
-.sidebar {
- width: 220px;
-position: fixed;
-left: 20px;
-top: 20px;
-margin: 0;
-}
+
 
 .sidebar h2 {
   margin-bottom: 18px;
