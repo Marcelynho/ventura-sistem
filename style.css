@@ -90,7 +90,16 @@ table {
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
 
-
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 230px;
+    height: 100vh;
+    background: linear-gradient(180deg, #063b78, #031f45);
+    padding: 25px 18px;
+    box-shadow: 4px 0 18px rgba(0,0,0,0.2);
+}
 .sidebar h2 {
   color: white;
 font-size: 28px;
