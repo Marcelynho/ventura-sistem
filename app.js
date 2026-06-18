@@ -78,6 +78,8 @@ const observacoes = document.getElementById("obsCliente").value;
 
 async function mostrarClientes() {
     const lista = document.getElementById("listaClientes");
+  const buscaInput = document.getElementById("buscaCliente");
+const busca = buscaInput ? buscaInput.value.toLowerCase() : "";
     if (!lista) return;
 
     lista.innerHTML = `
@@ -95,6 +97,13 @@ async function mostrarClientes() {
 
     snapshot.forEach(doc => {
         const cliente = doc.data();
+      if (
+    busca &&
+    !cliente.nome.toLowerCase().includes(busca) &&
+    !(cliente.telefone || "").toLowerCase().includes(busca)
+) {
+    return;
+}
 
         lista.innerHTML += `
         <tr>
