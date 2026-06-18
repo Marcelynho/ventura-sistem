@@ -31,7 +31,12 @@
 <button class="btn-salvar" onclick="salvarCliente()">Salvar Cliente</button>
 
 <h2>Clientes cadastrados</h2>
-
+<input 
+  type="text"
+  id="buscaCliente"
+  placeholder="Buscar por nome ou telefone"
+  onkeyup="mostrarClientes()"
+><br><br>
 <table id="listaClientes">
   <tr>
     <th>Nome</th>
