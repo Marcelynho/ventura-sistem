@@ -114,28 +114,33 @@ const busca = buscaInput ? buscaInput.value.toLowerCase() : "";
 }
 
         lista.innerHTML += `
-        <tr>
-            <td>${cliente.nome}</td>
-            <td>${cliente.telefone}</td>
-            <td>${cliente.endereco || ""}</td>
-<td>${cliente.bairro || ""}</td>
-<td>${cliente.cidade || ""}</td>
+<tr>
+    <td>${cliente.nome}</td>
+    <td>${cliente.telefone}</td>
+    <td>${cliente.endereco || ""}</td>
+    <td>${cliente.bairro || ""}</td>
+    <td>${cliente.cidade || ""}</td>
+    <td>${cliente.retorno || "-"}</td>
 
-            <td>
-            <button onclick="abrirWhatsApp('${cliente.telefone}')">
-    WhatsApp
-</button>
-<br><br>
-<button onclick="editarCliente('${doc.id}')">
-  Editar
-</button>
-<br><br>
-                <button onclick="excluirCliente('${doc.id}')">
-                    Excluir
-                </button>
-            </td>
-        </tr>
-        `;
+    <td>
+        <button onclick="abrirWhatsApp('${cliente.telefone}')">
+            WhatsApp
+        </button>
+
+        <br><br>
+
+        <button onclick="editarCliente('${doc.id}')">
+            Editar
+        </button>
+
+        <br><br>
+
+        <button onclick="excluirCliente('${doc.id}')">
+            Excluir
+        </button>
+    </td>
+</tr>
+`;
     });
 }
 
