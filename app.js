@@ -45,6 +45,9 @@ const endereco = document.getElementById("enderecoCliente").value;
 const bairro = document.getElementById("bairroCliente").value;
 const cidade = document.getElementById("cidadeCliente").value;
 const nascimento = document.getElementById("nascimentoCliente").value;
+  const retorno = new Date();
+retorno.setFullYear(retorno.getFullYear() + 1);
+const dataRetorno = retorno.toISOString().split("T")[0];
 const observacoes = document.getElementById("obsCliente").value;
   if (window.clienteEditandoId) {
     await db.collection("clientes").doc(window.clienteEditandoId).update({
@@ -54,7 +57,8 @@ const observacoes = document.getElementById("obsCliente").value;
         bairro,
         cidade,
         nascimento,
-        observacoes
+        observacoes,
+      retorno: dataRetorno
     });
 
     window.clienteEditandoId = null;
@@ -69,7 +73,11 @@ const observacoes = document.getElementById("obsCliente").value;
     bairro,
     cidade,
     nascimento,
-    observacoes
+    observacoes,
+      retorno: dataRetorno
+      
+
+      
 });
 
     mostrarClientes();
