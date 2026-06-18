@@ -46,6 +46,22 @@ const bairro = document.getElementById("bairroCliente").value;
 const cidade = document.getElementById("cidadeCliente").value;
 const nascimento = document.getElementById("nascimentoCliente").value;
 const observacoes = document.getElementById("obsCliente").value;
+  if (window.clienteEditandoId) {
+    await db.collection("clientes").doc(window.clienteEditandoId).update({
+        nome,
+        telefone,
+        endereco,
+        bairro,
+        cidade,
+        nascimento,
+        observacoes
+    });
+
+    window.clienteEditandoId = null;
+    mostrarClientes();
+    alert("Cliente atualizado com sucesso!");
+    return;
+}
     await db.collection("clientes").add({
     nome,
     telefone,
@@ -112,7 +128,20 @@ async function excluirCliente(id) {
 }
 
 async function editarCliente(id) {
-    alert("Editar cliente em construção");
+    const doc = await db.collection("clientes").doc(id).get();
+    const cliente = doc.data();
+
+    document.getElementById("nomeCliente").value = cliente.nome || "";
+    document.getElementById("telefoneCliente").value = cliente.telefone || "";
+    document.getElementById("enderecoCliente").value = cliente.endereco || "";
+    document.getElementById("bairroCliente").value = cliente.bairro || "";
+    document.getElementById("cidadeCliente").value = cliente.cidade || "";
+    document.getElementById("nascimentoCliente").value = cliente.nascimento || "";
+    document.getElementById("obsCliente").value = cliente.observacoes || "";
+
+    window.clienteEditandoId = id;
+
+    alert("Cliente carregado para edição!");
 }
 
 function abrirWhatsApp(telefone) {
