@@ -104,8 +104,13 @@ async function mostrarClientes() {
 
 async function excluirCliente(id) {
     await db.collection("clientes").doc(id).delete();
-    mostrarClientes();  
+    mostrarClientes();
 }
+
+async function editarCliente(id) {
+    alert("Editar cliente em construção");
+}
+
 function abrirWhatsApp(telefone) {
     let numero = telefone.replace(/\D/g, "");
     window.open("https://wa.me/55" + numero, "_blank");
