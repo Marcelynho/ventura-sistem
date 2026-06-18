@@ -325,3 +325,50 @@ input, textarea {
     font-size: 16px;
     font-weight: bold;
 }
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #063b78, #00bfff);
+}
+
+.caixa-login {
+    background: white;
+    padding: 40px;
+    width: 340px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+.caixa-login h1 {
+    color: #063b78;
+    margin-bottom: 10px;
+}
+
+.caixa-login p {
+    color: gray;
+    margin-bottom: 20px;
+}
+
+.caixa-login input {
+    width: 90%;
+    padding: 14px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+}
+
+.caixa-login button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #063b78, #00bfff);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
