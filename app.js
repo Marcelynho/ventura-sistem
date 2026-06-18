@@ -93,6 +93,10 @@ async function mostrarClientes() {
     WhatsApp
 </button>
 <br><br>
+<button onclick="editarCliente('${doc.id}')">
+  Editar
+</button>
+<br><br>
                 <button onclick="excluirCliente('${doc.id}')">
                     Excluir
                 </button>
