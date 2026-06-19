@@ -20,10 +20,22 @@
   <br><br>
 
 <button onclick="filtroStatus='todos'; mostrarClientes()">Todos</button>
-<button onclick="filtroStatus='vencido'; mostrarClientes()">🔴 Vencidos</button>
-<button onclick="filtroStatus='hoje'; mostrarClientes()">🟡 Vence hoje</button>
-<button onclick="filtroStatus='sem'; mostrarClientes()">⚪ Sem retorno</button>
-<button onclick="filtroStatus='prazo'; mostrarClientes()">🟢 No prazo</button>
+
+<button id="btnVencidos" onclick="filtroStatus='vencido'; mostrarClientes()">
+  🔴 Vencidos
+</button>
+
+<button id="btnHoje" onclick="filtroStatus='hoje'; mostrarClientes()">
+  🟡 Vence hoje
+</button>
+
+<button onclick="filtroStatus='sem'; mostrarClientes()">
+  ⚪ Sem retorno
+</button>
+
+<button onclick="filtroStatus='prazo'; mostrarClientes()">
+  🟢 No prazo
+</button>
 
 <br><br>
   <input id="nomeCliente" type="text" placeholder="Nome do cliente"><br><br>
