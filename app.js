@@ -10,6 +10,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+let filtroStatus = "todos";
 
 // PROTEÇÃO DE LOGIN
 if (
