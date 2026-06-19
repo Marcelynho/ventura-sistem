@@ -466,3 +466,26 @@ setTimeout(() => {
         });
     }
 }, 1000);
+async function buscarClienteOS() {
+    const busca = document.getElementById("buscaClienteOS").value.toLowerCase();
+
+    const snapshot = await db.collection("clientes").get();
+    let achou = false;
+
+    snapshot.forEach(doc => {
+        const cliente = doc.data();
+
+        if (
+            (cliente.nome && cliente.nome.toLowerCase().includes(busca)) ||
+            (cliente.telefone && cliente.telefone.includes(busca)) ||
+            (cliente.cpf && cliente.cpf.includes(busca))
+        ) {
+            document.getElementById("clienteOS").value = cliente.nome || "";
+            achou = true;
+        }
+    });
+
+    if (!achou) {
+        alert("Cliente não encontrado");
+    }
+}
