@@ -208,8 +208,13 @@ async function editarCliente(id) {
 }
 
 function abrirWhatsApp(telefone) {
-    let numero = telefone.replace(/\D/g, "");
-    window.open("https://wa.me/55" + numero, "_blank");
+  const numero = telefone.replace(/\D/g, "");
+
+  const mensagem = "Olá! Aqui é da Óticas Ventura 😊";
+
+  const link = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
+
+  window.open(link, "_blank");
 }
 // PEDIDOS
 async function salvarPedido() {
