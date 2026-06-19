@@ -107,6 +107,15 @@ const busca = buscaInput ? buscaInput.value.toLowerCase() : "";
 
     snapshot.forEach(doc => {
         const cliente = doc.data();
+      const hoje = new Date().toISOString().split("T")[0];
+
+let status = "🟢 No prazo";
+
+if (cliente.retorno < hoje) {
+    status = "🔴 Vencido";
+} else if (cliente.retorno === hoje) {
+    status = "🟡 Vence hoje";
+}
       if (
     busca &&
     !cliente.nome.toLowerCase().includes(busca) &&
@@ -123,6 +132,7 @@ const busca = buscaInput ? buscaInput.value.toLowerCase() : "";
     <td>${cliente.bairro || ""}</td>
     <td>${cliente.cidade || ""}</td>
     <td>${cliente.retorno || "-"}</td>
+    <td>${status}</td>
 
     <td>
         <button onclick="abrirWhatsApp('${cliente.telefone}')">
