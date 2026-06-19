@@ -109,12 +109,16 @@ const busca = buscaInput ? buscaInput.value.toLowerCase() : "";
         const cliente = doc.data();
       const hoje = new Date().toISOString().split("T")[0];
 
-let status = "🟢 No prazo";
+let status = "⚪ Sem retorno";
 
-if (cliente.retorno < hoje) {
-    status = "🔴 Vencido";
-} else if (cliente.retorno === hoje) {
-    status = "🟡 Vence hoje";
+if (cliente.retorno) {
+    status = "🟢 No prazo";
+
+    if (cliente.retorno < hoje) {
+        status = "🔴 Vencido";
+    } else if (cliente.retorno === hoje) {
+        status = "🟡 Vence hoje";
+    }
 }
       if (
     busca &&
