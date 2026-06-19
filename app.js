@@ -169,6 +169,8 @@ if (
 </tr>
 `;
     });
+  document.getElementById("btnVencidos").innerText = `🔴 Vencidos (${totalVencidos})`;
+document.getElementById("btnHoje").innerText = `🟡 Vence hoje (${totalHoje})`;
 }
 
 async function excluirCliente(id) {
