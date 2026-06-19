@@ -121,7 +121,13 @@ if (cliente.retorno) {
         status = "🟡 Vence hoje";
     }
 }
-      if (
+
+if (filtroStatus === "vencido" && status !== "🔴 Vencido") return;
+if (filtroStatus === "hoje" && status !== "🟡 Vence hoje") return;
+if (filtroStatus === "sem" && status !== "⚪ Sem retorno") return;
+if (filtroStatus === "prazo" && status !== "🟢 No prazo") return;
+
+if (
     busca &&
     !cliente.nome.toLowerCase().includes(busca) &&
     !(cliente.telefone || "").toLowerCase().includes(busca)
