@@ -97,6 +97,8 @@ const busca = buscaInput ? buscaInput.value.toLowerCase() : "";
 <th>Endereço</th>
 <th>Bairro</th>
 <th>Cidade</th>
+<th>Retorno</th>
+<th>Status</th>
 <th>Ações</th>
         </tr>
     `;
