@@ -467,6 +467,7 @@ setTimeout(() => {
     }
 }, 1000);
 async function buscarClienteOS() {
+  alert("Função Buscar rodou");
     const busca = document.getElementById("buscaClienteOS").value.toLowerCase();
 
     const snapshot = await db.collection("clientes").get();
