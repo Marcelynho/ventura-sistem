@@ -105,18 +105,24 @@ const busca = buscaInput ? buscaInput.value.toLowerCase() : "";
     `;
 
     const snapshot = await db.collection("clientes").get();
-  let totalVencidos = 0;
+  let totalClientes = 0;
+let totalVencidos = 0;
 let totalHoje = 0;
+let totalSem = 0;
+let totalPrazo = 0;
 
     snapshot.forEach(doc => {
         const cliente = doc.data();
+      totalClientes++;
       const hoje = new Date().toISOString().split("T")[0];
 
 let status = "⚪ Sem retorno";
+totalSem++;
 
 if (cliente.retorno) {
+    totalSem--;
+    totalPrazo++;
     status = "🟢 No prazo";
-
     if (cliente.retorno < hoje) {
     status = "🔴 Vencido";
     totalVencidos++;
@@ -171,6 +177,11 @@ if (
     });
   document.getElementById("btnVencidos").innerText = `🔴 Vencidos (${totalVencidos})`;
 document.getElementById("btnHoje").innerText = `🟡 Vence hoje (${totalHoje})`;
+document.getElementById("totalClientes").innerText = totalClientes;
+document.getElementById("totalVencidosCard").innerText = totalVencidos;
+document.getElementById("totalHojeCard").innerText = totalHoje;
+document.getElementById("totalSemCard").innerText = totalSem;
+document.getElementById("totalPrazoCard").innerText = totalPrazo;
 }
 
 async function excluirCliente(id) {
