@@ -105,6 +105,8 @@ const busca = buscaInput ? buscaInput.value.toLowerCase() : "";
     `;
 
     const snapshot = await db.collection("clientes").get();
+  let totalVencidos = 0;
+let totalHoje = 0;
 
     snapshot.forEach(doc => {
         const cliente = doc.data();
@@ -116,10 +118,12 @@ if (cliente.retorno) {
     status = "🟢 No prazo";
 
     if (cliente.retorno < hoje) {
-        status = "🔴 Vencido";
-    } else if (cliente.retorno === hoje) {
-        status = "🟡 Vence hoje";
-    }
+    status = "🔴 Vencido";
+    totalVencidos++;
+} else if (cliente.retorno === hoje) {
+    status = "🟡 Vence hoje";
+    totalHoje++;
+}
 }
 
 if (filtroStatus === "vencido" && status !== "🔴 Vencido") return;
