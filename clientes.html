@@ -52,12 +52,26 @@
 <button class="btn-salvar" onclick="salvarCliente()">Salvar Cliente</button>
 
 <h2>Clientes cadastrados</h2>
-<input 
+
+<div class="cards-resumo">
+  <div>Total: <span id="totalClientes">0</span></div>
+  <div>🔴 Vencidos: <span id="totalVencidosCard">0</span></div>
+  <div>🟡 Hoje: <span id="totalHojeCard">0</span></div>
+  <div>⚪ Sem retorno: <span id="totalSemCard">0</span></div>
+  <div>🟢 No prazo: <span id="totalPrazoCard">0</span></div>
+</div>
+
+<br>
+
+<input
   type="text"
   id="buscaCliente"
   placeholder="Buscar por nome ou telefone"
   onkeyup="mostrarClientes()"
-><br><br>
+>
+
+<br><br>
+
 <table id="listaClientes">
   <tr>
     <th>Nome</th>
