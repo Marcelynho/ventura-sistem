@@ -161,10 +161,7 @@ if (
         </button>
 
         <br><br>
-        <button onclick="enviarLembrete('${cliente.telefone}', '${cliente.nome}')">
-📲 Enviar lembrete
-</button>
-<br><br>
+     
 
         <button onclick="editarCliente('${doc.id}')">
             Editar
