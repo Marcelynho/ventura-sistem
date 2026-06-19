@@ -210,7 +210,7 @@ async function editarCliente(id) {
 function abrirWhatsApp(telefone) {
   const numero = telefone.replace(/\D/g, "");
 
-  const mensagem = "Olá! Aqui é da Óticas Ventura " + String.fromCodePoint(0x1F44B);
+  const mensagem = "Olá! Aqui é da Óticas Ventura";
 
   const link = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
 
