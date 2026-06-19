@@ -161,6 +161,12 @@ if (
         </button>
 
         <br><br>
+        ${status === "🟡 Vence hoje" ? `
+<button onclick="enviarLembrete('${cliente.telefone}', '${cliente.nome}')">
+📲 Enviar lembrete
+</button>
+<br><br>
+` : ""}
 
         <button onclick="editarCliente('${doc.id}')">
             Editar
