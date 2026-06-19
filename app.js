@@ -42,6 +42,8 @@ function logout() {
 async function salvarCliente() {
     const nome = document.getElementById("nomeCliente").value;
 const telefone = document.getElementById("telefoneCliente").value;
+  const cpf = document.getElementById("cpfCliente").value;
+const cep = document.getElementById("cepCliente").value;
 const endereco = document.getElementById("enderecoCliente").value;
 const bairro = document.getElementById("bairroCliente").value;
 const cidade = document.getElementById("cidadeCliente").value;
@@ -54,6 +56,8 @@ const observacoes = document.getElementById("obsCliente").value;
     await db.collection("clientes").doc(window.clienteEditandoId).update({
         nome,
         telefone,
+        cpf,
+        cep,
         endereco,
         bairro,
         cidade,
@@ -70,6 +74,8 @@ const observacoes = document.getElementById("obsCliente").value;
     await db.collection("clientes").add({
     nome,
     telefone,
+      cpf,
+      cep,
     endereco,
     bairro,
     cidade,
