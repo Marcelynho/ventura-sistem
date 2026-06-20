@@ -511,4 +511,6 @@ document.getElementById("pagamentoOS").value = "";
 
     alert("OS salva com sucesso!");
 }
-
+function imprimirOS() {
+    window.print();
+}
