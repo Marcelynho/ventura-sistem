@@ -498,7 +498,7 @@ document.getElementById("cidadeOS").value = cliente.cidade || "";
     }
 }
 async function salvarOS() {
-    await db.collection("ordens").add({
+    const dadosOS = {
         numero: document.getElementById("numeroOS").value,
         cliente: document.getElementById("clienteOS").value,
         lente: document.getElementById("lenteOS").value,
@@ -524,7 +524,15 @@ oeEixo: document.getElementById("oeEixo").value,
 dnp: document.getElementById("dnpOS").value,
 altura: document.getElementById("alturaOS").value,
 add: document.getElementById("addOS").value
-    });
+    };
+
+if (window.osEditandoId) {
+    await db.collection("ordens").doc(window.osEditandoId).update(dadosOS);
+    alert("OS atualizada com sucesso!");
+} else {
+    await db.collection("ordens").add(dadosOS);
+    alert("OS salva com sucesso!");
+}
   document.getElementById("numeroOS").value = "";
 document.getElementById("clienteOS").value = "";
 document.getElementById("lenteOS").value = "";
@@ -589,6 +597,7 @@ async function buscarOS() {
 
     snapshot.forEach(doc => {
         const os = doc.data();
+      window.osEditandoId = doc.id;
 
         if (
             String(os.numero) === String(busca) ||
