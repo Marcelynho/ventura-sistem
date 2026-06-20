@@ -653,9 +653,11 @@ async function buscarOS() {
       window.osEditandoId = doc.id;
 
         if (
-            String(os.numero) === String(busca) ||
-            (os.cliente && os.cliente.toLowerCase().includes(busca.toLowerCase()))
-        ) {
+    String(os.numero) === String(busca) ||
+    (os.cliente && os.cliente.toLowerCase().includes(busca.toLowerCase())) ||
+    (os.telefone && String(os.telefone).includes(busca)) ||
+    (os.cpf && String(os.cpf).includes(busca))
+) {
             document.getElementById("numeroOS").value = os.numero || "";
             document.getElementById("clienteOS").value = os.cliente || "";
           document.getElementById("telefoneOS").value = os.telefone || "";
