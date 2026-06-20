@@ -587,18 +587,19 @@ const add = document.getElementById("addOS").value;
 <style>
 body {
     font-family: Arial, sans-serif;
-    padding: 20px;
+    padding: 25px
+    font-size: 20px;
 }
 h2, h3 {
     text-align: center;
-    margin: 5px 0;
+    margin: 10px 0;
 }
 hr {
     margin: 15px 0;
 }
 p {
     margin: 6px 0;
-    font-size: 16px;
+    font-size: 22px;
 }
 .assinatura {
     margin-top: 50px;
