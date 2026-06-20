@@ -556,4 +556,34 @@ const add = document.getElementById("addOS").value;
     janela.document.write(conteudo);
     janela.print();
 }
+async function buscarOS() {
+    const busca = document.getElementById("buscaOS").value;
+
+    const snapshot = await db.collection("ordens").get();
+
+    let achou = false;
+
+    snapshot.forEach(doc => {
+        const os = doc.data();
+
+        if (
+            os.numero === busca ||
+            (os.cliente && os.cliente.toLowerCase().includes(busca.toLowerCase()))
+        ) {
+            document.getElementById("numeroOS").value = os.numero || "";
+            document.getElementById("clienteOS").value = os.cliente || "";
+            document.getElementById("lenteOS").value = os.lente || "";
+            document.getElementById("valorOS").value = os.valor || "";
+            document.getElementById("entradaOS").value = os.entrada || "";
+            document.getElementById("restanteOS").value = os.restante || "";
+            document.getElementById("pagamentoOS").value = os.pagamento || "";
+
+            achou = true;
+        }
+    });
+
+    if (!achou) {
+        alert("OS não encontrada");
+    }
+}
 
