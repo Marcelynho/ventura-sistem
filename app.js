@@ -491,4 +491,7 @@ async function buscarClienteOS() {
         alert("Cliente não encontrado");
     }
 }
+async function salvarOS() {
+    alert("Salvar OS funcionou");
+}
 
