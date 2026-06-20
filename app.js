@@ -506,6 +506,12 @@ async function salvarOS() {
         entrada: document.getElementById("entradaOS").value,
         restante: document.getElementById("restanteOS").value,
         pagamento: document.getElementById("pagamentoOS").value,
+      telefone: document.getElementById("telefoneOS").value,
+cpf: document.getElementById("cpfOS").value,
+cep: document.getElementById("cepOS").value,
+endereco: document.getElementById("enderecoOS").value,
+bairro: document.getElementById("bairroOS").value,
+cidade: document.getElementById("cidadeOS").value,
       
 odEsferico: document.getElementById("odEsferico").value,
 odCilindrico: document.getElementById("odCilindrico").value,
