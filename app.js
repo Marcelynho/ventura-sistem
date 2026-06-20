@@ -609,4 +609,19 @@ document.getElementById("addOS").value = os.add || "";
         alert("OS não encontrada");
     }
 }
+setTimeout(() => {
+    const valor = document.getElementById("valorOS");
+    const entrada = document.getElementById("entradaOS");
+    const restante = document.getElementById("restanteOS");
 
+    if (valor && entrada && restante) {
+        function calcularRestante() {
+            const total = parseFloat(valor.value.replace(",", ".")) || 0;
+            const pago = parseFloat(entrada.value.replace(",", ".")) || 0;
+            restante.value = (total - pago).toFixed(2).replace(".", ",");
+        }
+
+        valor.addEventListener("input", calcularRestante);
+        entrada.addEventListener("input", calcularRestante);
+    }
+}, 1000);
