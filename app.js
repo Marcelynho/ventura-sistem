@@ -501,6 +501,13 @@ async function salvarOS() {
         restante: document.getElementById("restanteOS").value,
         pagamento: document.getElementById("pagamentoOS").value
     });
+  document.getElementById("numeroOS").value = "";
+document.getElementById("clienteOS").value = "";
+document.getElementById("lenteOS").value = "";
+document.getElementById("valorOS").value = "";
+document.getElementById("entradaOS").value = "";
+document.getElementById("restanteOS").value = "";
+document.getElementById("pagamentoOS").value = "";
 
     alert("OS salva com sucesso!");
 }
