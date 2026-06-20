@@ -512,5 +512,32 @@ document.getElementById("pagamentoOS").value = "";
     alert("OS salva com sucesso!");
 }
 function imprimirOS() {
-    window.print();
+    const numero = document.getElementById("numeroOS").value;
+    const cliente = document.getElementById("clienteOS").value;
+    const lente = document.getElementById("lenteOS").value;
+    const valor = document.getElementById("valorOS").value;
+    const entrada = document.getElementById("entradaOS").value;
+    const restante = document.getElementById("restanteOS").value;
+    const pagamento = document.getElementById("pagamentoOS").value;
+
+    const conteudo = `
+        <h2>Óticas Ventura</h2>
+        <h3>Ordem de Serviço Nº ${numero}</h3>
+        <hr>
+
+        <p><b>Cliente:</b> ${cliente}</p>
+        <p><b>Lente / Produto:</b> ${lente}</p>
+        <p><b>Valor Total:</b> R$ ${valor}</p>
+        <p><b>Entrada:</b> R$ ${entrada}</p>
+        <p><b>Restante:</b> R$ ${restante}</p>
+        <p><b>Forma de Pagamento:</b> ${pagamento}</p>
+
+        <hr>
+        <p><b>Assinatura do cliente:</b> ______________________________</p>
+    `;
+
+    const janela = window.open("", "_blank");
+    janela.document.write(conteudo);
+    janela.print();
+}
 }
