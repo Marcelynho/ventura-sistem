@@ -483,6 +483,12 @@ async function buscarClienteOS() {
             (cliente.cpf && cliente.cpf.includes(busca))
         ) {
             document.getElementById("clienteOS").value = cliente.nome || "";
+          document.getElementById("telefoneOS").value = cliente.telefone || "";
+document.getElementById("cpfOS").value = cliente.cpf || "";
+document.getElementById("cepOS").value = cliente.cep || "";
+document.getElementById("enderecoOS").value = cliente.endereco || "";
+document.getElementById("bairroOS").value = cliente.bairro || "";
+document.getElementById("cidadeOS").value = cliente.cidade || "";
             achou = true;
         }
     });
