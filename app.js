@@ -591,7 +591,7 @@ async function buscarOS() {
         const os = doc.data();
 
         if (
-            os.numero === busca ||
+            String(os.numero) === String(busca) ||
             (os.cliente && os.cliente.toLowerCase().includes(busca.toLowerCase()))
         ) {
             document.getElementById("numeroOS").value = os.numero || "";
