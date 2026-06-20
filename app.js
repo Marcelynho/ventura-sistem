@@ -577,6 +577,17 @@ async function buscarOS() {
             document.getElementById("entradaOS").value = os.entrada || "";
             document.getElementById("restanteOS").value = os.restante || "";
             document.getElementById("pagamentoOS").value = os.pagamento || "";
+          document.getElementById("odEsferico").value = os.odEsferico || "";
+document.getElementById("odCilindrico").value = os.odCilindrico || "";
+document.getElementById("odEixo").value = os.odEixo || "";
+
+document.getElementById("oeEsferico").value = os.oeEsferico || "";
+document.getElementById("oeCilindrico").value = os.oeCilindrico || "";
+document.getElementById("oeEixo").value = os.oeEixo || "";
+
+document.getElementById("dnpOS").value = os.dnp || "";
+document.getElementById("alturaOS").value = os.altura || "";
+document.getElementById("addOS").value = os.add || "";
 
             achou = true;
         }
