@@ -499,7 +499,19 @@ async function salvarOS() {
         valor: document.getElementById("valorOS").value,
         entrada: document.getElementById("entradaOS").value,
         restante: document.getElementById("restanteOS").value,
-        pagamento: document.getElementById("pagamentoOS").value
+        pagamento: document.getElementById("pagamentoOS").value,
+      
+odEsferico: document.getElementById("odEsferico").value,
+odCilindrico: document.getElementById("odCilindrico").value,
+odEixo: document.getElementById("odEixo").value,
+
+oeEsferico: document.getElementById("oeEsferico").value,
+oeCilindrico: document.getElementById("oeCilindrico").value,
+oeEixo: document.getElementById("oeEixo").value,
+
+dnp: document.getElementById("dnpOS").value,
+altura: document.getElementById("alturaOS").value,
+add: document.getElementById("addOS").value
     });
   document.getElementById("numeroOS").value = "";
 document.getElementById("clienteOS").value = "";
