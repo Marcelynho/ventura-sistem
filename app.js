@@ -596,6 +596,12 @@ async function buscarOS() {
         ) {
             document.getElementById("numeroOS").value = os.numero || "";
             document.getElementById("clienteOS").value = os.cliente || "";
+          document.getElementById("telefoneOS").value = os.telefone || "";
+document.getElementById("cpfOS").value = os.cpf || "";
+document.getElementById("cepOS").value = os.cep || "";
+document.getElementById("enderecoOS").value = os.endereco || "";
+document.getElementById("bairroOS").value = os.bairro || "";
+document.getElementById("cidadeOS").value = os.cidade || "";
             document.getElementById("lenteOS").value = os.lente || "";
             document.getElementById("valorOS").value = os.valor || "";
             document.getElementById("entradaOS").value = os.entrada || "";
