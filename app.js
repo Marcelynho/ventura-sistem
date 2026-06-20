@@ -581,25 +581,60 @@ const altura = document.getElementById("alturaOS").value;
 const add = document.getElementById("addOS").value;
 
     const conteudo = `
-        <h2>Óticas Ventura</h2>
-        <h3>Ordem de Serviço Nº ${numero}</h3>
-        <hr>
+<html>
+<head>
+<title>OS ${numero}</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+h2, h3 {
+    text-align: center;
+    margin: 5px 0;
+}
+hr {
+    margin: 15px 0;
+}
+p {
+    margin: 6px 0;
+    font-size: 16px;
+}
+.assinatura {
+    margin-top: 50px;
+    text-align: center;
+}
+</style>
+</head>
+<body>
 
-        <p><b>Cliente:</b> ${cliente}</p>
-        <p><b>Lente / Produto:</b> ${lente}</p>
-        <p><b>Valor Total:</b> R$ ${valor}</p>
-        <p><b>Entrada:</b> R$ ${entrada}</p>
-        <p><b>Restante:</b> R$ ${restante}</p>
-        <p><b>Forma de Pagamento:</b> ${pagamento}</p>
-        <p><b>OD:</b> ${odEsferico} / ${odCilindrico} / ${odEixo}</p>
+<h2>Óticas Ventura</h2>
+<h3>Ordem de Serviço Nº ${numero}</h3>
+<hr>
+
+<p><b>Cliente:</b> ${cliente}</p>
+<p><b>Lente / Produto:</b> ${lente}</p>
+<p><b>Valor Total:</b> R$ ${valor}</p>
+<p><b>Entrada:</b> R$ ${entrada}</p>
+<p><b>Restante:</b> R$ ${restante}</p>
+<p><b>Forma de Pagamento:</b> ${pagamento}</p>
+
+<hr>
+
+<p><b>OD:</b> ${odEsferico} / ${odCilindrico} / ${odEixo}</p>
 <p><b>OE:</b> ${oeEsferico} / ${oeCilindrico} / ${oeEixo}</p>
 <p><b>DNP:</b> ${dnp}</p>
 <p><b>Altura:</b> ${altura}</p>
 <p><b>ADD:</b> ${add}</p>
 
-        <hr>
-        <p><b>Assinatura do cliente:</b> ______________________________</p>
-    `;
+<div class="assinatura">
+<p>________________________________</p>
+<p><b>Assinatura do Cliente</b></p>
+</div>
+
+</body>
+</html>
+`;
 
     const janela = window.open("", "_blank");
     janela.document.write(conteudo);
