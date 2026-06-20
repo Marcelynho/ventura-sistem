@@ -324,6 +324,7 @@ window.onload = function () {
 async function salvarReceituario() {
   const cliente = document.getElementById("clienteReceita").value;
   const telefone = document.getElementById("telefoneReceita").value;
+  const cpf = document.getElementById("cpfReceita").value;
   const adicao = document.getElementById("adicao").value;
   const dnp = document.getElementById("dnp").value;
   const altura = document.getElementById("altura").value;
@@ -332,6 +333,7 @@ async function salvarReceituario() {
   await db.collection("receituarios").add({
     cliente,
     telefone,
+    cpf,
     adicao,
     dnp,
     altura,
