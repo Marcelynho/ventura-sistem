@@ -491,4 +491,4 @@ async function buscarClienteOS() {
         alert("Cliente não encontrado");
     }
 }
-alert("app.js carregado");
+
