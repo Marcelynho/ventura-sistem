@@ -519,6 +519,17 @@ function imprimirOS() {
     const entrada = document.getElementById("entradaOS").value;
     const restante = document.getElementById("restanteOS").value;
     const pagamento = document.getElementById("pagamentoOS").value;
+  const odEsferico = document.getElementById("odEsferico").value;
+const odCilindrico = document.getElementById("odCilindrico").value;
+const odEixo = document.getElementById("odEixo").value;
+
+const oeEsferico = document.getElementById("oeEsferico").value;
+const oeCilindrico = document.getElementById("oeCilindrico").value;
+const oeEixo = document.getElementById("oeEixo").value;
+
+const dnp = document.getElementById("dnpOS").value;
+const altura = document.getElementById("alturaOS").value;
+const add = document.getElementById("addOS").value;
 
     const conteudo = `
         <h2>Óticas Ventura</h2>
@@ -531,6 +542,11 @@ function imprimirOS() {
         <p><b>Entrada:</b> R$ ${entrada}</p>
         <p><b>Restante:</b> R$ ${restante}</p>
         <p><b>Forma de Pagamento:</b> ${pagamento}</p>
+        <p><b>OD:</b> ${odEsferico} / ${odCilindrico} / ${odEixo}</p>
+<p><b>OE:</b> ${oeEsferico} / ${oeCilindrico} / ${oeEixo}</p>
+<p><b>DNP:</b> ${dnp}</p>
+<p><b>Altura:</b> ${altura}</p>
+<p><b>ADD:</b> ${add}</p>
 
         <hr>
         <p><b>Assinatura do cliente:</b> ______________________________</p>
