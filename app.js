@@ -492,6 +492,16 @@ async function buscarClienteOS() {
     }
 }
 async function salvarOS() {
-    alert("Salvar OS funcionou");
+    await db.collection("ordens").add({
+        numero: document.getElementById("numeroOS").value,
+        cliente: document.getElementById("clienteOS").value,
+        lente: document.getElementById("lenteOS").value,
+        valor: document.getElementById("valorOS").value,
+        entrada: document.getElementById("entradaOS").value,
+        restante: document.getElementById("restanteOS").value,
+        pagamento: document.getElementById("pagamentoOS").value
+    });
+
+    alert("OS salva com sucesso!");
 }
 
