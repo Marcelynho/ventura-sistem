@@ -52,6 +52,17 @@ const nascimento = document.getElementById("nascimentoCliente").value;
 retorno.setFullYear(retorno.getFullYear() + 1);
 const dataRetorno = retorno.toISOString().split("T")[0];
 const observacoes = document.getElementById("obsCliente").value;
+  const odEsferico = document.getElementById("odEsfericoCliente")?.value || "";
+const odCilindrico = document.getElementById("odCilindricoCliente")?.value || "";
+const odEixo = document.getElementById("odEixoCliente")?.value || "";
+
+const oeEsferico = document.getElementById("oeEsfericoCliente")?.value || "";
+const oeCilindrico = document.getElementById("oeCilindricoCliente")?.value || "";
+const oeEixo = document.getElementById("oeEixoCliente")?.value || "";
+
+const dnp = document.getElementById("dnpCliente")?.value || "";
+const altura = document.getElementById("alturaCliente")?.value || "";
+const adicao = document.getElementById("adicaoCliente")?.value || "";
   if (window.clienteEditandoId) {
     await db.collection("clientes").doc(window.clienteEditandoId).update({
         nome,
