@@ -863,6 +863,16 @@ document.getElementById("resumoDiferenca").innerText = diferenca;
     fechadoEm: new Date(),
     status: "fechado"
   });
+  await db.collection("historicoCaixa").add({
+    funcionario: document.getElementById("funcionarioCaixa").value,
+    valorInicial: valorInicialCaixaAtual,
+    entradas: totalEntradas,
+    saidas: totalSaidas,
+    saldoEsperado: saldoEsperado,
+    valorConferido: Number(valorConferido),
+    diferenca: diferenca,
+    fechadoEm: new Date()
+});
 
   alert("Caixa fechado com sucesso!");
   caixaAbertoId = null;
