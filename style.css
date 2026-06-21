@@ -401,3 +401,33 @@ body {
     border-radius: 16px;
     color: white;
 }
+.pagina-caixa {
+    padding: 15px 20px !important;
+    gap: 8px;
+}
+
+.pagina-caixa h1 {
+    font-size: 32px;
+    margin: 5px 0 10px;
+}
+
+.pagina-caixa h2 {
+    font-size: 24px;
+    margin: 12px 0 8px;
+}
+
+.pagina-caixa input,
+.pagina-caixa select {
+    padding: 10px !important;
+    margin: 5px 0 !important;
+}
+
+.pagina-caixa button {
+    padding: 10px 16px !important;
+    margin: 6px 0 10px !important;
+}
+
+.pagina-caixa hr {
+    width: 700px;
+    max-width: 90%;
+    opacity:
