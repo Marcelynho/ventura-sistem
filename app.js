@@ -491,6 +491,17 @@ document.getElementById("cepOS").value = cliente.cep || "";
 document.getElementById("enderecoOS").value = cliente.endereco || "";
 document.getElementById("bairroOS").value = cliente.bairro || "";
 document.getElementById("cidadeOS").value = cliente.cidade || "";
+          document.getElementById("odEsferico").value = cliente.odEsferico || "";
+document.getElementById("odCilindrico").value = cliente.odCilindrico || "";
+document.getElementById("odEixo").value = cliente.odEixo || "";
+
+document.getElementById("oeEsferico").value = cliente.oeEsferico || "";
+document.getElementById("oeCilindrico").value = cliente.oeCilindrico || "";
+document.getElementById("oeEixo").value = cliente.oeEixo || "";
+
+document.getElementById("dnpOS").value = cliente.dnp || "";
+document.getElementById("alturaOS").value = cliente.altura || "";
+document.getElementById("addOS").value = cliente.adicao || "";
             achou = true;
         }
     });
