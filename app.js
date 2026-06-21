@@ -774,3 +774,14 @@ async function listarOS() {
 
   listaDiv.innerHTML = html || "Nenhuma OS encontrada";
 }
+async function abrirCaixa() {
+  alert("Caixa aberto!");
+}
+
+async function registrarMovimento() {
+  alert("Movimento registrado!");
+}
+
+async function fecharCaixa() {
+  alert("Caixa fechado!");
+}
