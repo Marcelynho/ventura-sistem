@@ -897,6 +897,7 @@ async function carregarHistoricoCaixa() {
         <td>R$ ${h.entradas || 0}</td>
         <td>R$ ${h.saidas || 0}</td>
         <td>R$ ${h.valorConferido || 0}</td>
+        <td>${h.fechadoEm ? new Date(h.fechadoEm.seconds * 1000).toLocaleDateString('pt-BR') : '-'}</td>
         <td>R$ ${h.diferenca || 0}</td>
       </tr>
     `;
