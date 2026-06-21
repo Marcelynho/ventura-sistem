@@ -74,7 +74,18 @@ const adicao = document.getElementById("adicaoCliente")?.value || "";
         cidade,
         nascimento,
         observacoes,
-      retorno: dataRetorno
+      retorno: dataRetorno,
+      odEsferico,
+odCilindrico,
+odEixo,
+
+oeEsferico,
+oeCilindrico,
+oeEixo,
+
+dnp,
+altura,
+adicao,
     });
 
     window.clienteEditandoId = null;
@@ -92,8 +103,18 @@ const adicao = document.getElementById("adicaoCliente")?.value || "";
     cidade,
     nascimento,
     observacoes,
-      retorno: dataRetorno
-      
+      retorno: dataRetorno,
+      odEsferico,
+odCilindrico,
+odEixo,
+
+oeEsferico,
+oeCilindrico,
+oeEixo,
+
+dnp,
+altura,
+adicao,
 
       
 });
