@@ -519,26 +519,22 @@ body {
     width: 110px;
 }
 
-#tabelaHistorico {
-    width: 90% !important;
-    max-width: 900px !important;
-    margin: auto;
-}
+
   .pagina-caixa h1 {
   text-align: center;
 }
 
 .pagina-caixa > div,
 #tabelaHistorico {
-  width: 760px !important;
-  max-width: 760px !important;
+  width: 680px !important;
+  max-width: 680px !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
 
 .pagina-caixa > div {
   display: grid !important;
-  grid-template-columns: 1fr 1fr 100px;
+  grid-template-columns: 1fr 1fr 80px;
   gap: 10px !important;
 }
 
