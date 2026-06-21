@@ -450,3 +450,12 @@ body {
     background: transparent !important;
     color: #ffffff !important;
 }
+.pagina-caixa #resumoCaixa,
+.pagina-caixa #resumoCaixa *,
+.pagina-caixa #resumoCaixa p,
+.pagina-caixa #resumoCaixa span {
+    background: none !important;
+    box-shadow: none !important;
+    color: white !important;
+    border: none !important;
+}
