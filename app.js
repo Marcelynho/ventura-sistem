@@ -774,14 +774,74 @@ async function listarOS() {
 
   listaDiv.innerHTML = html || "Nenhuma OS encontrada";
 }
+
+let caixaAbertoId = null;
+
 async function abrirCaixa() {
-  alert("Caixa aberto!");
+  const valorInicial = document.getElementById("valorInicialCaixa").value;
+  const funcionario = document.getElementById("funcionarioCaixa").value;
+
+  if (!valorInicial || !funcionario) {
+    alert("Preencha valor inicial e funcionário");
+    return;
+  }
+
+  const docRef = await db.collection("caixas").add({
+    valorInicial: Number(valorInicial),
+    funcionario,
+    abertoEm: new Date(),
+    status: "aberto"
+  });
+
+  caixaAbertoId = docRef.id;
+
+  alert("Caixa aberto com sucesso!");
 }
 
 async function registrarMovimento() {
+  if (!caixaAbertoId) {
+    alert("Abra o caixa primeiro!");
+    return;
+  }
+
+  const descricao = document.getElementById("descricaoMovimento").value;
+  const valor = document.getElementById("valorMovimento").value;
+  const tipo = document.getElementById("tipoMovimento").value;
+
+  if (!descricao || !valor) {
+    alert("Preencha descrição e valor");
+    return;
+  }
+
+  await db.collection("caixas").doc(caixaAbertoId).collection("movimentos").add({
+    descricao,
+    valor: Number(valor),
+    tipo,
+    criadoEm: new Date()
+  });
+
   alert("Movimento registrado!");
 }
 
 async function fecharCaixa() {
-  alert("Caixa fechado!");
+  if (!caixaAbertoId) {
+    alert("Abra o caixa primeiro!");
+    return;
+  }
+
+  const valorConferido = document.getElementById("valorConferidoCaixa").value;
+
+  if (!valorConferido) {
+    alert("Informe o valor conferido");
+    return;
+  }
+
+  await db.collection("caixas").doc(caixaAbertoId).update({
+    valorConferido: Number(valorConferido),
+    fechadoEm: new Date(),
+    status: "fechado"
+  });
+
+  alert("Caixa fechado com sucesso!");
+  caixaAbertoId = null;
 }
