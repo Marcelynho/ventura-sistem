@@ -889,6 +889,16 @@ async function carregarHistoricoCaixa() {
 
   snapshot.forEach(doc => {
     const h = doc.data();
+    const filtroFuncionario = document.getElementById("filtroFuncionario")?.value.toLowerCase() || "";
+const filtroData = document.getElementById("filtroData")?.value || "";
+
+const nomeFuncionario = (h.funcionario || "").toLowerCase();
+const dataFormatada = h.fechadoEm
+  ? new Date(h.fechadoEm.seconds * 1000).toISOString().split("T")[0]
+  : "";
+
+if (filtroFuncionario && !nomeFuncionario.includes(filtroFuncionario)) return;
+if (filtroData && dataFormatada !== filtroData) return;
 
     tabela.innerHTML += `
       <tr>
