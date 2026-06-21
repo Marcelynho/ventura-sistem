@@ -493,3 +493,34 @@ body {
     border-radius: 12px;
     overflow: hidden;
 }
+  .pagina-caixa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pagina-caixa > div {
+    width: 90%;
+    max-width: 900px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px auto;
+}
+
+#filtroFuncionario,
+#filtroData {
+    width: 280px !important;
+    max-width: 280px !important;
+}
+
+.pagina-caixa button {
+    width: 110px;
+}
+
+#tabelaHistorico {
+    width: 90% !important;
+    max-width: 900px !important;
+    margin: auto;
+}
