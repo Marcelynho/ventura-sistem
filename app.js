@@ -877,3 +877,30 @@ document.getElementById("resumoDiferenca").innerText = diferenca;
   alert("Caixa fechado com sucesso!");
   caixaAbertoId = null;
 }
+async function carregarHistoricoCaixa() {
+  const tabela = document.querySelector("#tabelaHistorico tbody");
+  if (!tabela) return;
+
+  tabela.innerHTML = "";
+
+  const snapshot = await db.collection("historicoCaixa")
+    .orderBy("fechadoEm", "desc")
+    .get();
+
+  snapshot.forEach(doc => {
+    const h = doc.data();
+
+    tabela.innerHTML += `
+      <tr>
+        <td>${h.funcionario || ""}</td>
+        <td>R$ ${h.valorInicial || 0}</td>
+        <td>R$ ${h.entradas || 0}</td>
+        <td>R$ ${h.saidas || 0}</td>
+        <td>R$ ${h.valorConferido || 0}</td>
+        <td>R$ ${h.diferenca || 0}</td>
+      </tr>
+    `;
+  });
+}
+
+carregarHistoricoCaixa();
