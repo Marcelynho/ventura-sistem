@@ -466,3 +466,30 @@ body {
     font-weight: bold;
     margin: 10px 0;
 }
+.pagina-caixa > div {
+    width: 800px;
+    max-width: 90%;
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center;
+    justify-content: center;
+    margin: 15px auto !important;
+}
+
+.pagina-caixa > div input {
+    width: 100% !important;
+    max-width: 330px !important;
+}
+
+.pagina-caixa > div button {
+    width: 120px !important;
+    margin: 0 !important;
+}
+
+.pagina-caixa table {
+    width: 800px !important;
+    max-width: 90% !important;
+    margin: 20px auto !important;
+    border-radius: 12px;
+    overflow: hidden;
+}
