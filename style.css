@@ -437,3 +437,16 @@ body {
     font-size: 20px;
     font-weight: bold;
 }
+.pagina-caixa #resumoCaixa p {
+    background: transparent !important;
+    color: white !important;
+    padding: 0 !important;
+    margin: 12px 0 !important;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.pagina-caixa #resumoCaixa span {
+    background: transparent !important;
+    color: #ffffff !important;
+}
