@@ -524,3 +524,30 @@ body {
     max-width: 900px !important;
     margin: auto;
 }
+  .pagina-caixa h1 {
+  text-align: center;
+}
+
+.pagina-caixa > div,
+#tabelaHistorico {
+  width: 760px !important;
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.pagina-caixa > div {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 100px;
+  gap: 10px !important;
+}
+
+#filtroFuncionario,
+#filtroData {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.pagina-caixa > div button {
+  width: 100px !important;
+}
