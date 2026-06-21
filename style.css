@@ -363,33 +363,41 @@ body {
     font-size: 16px;
 }
 
-.caixa-login button {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(90deg, #063b78, #00bfff);
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
+.pagina-caixa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
 }
+
 .pagina-caixa h1,
 .pagina-caixa h2 {
     color: white !important;
     text-align: center;
 }
 
+.pagina-caixa input,
+.pagina-caixa select {
+    width: 700px;
+    max-width: 90%;
+    padding: 14px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 12px;
+}
+
 .pagina-caixa button {
     padding: 12px 20px;
     border-radius: 12px;
     font-size: 16px;
+    margin: 10px 0 20px 0;
 }
 
 .pagina-caixa #resumoCaixa {
-    background: rgba(255,255,255,0.18);
-    padding: 20px;
+    width: 700px;
+    max-width: 90%;
+    background: rgba(255,255,255,0.15);
+    padding: 25px;
     border-radius: 16px;
     color: white;
-    margin-top: 20px;
 }
