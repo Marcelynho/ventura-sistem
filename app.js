@@ -775,7 +775,11 @@ async function listarOS() {
   listaDiv.innerHTML = html || "Nenhuma OS encontrada";
 }
 
+
 let caixaAbertoId = null;
+let totalEntradas = 0;
+let totalSaidas = 0;
+let valorInicialCaixaAtual = 0;
 
 async function abrirCaixa() {
   const valorInicial = document.getElementById("valorInicialCaixa").value;
@@ -794,6 +798,9 @@ async function abrirCaixa() {
   });
 
   caixaAbertoId = docRef.id;
+  valorInicialCaixaAtual = Number(valorInicial);
+document.getElementById("resumoInicial").innerText = valorInicial;
+document.getElementById("resumoSaldo").innerText = valorInicial;
 
   alert("Caixa aberto com sucesso!");
 }
@@ -807,12 +814,23 @@ async function registrarMovimento() {
   const descricao = document.getElementById("descricaoMovimento").value;
   const valor = document.getElementById("valorMovimento").value;
   const tipo = document.getElementById("tipoMovimento").value;
+  
 
   if (!descricao || !valor) {
     alert("Preencha descrição e valor");
     return;
   }
+if (tipo === "entrada") {
+   totalEntradas += Number(valor);
+} else {
+   totalSaidas += Number(valor);
+}
 
+const saldo = valorInicialCaixaAtual + totalEntradas - totalSaidas;
+
+document.getElementById("resumoEntradas").innerText = totalEntradas;
+document.getElementById("resumoSaidas").innerText = totalSaidas;
+document.getElementById("resumoSaldo").innerText = saldo;
   await db.collection("caixas").doc(caixaAbertoId).collection("movimentos").add({
     descricao,
     valor: Number(valor),
