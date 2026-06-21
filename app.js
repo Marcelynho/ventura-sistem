@@ -853,7 +853,11 @@ async function fecharCaixa() {
     alert("Informe o valor conferido");
     return;
   }
+const saldoEsperado = valorInicialCaixaAtual + totalEntradas - totalSaidas;
+const diferenca = Number(valorConferido) - saldoEsperado;
 
+document.getElementById("resumoConferido").innerText = valorConferido;
+document.getElementById("resumoDiferenca").innerText = diferenca;
   await db.collection("caixas").doc(caixaAbertoId).update({
     valorConferido: Number(valorConferido),
     fechadoEm: new Date(),
