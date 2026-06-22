@@ -321,14 +321,27 @@ async function atualizarDashboard() {
 }
 
 // GRÁFICO
-function desenharGrafico() {
+async function desenharGrafico() {
     const canvas = document.getElementById("graficoVendas");
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const valores = [2, 1, 5000];
+    const clientesSnap = await db.collection("clientes").get();
+const pedidosSnap = await db.collection("pedidos").get();
+
+let totalFinanceiro = 0;
+
+pedidosSnap.forEach(doc => {
+  totalFinanceiro += Number(doc.data().valor || 0);
+});
+
+const valores = [
+  clientesSnap.size,
+  pedidosSnap.size,
+  totalFinanceiro
+];
     const cores = ["#00c6ff", "#0072ff", "#28a745"];
     const larguraBarra = 80;
 
