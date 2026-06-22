@@ -278,9 +278,11 @@ async function mostrarPedidos() {
     lista.innerHTML = "";
 
     const snapshot = await db.collection("pedidos").get();
+  let total = 0;
 
     snapshot.forEach(doc => {
         const pedido = doc.data();
+      total += Number(pedido.valor || 0);
 
         lista.innerHTML += `
             <p>
@@ -317,7 +319,7 @@ async function atualizarDashboard() {
         soma += Number(doc.data().valor || 0);
     });
 
-    if (totalFinanceiro) totalFinanceiro.textContent = soma;
+    if (totalFinanceiro) totalFinanceiro.textContent = soma.toFixed(2);
 }
 
 // GRÁFICO
