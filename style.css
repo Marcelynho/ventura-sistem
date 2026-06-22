@@ -524,18 +524,7 @@ body {
   text-align: center;
 }
 
-.pagina-caixa > div,
-#tabelaHistorico {
-  width: 680px !important;
-  max-width: 680px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
 
-.pagina-caixa > div {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr 80px;
-  gap: 10px !important;
 }
 
 #filtroFuncionario,
@@ -546,4 +535,22 @@ body {
 
 .pagina-caixa > div button {
   width: 100px !important;
+}
+.filtros-historico {
+  width: 680px !important;
+  margin: 20px auto !important;
+  display: grid !important;
+  grid-template-columns: 250px 250px 90px !important;
+  gap: 10px !important;
+}
+
+.filtros-historico input,
+.filtros-historico button {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+#tabelaHistorico {
+  width: 680px !important;
+  margin: 20px auto !important;
 }
