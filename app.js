@@ -915,3 +915,6 @@ if (filtroData && dataFormatada !== filtroData) return;
 }
 
 carregarHistoricoCaixa();
+function imprimirCaixa() {
+  window.print();
+}
