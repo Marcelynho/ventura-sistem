@@ -537,11 +537,12 @@ body {
   width: 100px !important;
 }
 .filtros-historico {
-  width: 680px !important;
+  width: 870px !important;
   margin: 20px auto !important;
   display: grid !important;
-  grid-template-columns: 250px 250px 90px !important;
+  grid-template-columns: 1fr 1fr 90px !important;
   gap: 10px !important;
+  align-items: end !important;
 }
 
 .filtros-historico input,
@@ -551,6 +552,6 @@ body {
 }
 
 #tabelaHistorico {
-  width: 680px !important;
+  width: 870px !important;
   margin: 20px auto !important;
 }
