@@ -578,7 +578,11 @@ body {
     width: 100% !important;
     margin: 0 !important;
     padding: 20px !important;
-    font-size: 18px !important;
+    
+  font-size: 26px !important;
+position: absolute;
+top: 80px;
+left: 80px;
   }
 
   #resumoCaixa::before {
