@@ -256,19 +256,19 @@ function abrirWhatsApp(telefone) {
 }
 // PEDIDOS
 async function salvarPedido() {
-    const nome = document.querySelectorAll("input")[0].value;
-    const produto = document.querySelectorAll("input")[1].value;
-    const valor = document.querySelectorAll("input")[2].value;
-    const data = new Date().toLocaleDateString("pt-BR");
+  const nome = document.getElementById("nomePedido").value;
+  const produto = document.getElementById("produtoPedido").value;
+  const valor = Number(document.getElementById("valorPedido").value);
+  const data = new Date().toLocaleDateString("pt-BR");
 
-    await db.collection("pedidos").add({
-        nome,
-        produto,
-        valor,
-        data
-    });
+  await db.collection("pedidos").add({
+    nome,
+    produto,
+    valor,
+    data
+  });
 
-    mostrarPedidos();
+  mostrarPedidos();
 }
 
 async function mostrarPedidos() {
