@@ -537,7 +537,7 @@ body {
   width: 100px !important;
 }
 .filtros-historico {
-  width: 870px !important;
+  width: 760px !important;
   margin: 20px auto !important;
   display: grid !important;
   grid-template-columns: 1fr 1fr 90px !important;
@@ -552,6 +552,6 @@ body {
 }
 
 #tabelaHistorico {
-  width: 870px !important;
+  width: 760px !important;
   margin: 20px auto !important;
 }
