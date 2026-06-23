@@ -731,8 +731,7 @@ async function buscarOS() {
 
     snapshot.forEach(doc => {
   const os = doc.data();
-      console.log("DOC:", os);
-
+      
   if (
   String(os.numero || "").trim() === String(busca || "").trim() ||
   (os.cliente && os.cliente.toLowerCase().includes(busca.toLowerCase())) ||
