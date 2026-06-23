@@ -325,7 +325,9 @@ async function atualizarDashboard() {
 // GRÁFICO
 async function desenharGrafico() {
   const canvas = document.getElementById("graficoVendas");
-  if (!canvas) return;
+const canvasFinanceiro = document.getElementById("graficoFinanceiro");
+
+if (!canvas || !canvasFinanceiro) return;
 
   const clientesSnap = await db.collection("clientes").get();
   const pedidosSnap = await db.collection("pedidos").get();
@@ -337,35 +339,46 @@ async function desenharGrafico() {
   });
 
   new Chart(canvas, {
-    type: "bar",
-    data: {
-      labels: ["Clientes", "Pedidos", "Financeiro"],
-      datasets: [{
-        label: "Resumo do sistema",
-        data: [
-          clientesSnap.size,
-          pedidosSnap.size,
-          totalFinanceiro
-        ],
-        borderRadius: 12
-      }]
+  type: "bar",
+  data: {
+    labels: ["Clientes", "Pedidos"],
+    datasets: [{
+      data: [
+        clientesSnap.size,
+        pedidosSnap.size
+      ],
+      borderRadius: 12
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false }
     },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: false
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true
-        }
+    scales: {
+      y: {
+        beginAtZero: true
       }
     }
-  });
-}
+  }
+});
 
+new Chart(canvasFinanceiro, {
+  type: "bar",
+  data: {
+    labels: ["Faturamento"],
+    datasets: [{
+      data: [totalFinanceiro],
+      borderRadius: 12
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false }
+    }
+  }
+});
 window.onload = function () {
     mostrarClientes();
     mostrarPedidos();
