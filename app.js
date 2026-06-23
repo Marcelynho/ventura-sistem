@@ -723,48 +723,53 @@ p {
     janela.print();
 }
 async function buscarOS() {
-    const busca = document.getElementById("buscaOS").value;
+    const busca = document.getElementById("buscaOS").value.trim();
 
     const snapshot = await db.collection("ordens").get();
 
     let achou = false;
 
     snapshot.forEach(doc => {
-        const os = doc.data();
-      window.osEditandoId = doc.id;
+  const os = doc.data();
 
-        if (
-    String(os.numero) === String(busca) ||
-    (os.cliente && os.cliente.toLowerCase().includes(busca.toLowerCase())) ||
-    (os.telefone && String(os.telefone).includes(busca)) ||
-    (os.cpf && String(os.cpf).includes(busca))
+  if (
+  String(os.numero  "").trim() === String(busca  "").trim() ||
+  (os.cliente && os.cliente.toLowerCase().includes(busca.toLowerCase())) ||
+  (os.telefone && String(os.telefone).includes(busca)) ||
+  (os.cpf && String(os.cpf).includes(busca))
 ) {
-            document.getElementById("numeroOS").value = os.numero || "";
-            document.getElementById("clienteOS").value = os.cliente || "";
-          document.getElementById("telefoneOS").value = os.telefone || "";
-document.getElementById("cpfOS").value = os.cpf || "";
-document.getElementById("cepOS").value = os.cep || "";
-document.getElementById("enderecoOS").value = os.endereco || "";
-document.getElementById("bairroOS").value = os.bairro || "";
-document.getElementById("cidadeOS").value = os.cidade || "";
-            document.getElementById("lenteOS").value = os.lente || "";
-            document.getElementById("valorOS").value = os.valor || "";
-            document.getElementById("entradaOS").value = os.entrada || "";
-            document.getElementById("restanteOS").value = os.restante || "";
-            document.getElementById("pagamentoOS").value = os.pagamento || "";
-          document.getElementById("odEsferico").value = os.odEsferico || "";
-document.getElementById("odCilindrico").value = os.odCilindrico || "";
-document.getElementById("odEixo").value = os.odEixo || "";
+    window.osEditandoId = doc.id;
 
-document.getElementById("oeEsferico").value = os.oeEsferico || "";
-document.getElementById("oeCilindrico").value = os.oeCilindrico || "";
-document.getElementById("oeEixo").value = os.oeEixo || "";
+    document.getElementById("numeroOS").value = os.numero || "";
+    document.getElementById("clienteOS").value = os.cliente || "";
+    document.getElementById("telefoneOS").value = os.telefone || "";
+    document.getElementById("cpfOS").value = os.cpf || "";
+    document.getElementById("cepOS").value = os.cep || "";
+    document.getElementById("enderecoOS").value = os.endereco || "";
+    document.getElementById("bairroOS").value = os.bairro || "";
+    document.getElementById("cidadeOS").value = os.cidade || "";
 
-document.getElementById("dnpOS").value = os.dnp || "";
-document.getElementById("alturaOS").value = os.altura || "";
-document.getElementById("addOS").value = os.add || "";
+    document.getElementById("lenteOS").value = os.lente || "";
+    document.getElementById("valorOS").value = os.valor || "";
+    document.getElementById("entradaOS").value = os.entrada || "";
+    document.getElementById("restanteOS").value = os.restante || "";
+    document.getElementById("pagamentoOS").value = os.pagamento || "";
 
-            achou = true;
+    document.getElementById("odEsferico").value = os.odEsferico || "";
+    document.getElementById("odCilindrico").value = os.odCilindrico || "";
+    document.getElementById("odEixo").value = os.odEixo || "";
+
+    document.getElementById("oeEsferico").value = os.oeEsferico || "";
+    document.getElementById("oeCilindrico").value = os.oeCilindrico || "";
+    document.getElementById("oeEixo").value = os.oeEixo || "";
+
+    document.getElementById("dnpOS").value = os.dnp || "";
+    document.getElementById("alturaOS").value = os.altura || "";
+    document.getElementById("addOS").value = os.add || "";
+
+    achou = true;
+  }
+});
         }
     });
 
