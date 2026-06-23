@@ -740,7 +740,7 @@ async function buscarOS() {
 ) {
     window.osEditandoId = doc.id;
 
-    document.getElementById("numeroOS").value = os.numero || "";
+    document.getElementById("numeroOS").value = os.numero || os.os || os.OS || os.numeroOS || os.ordem || "";
     document.getElementById("clienteOS").value = os.cliente || "";
     document.getElementById("telefoneOS").value = os.telefone || "";
     document.getElementById("cpfOS").value = os.cpf || "";
