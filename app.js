@@ -325,9 +325,7 @@ async function atualizarDashboard() {
 // GRÁFICO
 async function desenharGrafico() {
   const canvas = document.getElementById("graficoVendas");
-const canvasFinanceiro = document.getElementById("graficoFinanceiro");
-
-if (!canvas || !canvasFinanceiro) return;
+  if (!canvas) return;
 
   const clientesSnap = await db.collection("clientes").get();
   const pedidosSnap = await db.collection("pedidos").get();
@@ -339,17 +337,16 @@ if (!canvas || !canvasFinanceiro) return;
   });
 
   new Chart(canvas, {
-  type: "bar",
-  data: {
-    labels: ["Clientes", "Pedidos"],
-    datasets: [{
-      data: [
-        clientesSnap.size,
-        pedidosSnap.size
-      ],
-      borderRadius: 12
-    }]
-  },
+    type: "bar",
+    data: {
+      labels: ["Clientes", "Pedidos", "Financeiro"],
+      datasets: [{
+        data: [clientesSnap.size, pedidosSnap.size, totalFinanceiro],
+        borderRadius: 12
+      }]
+    }
+  });
+}
   options: {
     responsive: true,
     plugins: {
