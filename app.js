@@ -733,7 +733,7 @@ async function buscarOS() {
   const os = doc.data();
       
   if (
-  String(os.numero || "").trim() === String(busca || "").trim() ||
+  String(os.numero || "").replace(/\D/g, "") === String(busca || "").replace(/\D/g, "") ||
   (os.cliente && os.cliente.toLowerCase().includes(busca.toLowerCase())) ||
   (os.telefone && String(os.telefone).includes(busca)) ||
   (os.cpf && String(os.cpf).includes(busca))
