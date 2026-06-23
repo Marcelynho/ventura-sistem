@@ -324,41 +324,46 @@ async function atualizarDashboard() {
 
 // GRÁFICO
 async function desenharGrafico() {
-    const canvas = document.getElementById("graficoVendas");
-    if (!canvas) return;
+  const canvas = document.getElementById("graficoVendas");
+  if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const clientesSnap = await db.collection("clientes").get();
+  const pedidosSnap = await db.collection("pedidos").get();
 
-    const clientesSnap = await db.collection("clientes").get();
-const pedidosSnap = await db.collection("pedidos").get();
+  let totalFinanceiro = 0;
 
-let totalFinanceiro = 0;
+  pedidosSnap.forEach(doc => {
+    totalFinanceiro += Number(doc.data().valor || 0);
+  });
 
-pedidosSnap.forEach(doc => {
-  totalFinanceiro += Number(doc.data().valor || 0);
-});
-
-const valores = [
-  clientesSnap.size,
-  pedidosSnap.size,
-  totalFinanceiro
-];
-    const cores = ["#00c6ff", "#0072ff", "#28a745"];
-    const larguraBarra = 80;
-
-    valores.forEach((valor, i) => {
-        let altura = valor > 100 ? 120 : valor * 40;
-        ctx.fillStyle = cores[i];
-        ctx.fillRect(50 + (i * 120), 150 - altura, larguraBarra, altura);
-
-        ctx.fillStyle = "#0b3d91";
-        ctx.font = "14px Arial";
-        ctx.textAlign = "center";
-
-        const nomes = ["Clientes", "Pedidos", "Financeiro"];
-        ctx.fillText(nomes[i], 50 + (i * 120) + larguraBarra / 2, 205);
-    });
+  new Chart(canvas, {
+    type: "bar",
+    data: {
+      labels: ["Clientes", "Pedidos", "Financeiro"],
+      datasets: [{
+        label: "Resumo do sistema",
+        data: [
+          clientesSnap.size,
+          pedidosSnap.size,
+          totalFinanceiro
+        ],
+        borderRadius: 12
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
 }
 
 window.onload = function () {
