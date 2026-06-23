@@ -770,9 +770,8 @@ async function buscarOS() {
     achou = true;
   }
 });
-        }
-    });
-
+      
+ 
     if (!achou) {
         alert("OS não encontrada");
     }
