@@ -383,10 +383,10 @@ async function desenharGrafico() {
   });
 }
 window.onload = function () {
-    mostrarClientes();
-    mostrarPedidos();
-    atualizarDashboard();
-    desenharGrafico();
+  if (document.getElementById("listaClientes")) mostrarClientes();
+  if (document.getElementById("listaPedidos")) mostrarPedidos();
+  if (document.getElementById("totalClientes")) atualizarDashboard();
+  if (document.getElementById("graficoVendas")) desenharGrafico();
 };
 
 async function salvarReceituario() {
