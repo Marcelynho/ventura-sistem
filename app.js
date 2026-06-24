@@ -972,20 +972,24 @@ async function carregarFinanceiro() {
   let totalMes = 0;
   let totalPedidos = 0;
 
-  const snapshot = await db.collection("pedidos").get();
-
+  const snapshot = await db.collection("caixas").get();
   const mesAtual = new Date().getMonth() + 1;
   const anoAtual = new Date().getFullYear();
 
   snapshot.forEach(doc => {
     const pedido = doc.data();
 
-    if (!pedido.data || !pedido.valor) return;
+    if (!pedido.valor) return;
 
-    const partes = pedido.data.split("/");
-    const dia = parseInt(partes[0]);
-    const mes = parseInt(partes[1]);
-    const ano = parseInt(partes[2]);
+    
+let ano = anoAtual;
+let mes = mesAtual;
+
+if (pedido.data) {
+const partes = pedido.data.split("/");
+mes = parseInt(partes[1]);
+ano = parseInt(partes[2]);
+}
 
     if (mes === mesAtual && ano === anoAtual) {
       totalMes += Number(pedido.valor);
