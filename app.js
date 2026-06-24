@@ -629,6 +629,16 @@ if (!cpfDuplicado.empty) {
     return;
 }
     await db.collection("ordens").add(dadosOS);
+  await db.collection("caixas").add({
+  tipo: "entrada",
+  descricao: "OS " + dadosOS.numero + " - " + dadosOS.cliente,
+  valor: Number(dadosOS.valor || 0),
+  pagamento: dadosOS.pagamento || "",
+  origem: "ordem_servico",
+  os: dadosOS.numero,
+  cliente: dadosOS.cliente,
+  criadoEm: new Date()
+});
     alert("OS salva com sucesso!");
 }
   document.getElementById("numeroOS").value = "";
