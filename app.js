@@ -611,23 +611,9 @@ if (window.osEditandoId) {
     await db.collection("ordens").doc(window.osEditandoId).update(dadosOS);
     alert("OS atualizada com sucesso!");
 } else {
-    const duplicada = await db.collection("ordens")
-        .where("numero", "==", dadosOS.numero)
-        .get();
+    
 
-    if (!duplicada.empty) {
-        alert("Já existe uma OS com esse número!");
-        return;
-    }
 
-  const cpfDuplicado = await db.collection("ordens")
-    .where("cpf", "==", dadosOS.cpf)
-    .get();
-
-if (!cpfDuplicado.empty) {
-    alert("Já existe uma OS com esse CPF!");
-    return;
-}
     await db.collection("ordens").add(dadosOS);
   await db.collection("caixas").add({
   tipo: "entrada",
