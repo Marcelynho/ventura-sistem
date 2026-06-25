@@ -812,12 +812,19 @@ async function listarOS() {
     const os = doc.data();
 
     html += `
-      <div style="border:1px solid #ccc; margin:5px; padding:5px;">
-        <b>OS:</b> ${os.numero || ""} <br>
-        <b>Cliente:</b> ${os.cliente || ""} <br>
-        <b>Telefone:</b> ${os.telefone || ""} <br>
-      </div>
-    `;
+  <div style="border:1px solid #ccc; margin:5px; padding:5px; display:flex; justify-content:space-between; align-items:center;">
+    <div>
+      <b>OS:</b> ${os.numero || ""}<br>
+      <b>Cliente:</b> ${os.cliente || ""}<br>
+      <b>Telefone:</b> ${os.telefone || ""}<br>
+    </div>
+
+    <button onclick="deletarOSDireto('${os.numero}')"
+      style="background:red; color:white; border:none; padding:8px; cursor:pointer; border-radius:5px;">
+      🗑 Deletar
+    </button>
+  </div>
+`;
   });
 
   listaDiv.innerHTML = html || "Nenhuma OS encontrada";
@@ -1042,4 +1049,8 @@ async function deletarOS() {
   });
 
   alert("OS deletada com sucesso!");
+}
+function deletarOSDireto(numero) {
+  document.getElementById("numeroOS").value = numero;
+  deletarOS();
 }
