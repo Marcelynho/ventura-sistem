@@ -1035,6 +1035,7 @@ async function deletarOS() {
   const caixaSnap = await db.collection("caixas")
     .where("os", "==", numero)
     .get();
+  alert("Encontrados em caixas: " + caixaSnap.size);
 
   caixaSnap.forEach(async (doc) => {
     await db.collection("caixas").doc(doc.id).delete();
