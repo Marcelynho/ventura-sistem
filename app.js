@@ -623,6 +623,7 @@ if (window.osEditandoId) {
   origem: "ordem_servico",
   os: dadosOS.numero,
   cliente: dadosOS.cliente,
+    data: new Date().toLocaleDateString("pt-BR"),
   criadoEm: new Date()
 });
     alert("OS salva com sucesso!");
