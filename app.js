@@ -1007,3 +1007,38 @@ if (window.location.pathname.includes("financeiro")) {
 if (document.getElementById("graficoFinanceiro")) {
   desenharGrafico();
 }
+async function deletarOS() {
+  const numero = document.getElementById("numeroOS").value;
+
+  if (!numero) {
+    alert("Digite o número da OS.");
+    return;
+  }
+
+  if (!confirm("Tem certeza que deseja deletar esta OS?")) {
+    return;
+  }
+
+  const osSnap = await db.collection("ordens")
+    .where("numero", "==", numero)
+    .get();
+
+  if (osSnap.empty) {
+    alert("OS não encontrada.");
+    return;
+  }
+
+  osSnap.forEach(async (doc) => {
+    await db.collection("ordens").doc(doc.id).delete();
+  });
+
+  const caixaSnap = await db.collection("caixas")
+    .where("os", "==", numero)
+    .get();
+
+  caixaSnap.forEach(async (doc) => {
+    await db.collection("caixas").doc(doc.id).delete();
+  });
+
+  alert("OS deletada com sucesso!");
+}
