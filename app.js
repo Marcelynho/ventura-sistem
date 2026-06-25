@@ -614,9 +614,10 @@ document.getElementById("oeEixo").value = receita.oeLongeEixo || "";
 document.getElementById("dnpOS").value = receita.dnp || "";
 document.getElementById("alturaOS").value = receita.altura || "";
 document.getElementById("addOS").value = receita.adicao || "";
+
+achou = true;
 }
 });
-
     if (!achou) {
         alert("Cliente não encontrado");
     }
