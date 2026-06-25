@@ -330,8 +330,8 @@ async function desenharGrafico() {
   if (!canvas || !canvasFinanceiro) return;
 
   const clientesSnap = await db.collection("clientes").get();
-  const pedidosSnap = await db.collection("caixas").get();
-
+const pedidosSnap = await db.collection("pedidos").get();
+const caixasSnap = await db.collection("caixas").get();
   let totalFinanceiro = 0;
 
   pedidosSnap.forEach(doc => {
