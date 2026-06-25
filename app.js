@@ -1063,7 +1063,7 @@ const caixaSnap = await db.collection("caixas").get();
 caixaSnap.forEach(async (doc) => {
 const item = doc.data();
 
-if (String(item.os || "") === String(numero || "")) {
+if (numero && String(item.os || "") === String(numero)) {
 await db.collection("caixas").doc(doc.id).delete();
 }
 });
