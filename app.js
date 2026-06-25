@@ -330,13 +330,17 @@ async function desenharGrafico() {
   if (!canvas || !canvasFinanceiro) return;
 
   const clientesSnap = await db.collection("clientes").get();
-  const pedidosSnap = await db.collection("pedidos").get();
+  const pedidosSnap = await db.collection("caixas").get();
 
   let totalFinanceiro = 0;
 
   pedidosSnap.forEach(doc => {
-    totalFinanceiro += Number(doc.data().valor || 0);
-  });
+  const item = doc.data();
+
+  if (item.tipo === "entrada") {
+    totalFinanceiro += Number(item.valor || 0);
+  }
+});
 
   new Chart(canvas, {
     type: "bar",
