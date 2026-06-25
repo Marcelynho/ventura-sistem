@@ -999,3 +999,6 @@ ano = parseInt(partes[2]);
 if (window.location.pathname.includes("financeiro")) {
   carregarFinanceiro();
 }
+if (document.getElementById("graficoFinanceiro")) {
+  desenharGrafico();
+}
