@@ -819,7 +819,7 @@ async function listarOS() {
       <b>Telefone:</b> ${os.telefone || ""}<br>
     </div>
 
-    <button onclick="deletarOSDireto('${os.numero}')"
+    <button onclick="deletarOSPorId('${doc.id}', '${os.numero || ""}')"
       style="background:red; color:white; border:none; padding:8px; cursor:pointer; border-radius:5px;">
       🗑 Deletar
     </button>
@@ -1050,8 +1050,24 @@ async function deletarOS() {
 
   alert("OS deletada com sucesso!");
 }
-function deletarOSDireto(numero) {
-  alert("Número recebido: " + numero);
-  document.getElementById("numeroOS").value = numero;
-  deletarOS();
+
+async function deletarOSPorId(id, numero) {
+if (!confirm("Tem certeza que deseja deletar esta OS?")) {
+return;
+}
+
+await db.collection("ordens").doc(id).delete();
+
+const caixaSnap = await db.collection("caixas").get();
+
+caixaSnap.forEach(async (doc) => {
+const item = doc.data();
+
+if (String(item.os || "") === String(numero || "")) {
+await db.collection("caixas").doc(doc.id).delete();
+}
+});
+
+alert("OS deletada com sucesso!");
+listarOS();
 }
