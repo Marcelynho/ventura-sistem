@@ -1051,6 +1051,7 @@ async function deletarOS() {
   alert("OS deletada com sucesso!");
 }
 function deletarOSDireto(numero) {
+  alert("Número recebido: " + numero);
   document.getElementById("numeroOS").value = numero;
   deletarOS();
 }
