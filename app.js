@@ -593,6 +593,29 @@ document.getElementById("addOS").value = cliente.adicao || "";
             achou = true;
         }
     });
+  const receitasSnap = await db.collection("receituarios").get();
+
+receitasSnap.forEach(doc => {
+const receita = doc.data();
+
+if (
+String(receita.cliente || "").toLowerCase().includes(busca) ||
+String(receita.telefone || "").includes(busca) ||
+String(receita.cpf || "").includes(busca)
+) {
+document.getElementById("odEsferico").value = receita.odLongeEsferico || "";
+document.getElementById("odCilindrico").value = receita.odLongeCilindrico || "";
+document.getElementById("odEixo").value = receita.odLongeEixo || "";
+
+document.getElementById("oeEsferico").value = receita.oeLongeEsferico || "";
+document.getElementById("oeCilindrico").value = receita.oeLongeCilindrico || "";
+document.getElementById("oeEixo").value = receita.oeLongeEixo || "";
+
+document.getElementById("dnpOS").value = receita.dnp || "";
+document.getElementById("alturaOS").value = receita.altura || "";
+document.getElementById("addOS").value = receita.adicao || "";
+}
+});
 
     if (!achou) {
         alert("Cliente não encontrado");
