@@ -334,7 +334,9 @@ const pedidosSnap = await db.collection("pedidos").get();
 const caixasSnap = await db.collection("caixas").get();
   let totalFinanceiro = 0;
 
-  pedidosSnap.forEach(doc => {
+  
+
+caixasSnap.forEach(doc => {
   const item = doc.data();
 
   if (item.tipo === "entrada") {
