@@ -1148,3 +1148,39 @@ async function buscarClientePedido() {
 
   document.getElementById("nomePedido").value = encontrado.nome || "";
 }
+async function buscarClienteReceita() {
+  const busca = document.getElementById("buscaClienteReceita").value.trim().toLowerCase();
+
+  if (!busca) {
+    alert("Digite nome, telefone ou CPF.");
+    return;
+  }
+
+  const snapshot = await db.collection("clientes").get();
+  let encontrado = null;
+
+  snapshot.forEach(doc => {
+    const cliente = doc.data();
+
+    const nome = String(cliente.nome || "").toLowerCase();
+    const telefone = String(cliente.telefone || "");
+    const cpf = String(cliente.cpf || "");
+
+    if (
+      nome.includes(busca) ||
+      telefone.includes(busca) ||
+      cpf.includes(busca)
+    ) {
+      encontrado = cliente;
+    }
+  });
+
+  if (!encontrado) {
+    alert("Cliente não encontrado.");
+    return;
+  }
+
+  document.getElementById("clienteReceita").value = encontrado.nome || "";
+  document.getElementById("telefoneReceita").value = encontrado.telefone || "";
+  document.getElementById("cpfReceita").value = encontrado.cpf || "";
+}
