@@ -416,7 +416,16 @@ async function salvarReceituario() {
     adicao,
     dnp,
     altura,
-    observacoes
+    
+odLongeEsferico: document.getElementById("odLongeEsferico").value,
+odLongeCilindrico: document.getElementById("odLongeCilindrico").value,
+odLongeEixo: document.getElementById("odLongeEixo").value,
+
+oeLongeEsferico: document.getElementById("oeLongeEsferico").value,
+oeLongeCilindrico: document.getElementById("oeLongeCilindrico").value,
+oeLongeEixo: document.getElementById("oeLongeEixo").value,
+
+observacoes
   });
 
   alert("Receituário salvo com sucesso!");
