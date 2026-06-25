@@ -305,8 +305,8 @@ async function excluirPedido(id) {
 // DASHBOARD
 async function atualizarDashboard() {
     const clientesSnap = await db.collection("clientes").get();
-    const pedidosSnap = await db.collection("pedidos").get();
-
+const pedidosSnap = await db.collection("pedidos").get();
+const caixasSnap = await db.collection("caixas").get();
     const totalClientes = document.getElementById("totalClientes");
     const totalPedidos = document.getElementById("totalPedidos");
     const totalFinanceiro = document.getElementById("totalFinanceiro");
@@ -315,9 +315,14 @@ async function atualizarDashboard() {
     if (totalPedidos) totalPedidos.textContent = pedidosSnap.size;
 
     let soma = 0;
-    pedidosSnap.forEach(doc => {
-        soma += Number(doc.data().valor || 0);
-    });
+
+caixasSnap.forEach(doc => {
+  const item = doc.data();
+
+  if (item.tipo === "entrada") {
+    soma += Number(item.valor || 0);
+  }
+});
 
     if (totalFinanceiro) totalFinanceiro.textContent = soma.toFixed(2);
 }
