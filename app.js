@@ -1071,3 +1071,37 @@ await db.collection("caixas").doc(doc.id).delete();
 alert("OS deletada com sucesso!");
 listarOS();
 }
+async function buscarClienteOS() {
+const busca = document.getElementById("buscaClienteOS").value.trim().toLowerCase();
+
+if (!busca) {
+alert("Digite nome, telefone ou CPF.");
+return;
+}
+
+const snapshot = await db.collection("clientes").get();
+let encontrado = null;
+
+snapshot.forEach(doc => {
+const cliente = doc.data();
+
+const nome = String(cliente.nome || "").toLowerCase();
+const telefone = String(cliente.telefone || "");
+const cpf = String(cliente.cpf || "");
+
+if (nome.includes(busca) || telefone.includes(busca) || cpf.includes(busca)) {
+encontrado = cliente;
+}
+});
+
+if (!encontrado) {
+alert("Cliente não encontrado.");
+return;
+}
+
+document.getElementById("clienteOS").value = encontrado.nome || "";
+document.getElementById("telefoneOS").value = encontrado.telefone || "";
+document.getElementById("cpfOS").value = encontrado.cpf || "";
+document.getElementById("cepOS").value = encontrado.cep || "";
+document.getElementById("enderecoOS").value = encontrado.endereco || "";
+}
