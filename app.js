@@ -1260,3 +1260,11 @@ function calcularRestante() {
 
   document.getElementById("restanteOS").value = Math.max(valor - entrada, 0);
 }
+async function deletarFinanceiro(id) {
+  if (!confirm("Deseja deletar este lançamento?")) return;
+
+  await db.collection("caixas").doc(id).delete();
+
+  alert("Lançamento deletado!");
+  carregarFinanceiro();
+}
