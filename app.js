@@ -603,7 +603,8 @@ String(receita.cliente || "").toLowerCase().includes(busca) ||
 String(receita.telefone || "").includes(busca) ||
 String(receita.cpf || "").includes(busca)
 ) {
-document.getElementById("odEsferico").value = receita.odLongeEsferico || "";
+alert("Receita encontrada!");
+  document.getElementById("odEsferico").value = receita.odLongeEsferico || "";
 document.getElementById("odCilindrico").value = receita.odLongeCilindrico || "";
 document.getElementById("odEixo").value = receita.odLongeEixo || "";
 
