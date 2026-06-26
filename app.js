@@ -599,9 +599,8 @@ receitasSnap.forEach(doc => {
 const receita = doc.data();
 
 if (
-String(receita.cliente || "").toLowerCase().includes(busca) ||
-String(receita.telefone || "").includes(busca) ||
-String(receita.cpf || "").includes(busca)
+String(receita.cpf || "") === document.getElementById("cpfOS").value ||
+String(receita.telefone || "") === document.getElementById("telefoneOS").value
 ) {
 alert("Receita encontrada!");
   document.getElementById("odEsferico").value = receita.odLongeEsferico || "";
