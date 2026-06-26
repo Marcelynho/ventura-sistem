@@ -1165,7 +1165,7 @@ pedidosSnap.forEach(doc => {
 const pedido = doc.data();
 
 if (
-String(pedido.cliente || "").toLowerCase() === String(clienteEncontrado.nome || "").toLowerCase() ||
+String(pedido.nome || "").toLowerCase() === String(clienteEncontrado.nome || "").toLowerCase() ||
 String(pedido.telefone || "") === String(clienteEncontrado.telefone || "")
 ) {
 document.getElementById("lenteOS").value = pedido.produto || "";
