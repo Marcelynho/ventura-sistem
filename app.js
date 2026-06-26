@@ -1299,3 +1299,31 @@ async function editarOS(id) {
   document.getElementById("restanteOS").value = os.restante || "";
   document.getElementById("pagamentoOS").value = os.pagamento || "";
 }
+function finalizarEEnviar() {
+  const cliente = document.getElementById("clienteOS").value;
+  const telefone = document.getElementById("telefoneOS").value.replace(/\D/g, "");
+  const numero = document.getElementById("numeroOS").value;
+  const produto = document.getElementById("lenteOS").value;
+  const valor = document.getElementById("valorOS").value;
+  const entrada = document.getElementById("entradaOS").value;
+  const restante = document.getElementById("restanteOS").value;
+
+  if (!telefone) {
+    alert("Cliente sem telefone!");
+    return;
+  }
+
+  const mensagem = `Olá ${cliente} 👋
+
+Sua Ordem de Serviço da Óticas Ventura foi finalizada com sucesso ✅
+
+OS Nº: ${numero}
+Produto: ${produto}
+Valor: R$ ${valor}
+Entrada: R$ ${entrada}
+Restante: R$ ${restante}
+
+Qualquer dúvida, estamos à disposição.`;
+
+  window.open(`https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`, "_blank");
+}
