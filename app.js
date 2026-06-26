@@ -1015,6 +1015,8 @@ async function carregarFinanceiro() {
   const mesAtual = new Date().getMonth() + 1;
   const anoAtual = new Date().getFullYear();
 
+  const lista = document.getElementById("listaFinanceiro");
+if (lista) lista.innerHTML = "";
   snapshot.forEach(doc => {
     const pedido = doc.data();
 
@@ -1033,6 +1035,15 @@ ano = parseInt(partes[2]);
     if (mes === mesAtual && ano === anoAtual) {
       totalMes += Number(pedido.valor);
       totalPedidos++;
+      if (lista) {
+        
+  lista.innerHTML += `
+    <div style="margin-bottom:10px; border:1px solid #ccc; padding:8px;">
+      Pedido: ${pedido.descricao || "Sem descrição"} - R$ ${pedido.valor}
+      <button onclick="deletarFinanceiro('${doc.id}')">Deletar</button>
+    </div>
+  `;
+}
     }
   });
 
