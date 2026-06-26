@@ -1275,5 +1275,27 @@ async function deletarFinanceiro(id) {
   carregarFinanceiro();
 }
 async function editarOS(id) {
-  alert("Editar OS: " + id);
+  const doc = await db.collection("os").doc(id).get();
+
+  if (!doc.exists) {
+    alert("OS não encontrada!");
+    return;
+  }
+
+  const os = doc.data();
+
+  document.getElementById("numeroOS").value = os.numero || "";
+  document.getElementById("clienteOS").value = os.cliente || "";
+  document.getElementById("telefoneOS").value = os.telefone || "";
+  document.getElementById("cpfOS").value = os.cpf || "";
+  document.getElementById("cepOS").value = os.cep || "";
+  document.getElementById("enderecoOS").value = os.endereco || "";
+  document.getElementById("bairroOS").value = os.bairro || "";
+  document.getElementById("cidadeOS").value = os.cidade || "";
+
+  document.getElementById("lenteOS").value = os.lente || "";
+  document.getElementById("valorOS").value = os.valor || "";
+  document.getElementById("entradaOS").value = os.entrada || "";
+  document.getElementById("restanteOS").value = os.restante || "";
+  document.getElementById("pagamentoOS").value = os.pagamento || "";
 }
