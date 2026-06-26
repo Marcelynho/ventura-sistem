@@ -1243,3 +1243,9 @@ async function buscarClienteReceita() {
   document.getElementById("telefoneReceita").value = encontrado.telefone || "";
   document.getElementById("cpfReceita").value = encontrado.cpf || "";
 }
+function calcularRestante() {
+  const valor = Number(document.getElementById("valorOS").value) || 0;
+  const entrada = Number(document.getElementById("entradaOS").value) || 0;
+
+  document.getElementById("restanteOS").value = Math.max(valor - entrada, 0);
+}
