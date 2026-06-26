@@ -1106,38 +1106,69 @@ alert("OS deletada com sucesso!");
 listarOS();
 }
 async function buscarClienteOS() {
-const busca = document.getElementById("buscaClienteOS").value.trim().toLowerCase();
+const busca = document.getElementById("buscaClienteOS").value.toLowerCase();
 
-if (!busca) {
-alert("Digite nome, telefone ou CPF.");
-return;
-}
+const clientesSnap = await db.collection("clientes").get();
+let clienteEncontrado = null;
 
-const snapshot = await db.collection("clientes").get();
-let encontrado = null;
-
-snapshot.forEach(doc => {
+clientesSnap.forEach(doc => {
 const cliente = doc.data();
 
-const nome = String(cliente.nome || "").toLowerCase();
-const telefone = String(cliente.telefone || "");
-const cpf = String(cliente.cpf || "");
-
-if (nome.includes(busca) || telefone.includes(busca) || cpf.includes(busca)) {
-encontrado = cliente;
+if (
+String(cliente.nome || "").toLowerCase().includes(busca) ||
+String(cliente.telefone || "").includes(busca) ||
+String(cliente.cpf || "").includes(busca)
+) {
+clienteEncontrado = cliente;
 }
 });
 
-if (!encontrado) {
-alert("Cliente não encontrado.");
+if (!clienteEncontrado) {
+alert("Cliente não encontrado");
 return;
 }
 
-document.getElementById("clienteOS").value = encontrado.nome || "";
-document.getElementById("telefoneOS").value = encontrado.telefone || "";
-document.getElementById("cpfOS").value = encontrado.cpf || "";
-document.getElementById("cepOS").value = encontrado.cep || "";
-document.getElementById("enderecoOS").value = encontrado.endereco || "";
+document.getElementById("clienteOS").value = clienteEncontrado.nome || "";
+document.getElementById("telefoneOS").value = clienteEncontrado.telefone || "";
+document.getElementById("cpfOS").value = clienteEncontrado.cpf || "";
+document.getElementById("cepOS").value = clienteEncontrado.cep || "";
+document.getElementById("enderecoOS").value = clienteEncontrado.endereco || "";
+document.getElementById("bairroOS").value = clienteEncontrado.bairro || "";
+document.getElementById("cidadeOS").value = clienteEncontrado.cidade || "";
+
+const receitasSnap = await db.collection("receituarios").get();
+
+receitasSnap.forEach(doc => {
+const receita = doc.data();
+
+if (
+String(receita.cpf || "") === String(clienteEncontrado.cpf || "") ||
+String(receita.telefone || "") === String(clienteEncontrado.telefone || "")
+) {
+document.getElementById("odEsferico").value = receita.odLongeEsferico || "";
+document.getElementById("odCilindrico").value = receita.odLongeCilindrico || "";
+document.getElementById("odEixo").value = receita.odLongeEixo || "";
+
+document.getElementById("oeEsferico").value = receita.oeLongeEsferico || "";
+document.getElementById("oeCilindrico").value = receita.oeLongeCilindrico || "";
+document.getElementById("oeEixo").value = receita.oeLongeEixo || "";
+
+document.getElementById("dnpOS").value = receita.dnp || "";
+document.getElementById("alturaOS").value = receita.altura || "";
+document.getElementById("addOS").value = receita.adicao || "";
+}
+});
+
+const pedidosSnap = await db.collection("pedidos").get();
+
+pedidosSnap.forEach(doc => {
+const pedido = doc.data();
+
+if (String(pedido.cliente || "") === String(clienteEncontrado.nome || "")) {
+document.getElementById("lenteOS").value = pedido.produto || "";
+document.getElementById("valorOS").value = pedido.valor || "";
+}
+});
 }
 async function buscarClientePedido() {
   const busca = document.getElementById("buscaClientePedido").value.trim().toLowerCase();
