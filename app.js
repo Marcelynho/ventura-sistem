@@ -593,6 +593,7 @@ document.getElementById("addOS").value = cliente.adicao || "";
             achou = true;
         }
     });
+  alert("Entrou na busca da receita");
   const receitasSnap = await db.collection("receituarios").get();
 
 receitasSnap.forEach(doc => {
