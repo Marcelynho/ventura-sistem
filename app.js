@@ -853,9 +853,15 @@ async function listarOS() {
       <b>Telefone:</b> ${os.telefone || ""}<br>
     </div>
 
-    <button onclick="deletarOSPorId('${doc.id}', '${os.numero || ""}')"
-      style="background:red; color:white; border:none; padding:8px; cursor:pointer; border-radius:5px;">
-      🗑 Deletar
+    <button onclick="editarOS('${doc.id}')"
+style="background:orange; color:white; border:none; padding:8px; cursor:pointer; border-radius:5px; margin-right:5px;">
+✏ Editar
+</button>
+
+<button onclick="deletarOSPorId('${doc.id}', '${os.numero || ""}')"
+style="background:red; color:white; border:none; padding:8px; cursor:pointer; border-radius:5px;">
+🗑 Deletar
+</button>
     </button>
   </div>
 `;
@@ -1267,4 +1273,7 @@ async function deletarFinanceiro(id) {
 
   alert("Lançamento deletado!");
   carregarFinanceiro();
+}
+async function editarOS(id) {
+  alert("Editar OS: " + id);
 }
