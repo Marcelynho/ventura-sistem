@@ -1164,7 +1164,10 @@ const pedidosSnap = await db.collection("pedidos").get();
 pedidosSnap.forEach(doc => {
 const pedido = doc.data();
 
-if (String(pedido.cliente || "") === String(clienteEncontrado.nome || "")) {
+if (
+String(pedido.cliente || "").toLowerCase() === String(clienteEncontrado.nome || "").toLowerCase() ||
+String(pedido.telefone || "") === String(clienteEncontrado.telefone || "")
+) {
 document.getElementById("lenteOS").value = pedido.produto || "";
 document.getElementById("valorOS").value = pedido.valor || "";
 }
