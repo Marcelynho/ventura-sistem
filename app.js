@@ -1275,7 +1275,7 @@ async function deletarFinanceiro(id) {
   carregarFinanceiro();
 }
 async function editarOS(id) {
-  const doc = await db.collection("os").doc(id).get();
+  const doc = await db.collection("ordens").doc(id).get();
 
   if (!doc.exists) {
     alert("OS não encontrada!");
