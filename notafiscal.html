@@ -26,6 +26,15 @@
   </div>
 
   <script>
+    window.onload = function () {
+  const ultimaOS = JSON.parse(localStorage.getItem("ultimaOS"));
+
+  if (!ultimaOS) return;
+
+  document.getElementById("clienteNF").value = ultimaOS.cliente || "";
+  document.getElementById("produtoNF").value = ultimaOS.lente || "";
+  document.getElementById("valorNF").value = ultimaOS.valor || "";
+};
     function gerarNota() {
       let cliente = document.getElementById("clienteNF").value;
       let produto = document.getElementById("produtoNF").value;
