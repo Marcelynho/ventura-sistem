@@ -177,7 +177,7 @@ th, td {
     width: 250px;
     height: 100vh;
     background: linear-gradient(180deg, #063b78, #031f45);
-    padding: 25px 18px;
+    padding: 12px 18px;
     border-radius: 0;
     box-shadow: 4px 0 18px rgba(0,0,0,0.2);
 }
@@ -185,7 +185,7 @@ th, td {
     margin-bottom: 15px;
 }
 body {
-    padding-top: 40px;
+    padding-top: 20px;
     padding-left: 280px;
 }
 .btn-salvar {
