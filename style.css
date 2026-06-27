@@ -129,12 +129,12 @@ th, td {
     justify-content: flex-start;
     width: 90%;
     min-width: 0;
-    height: 56px;
-    padding-left: 20px;
-    font-size: 18px;
-    margin: 10px auto;
+    height: 42px;
+    padding-left: 16px;
+    font-size: 15px;
+    margin: 6px auto;
     text-align: left;
-    gap: 12px;
+    gap: 8px;
 }
 .card {
   border-radius: 24px;
