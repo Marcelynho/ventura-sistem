@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Nota Fiscal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="sidebar">
+    <button onclick="window.location.href='dashboard.html'">🏠 Início</button>
+    <button onclick="window.location.href='os.html'">📋 Ordem de Serviço</button>
+  </div>
+
+  <div style="padding:40px;">
+    <h1>🧾 Nota Fiscal</h1>
+
+    <div class="card" style="padding:20px; max-width:700px;">
+      <input id="clienteNF" placeholder="Cliente"><br><br>
+      <input id="produtoNF" placeholder="Produto"><br><br>
+      <input id="valorNF" placeholder="Valor"><br><br>
+
+      <button onclick="gerarNota()">Gerar Nota</button>
+    </div>
+
+    <div id="resultadoNF" class="card" style="margin-top:20px; padding:20px;"></div>
+  </div>
+
+  <script>
+    function gerarNota() {
+      let cliente = document.getElementById("clienteNF").value;
+      let produto = document.getElementById("produtoNF").value;
+      let valor = document.getElementById("valorNF").value;
+
+      document.getElementById("resultadoNF").innerHTML = `
+        <h2>Nota Fiscal Gerada</h2>
+        <p><b>Cliente:</b> ${cliente}</p>
+        <p><b>Produto:</b> ${produto}</p>
+        <p><b>Valor:</b> R$ ${valor}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
