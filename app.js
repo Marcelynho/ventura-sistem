@@ -1327,3 +1327,31 @@ Qualquer dúvida, estamos à disposição.`;
 
   window.open(`https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`, "_blank");
 }
+function salvarConfig() {
+  const config = {
+    nome: document.getElementById("nomeLoja").value,
+    telefone: document.getElementById("telefoneLoja").value,
+    endereco: document.getElementById("enderecoLoja").value,
+    cidade: document.getElementById("cidadeLoja").value
+  };
+
+  localStorage.setItem("configLoja", JSON.stringify(config));
+
+  alert("Configurações salvas com sucesso!");
+}
+function carregarConfig() {
+  const configSalva = localStorage.getItem("configLoja");
+
+  if (!configSalva) return;
+
+  const config = JSON.parse(configSalva);
+
+  if (document.getElementById("nomeLoja")) {
+    document.getElementById("nomeLoja").value = config.nome || "";
+    document.getElementById("telefoneLoja").value = config.telefone || "";
+    document.getElementById("enderecoLoja").value = config.endereco || "";
+    document.getElementById("cidadeLoja").value = config.cidade || "";
+  }
+}
+
+carregarConfig();
