@@ -658,7 +658,7 @@ if (window.osEditandoId) {
 } else {
     
 
-
+localStorage.setItem("ultimaOS", JSON.stringify(dadosOS));
     await db.collection("ordens").add(dadosOS);
   await db.collection("caixas").add({
   tipo: "entrada",
