@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+  <title>Configurações</title>
+</head>
+<body>
+
+<div class="sidebar">
+  <div style="text-align:center; margin-bottom:8px; padding-top:10px;">
+    <img src="logo.jpg" width="75" style="border-radius:50%; display:block; margin:auto;">
+  </div>
+
+  <button onclick="window.location.href='dashboard.html'">🏠 Início</button>
+  <button onclick="window.location.href='clientes.html'">👥 Clientes</button>
+  <button onclick="window.location.href='pedidos.html'">📦 Pedidos</button>
+  <button onclick="window.location.href='financeiro.html'">💰 Financeiro</button>
+  <button onclick="window.location.href='caixa.html'">💵 Caixa</button>
+  <button onclick="window.location.href='historico.html'">📊 Histórico</button>
+  <button onclick="window.location.href='os.html'">📋 Ordem de Serviço</button>
+  <button onclick="window.location.href='receituario.html'">📄 Receituário</button>
+  <button onclick="window.location.href='config.html'">⚙️ Configurações</button>
+  <button onclick="logout()">🚪 Sair</button>
+</div>
+
+<h1 style="color:white; font-size:42px; font-weight:bold; text-shadow:0 4px 12px rgba(0,0,0,0.3);">
+  Configurações
+</h1>
+
+<div class="form-box">
+  <h2>Dados da Loja</h2>
+
+  <input id="nomeLoja" placeholder="Nome da loja"><br><br>
+  <input id="telefoneLoja" placeholder="WhatsApp da loja"><br><br>
+  <input id="enderecoLoja" placeholder="Endereço"><br><br>
+  <input id="cidadeLoja" placeholder="Cidade"><br><br>
+
+  <button onclick="salvarConfig()">Salvar Configurações</button>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
