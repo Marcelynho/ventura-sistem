@@ -50,13 +50,14 @@
       let cliente = document.getElementById("clienteNF").value;
       let produto = document.getElementById("produtoNF").value;
       let valor = document.getElementById("valorNF").value;
+      alert(cliente + " | " + produto + " | " + valor);
 
       document.getElementById("resultadoNF").innerHTML = `
-        <h2>Nota Fiscal Gerada</h2>
-        <p><b>Cliente:</b> ${cliente}</p>
-        <p><b>Produto:</b> ${produto}</p>
-        <p><b>Valor:</b> R$ ${valor}</p>
-      `;
+<h2>Nota Fiscal Gerada</h2>
+<div><b>Cliente:</b> ${cliente}</div>
+<div><b>Produto:</b> ${produto}</div>
+<div><b>Valor:</b> R$ ${valor}</div>
+`;
     }
   </script>
 </body>
