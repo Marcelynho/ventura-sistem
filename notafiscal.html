@@ -19,13 +19,24 @@
       <input id="produtoNF" placeholder="Produto"><br><br>
       <input id="valorNF" placeholder="Valor"><br><br>
 
-      <button onclick="gerarNota()">Gerar Nota</button>
+      <button onclick="gerarNota()" style="
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+">
+  🧾 Gerar Nota Fiscal
+</button>
     </div>
 
     <div id="resultadoNF" class="card" style="margin-top:20px; padding:20px;"></div>
-  </div>
 
-  <script>
+<script>
     window.onload = function () {
   const ultimaOS = JSON.parse(localStorage.getItem("ultimaOS"));
 
