@@ -36,6 +36,19 @@
 
     <div id="resultadoNF" class="card" style="margin-top:20px; padding:20px;"></div>
 
+<button onclick="window.print()" style="
+background: white;
+color: #0072ff;
+border: 2px solid #0072ff;
+padding: 12px 24px;
+border-radius: 12px;
+font-size: 15px;
+font-weight: bold;
+cursor: pointer;
+margin-top: 15px;
+">
+🖨️ Imprimir Nota
+</button>
 <script>
     window.onload = function () {
   const ultimaOS = JSON.parse(localStorage.getItem("ultimaOS"));
