@@ -1355,3 +1355,29 @@ function carregarConfig() {
 }
 
 carregarConfig();
+function salvarConfig() {
+  const config = {
+    nomeLoja: document.getElementById("nomeLoja").value,
+    telefoneLoja: document.getElementById("telefoneLoja").value,
+    enderecoLoja: document.getElementById("enderecoLoja").value,
+    cidadeLoja: document.getElementById("cidadeLoja").value
+  };
+
+  localStorage.setItem("configLoja", JSON.stringify(config));
+  alert("Configurações salvas com sucesso!");
+}
+
+window.addEventListener("load", function () {
+  const configSalva = localStorage.getItem("configLoja");
+
+  if (!configSalva) return;
+
+  const config = JSON.parse(configSalva);
+
+  if (document.getElementById("nomeLoja")) {
+    document.getElementById("nomeLoja").value = config.nomeLoja || "";
+    document.getElementById("telefoneLoja").value = config.telefoneLoja || "";
+    document.getElementById("enderecoLoja").value = config.enderecoLoja || "";
+    document.getElementById("cidadeLoja").value = config.cidadeLoja || "";
+  }
+});
