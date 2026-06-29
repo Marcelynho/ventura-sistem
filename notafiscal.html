@@ -47,6 +47,7 @@
   document.getElementById("valorNF").value = ultimaOS.valor || "";
 };
     function gerarNota() {
+const config = JSON.parse(localStorage.getItem("configLoja")) || {};
       let cliente = document.getElementById("clienteNF").value;
       let produto = document.getElementById("produtoNF").value;
       let valor = document.getElementById("valorNF").value;
@@ -54,6 +55,14 @@
 
       document.getElementById("resultadoNF").innerHTML = `
 <h2>Nota Fiscal Gerada</h2>
+
+<div><b>${config.nomeLoja || "Óticas Ventura"}</b></div>
+<div>${config.telefoneLoja || ""}</div>
+<div>${config.enderecoLoja || ""}</div>
+<div>${config.cidadeLoja || ""}</div>
+
+<hr>
+
 <div><b>Cliente:</b> ${cliente}</div>
 <div><b>Produto:</b> ${produto}</div>
 <div><b>Valor:</b> R$ ${valor}</div>
