@@ -38,7 +38,30 @@
 
   <button onclick="salvarConfig()">Salvar Configurações</button>
 </div>
+<script>
+function salvarConfig() {
+  const config = {
+    nomeLoja: document.getElementById("nomeLoja").value,
+    telefoneLoja: document.getElementById("telefoneLoja").value,
+    enderecoLoja: document.getElementById("enderecoLoja").value,
+    cidadeLoja: document.getElementById("cidadeLoja").value
+  };
 
+  localStorage.setItem("configLoja", JSON.stringify(config));
+  alert("Configurações salvas com sucesso!");
+}
+
+window.onload = function () {
+  const config = JSON.parse(localStorage.getItem("configLoja"));
+
+  if (!config) return;
+
+  document.getElementById("nomeLoja").value = config.nomeLoja || "";
+  document.getElementById("telefoneLoja").value = config.telefoneLoja || "";
+  document.getElementById("enderecoLoja").value = config.enderecoLoja || "";
+  document.getElementById("cidadeLoja").value = config.cidadeLoja || "";
+};
+</script>
 <script src="app.js"></script>
 </body>
 </html>
