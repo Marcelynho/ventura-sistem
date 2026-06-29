@@ -51,9 +51,8 @@ const config = JSON.parse(localStorage.getItem("configLoja")) || {};
       let cliente = document.getElementById("clienteNF").value;
       let produto = document.getElementById("produtoNF").value;
       let valor = document.getElementById("valorNF").value;
-      alert(cliente + " | " + produto + " | " + valor);
-
-      document.getElementById("resultadoNF").innerHTML = `
+      
+ document.getElementById("resultadoNF").innerHTML = `
 <h2>Nota Fiscal Gerada</h2>
 
 <div><b>${config.nomeLoja || "Óticas Ventura"}</b></div>
