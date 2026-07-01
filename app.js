@@ -35,8 +35,14 @@ function fazerLogin() {
 }
 
 function logout() {
-    localStorage.removeItem("logado");
-    window.location.href = "login.html";
+    firebase.auth().signOut()
+        .then(() => {
+            window.location.href = "login.html";
+        })
+        .catch((error) => {
+            alert("Erro ao sair do sistema.");
+            console.log(error);
+        });
 }
 
 // CLIENTES
