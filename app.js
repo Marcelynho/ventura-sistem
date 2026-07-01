@@ -1314,6 +1314,11 @@ function finalizarEEnviar() {
   const valor = document.getElementById("valorOS").value;
   const entrada = document.getElementById("entradaOS").value;
   const restante = document.getElementById("restanteOS").value;
+  localStorage.setItem("ultimaOS", JSON.stringify({
+  cliente: cliente,
+  lente: produto,
+  valor: valor
+}));
 
   if (!telefone) {
     alert("Cliente sem telefone!");
