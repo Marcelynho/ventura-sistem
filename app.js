@@ -13,24 +13,25 @@ const db = firebase.firestore();
 let filtroStatus = "todos";
 
 // PROTEÇÃO DE LOGIN
-if (
-    !window.location.href.includes("login.html") &&
-    localStorage.getItem("logado") !== "sim"
-) {
-    window.location.href = "login.html";
-}
+firebase.auth().onAuthStateChanged((user) => {
+    if (!window.location.href.includes("login.html") && !user) {
+        window.location.href = "login.html";
+    }
+});
 
 // LOGIN
 function fazerLogin() {
-    const usuario = document.getElementById("usuario").value;
+    const email = document.getElementById("usuario").value;
     const senha = document.getElementById("senha").value;
 
-    if (usuario === "ventura" && senha === "123456") {
-        localStorage.setItem("logado", "sim");
-        window.location.href = "dashboard.html";
-    } else {
-        alert("Usuário ou senha incorretos!");
-    }
+    firebase.auth().signInWithEmailAndPassword(email, senha)
+        .then(() => {
+            window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+            alert("Email ou senha incorretos!");
+            console.log(error);
+        });
 }
 
 function logout() {
