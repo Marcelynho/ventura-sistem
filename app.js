@@ -1394,11 +1394,13 @@ window.addEventListener("load", function () {
   }
 });
 function gerarNotaFiscalOS() {
-  localStorage.setItem("ultimaOS", JSON.stringify({
-    cliente: document.getElementById("clienteOS").value,
-    lente: document.getElementById("lenteOS").value,
-    valor: document.getElementById("valorOS").value
-  }));
+const osTexto = document.querySelector("#listaOS").innerText;
 
-  window.location.href = "notafiscal.html";
+localStorage.setItem("ultimaOS", JSON.stringify({
+cliente: (osTexto.match(/Cliente:\s*(.*)/) || [])[1] || "",
+lente: document.getElementById("lenteOS").value || "",
+valor: document.getElementById("valorOS").value || ""
+}));
+
+window.location.href = "notafiscal.html";
 }
