@@ -1393,3 +1393,12 @@ window.addEventListener("load", function () {
     document.getElementById("cidadeLoja").value = config.cidadeLoja || "";
   }
 });
+function gerarNotaFiscalOS() {
+  localStorage.setItem("ultimaOS", JSON.stringify({
+    cliente: document.getElementById("clienteOS").value,
+    lente: document.getElementById("lenteOS").value,
+    valor: document.getElementById("valorOS").value
+  }));
+
+  window.location.href = "notafiscal.html";
+}
