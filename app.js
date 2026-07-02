@@ -633,6 +633,7 @@ async function salvarOS() {
         entrada: document.getElementById("entradaOS").value,
         restante: document.getElementById("restanteOS").value,
         pagamento: document.getElementById("pagamentoOS").value,
+      parcelasCartao: document.getElementById("parcelasCartao").value,
       telefone: document.getElementById("telefoneOS").value,
 cpf: document.getElementById("cpfOS").value,
 cep: document.getElementById("cepOS").value,
@@ -693,6 +694,7 @@ function imprimirOS() {
   const entrada = document.getElementById("entradaOS").value;
   const restante = document.getElementById("restanteOS").value;
   const pagamento = document.getElementById("pagamentoOS").value;
+  const parcelasCartao = document.getElementById("parcelasCartao").value;
 
   const odEsferico = document.getElementById("odEsferico").value;
   const odCilindrico = document.getElementById("odCilindrico").value;
@@ -748,7 +750,7 @@ function imprimirOS() {
         <p><b>Valor Total:</b> R$ ${valor}</p>
         <p><b>Entrada:</b> R$ ${entrada}</p>
         <p><b>Restante:</b> R$ ${restante}</p>
-        <p><b>Forma de Pagamento:</b> ${pagamento}</p>
+        <p><b>Forma de Pagamento:</b> ${pagamento} ${parcelasCartao}</p>
       </div>
 
       <div class="box">
