@@ -348,12 +348,9 @@ const caixasSnap = await db.collection("caixas").get();
 
   
 
-caixasSnap.forEach(doc => {
+pedidosSnap.forEach(doc => {
   const item = doc.data();
-
-  if (item.tipo === "entrada") {
-    totalFinanceiro += Number(item.valor || 0);
-  }
+  totalFinanceiro += Number(item.valor || 0);
 });
 
   new Chart(canvas, {
