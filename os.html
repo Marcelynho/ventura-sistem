@@ -30,7 +30,7 @@
 <input id="valorOS" placeholder="Valor Total"><br><br>
 <input id="entradaOS" placeholder="Entrada" oninput="calcularRestante()"><br><br>
 <input id="restanteOS" placeholder="Restante"><br><br>
-<select id="pagamentoOS">
+<select id="pagamentoOS" onchange="mostrarParcelas()">
   <option value="">Forma de Pagamento</option>
   <option value="Pix">Pix</option>
   <option value="Dinheiro">Dinheiro</option>
