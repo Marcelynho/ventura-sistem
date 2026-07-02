@@ -30,7 +30,7 @@
 <input id="valorOS" placeholder="Valor Total"><br><br>
 <input id="entradaOS" placeholder="Entrada" oninput="calcularRestante()"><br><br>
 <input id="restanteOS" placeholder="Restante"><br><br>
-<select id="pagamentoOS" onchange="document.getElementById('parcelasCartao').style.display = this.value === 'Cartão de Crédito' ? 'block' : 'none'">
+<select id="pagamentoOS">
   <option value="">Forma de Pagamento</option>
   <option value="Pix">Pix</option>
   <option value="Dinheiro">Dinheiro</option>
@@ -86,5 +86,17 @@ style="background:green; color:white; border:none; padding:10px; border-radius:5
 <h3>Lista de OS</h3>
 <button onclick="listarOS()">Atualizar Lista</button>
 <div id="listaOS"></div>
+  <script>
+document.getElementById("pagamentoOS").addEventListener("change", function () {
+  const parcelas = document.getElementById("parcelasCartao");
+
+  if (this.value === "Cartão de Crédito") {
+    parcelas.style.display = "block";
+  } else {
+    parcelas.style.display = "none";
+    parcelas.value = "";
+  }
+});
+</script>
 </body>
 </html>
