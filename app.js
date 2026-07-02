@@ -685,85 +685,116 @@ document.getElementById("pagamentoOS").value = "";
     alert("OS salva com sucesso!");
 }
 function imprimirOS() {
-    const numero = document.getElementById("numeroOS").value;
-    const cliente = document.getElementById("clienteOS").value;
-    const lente = document.getElementById("lenteOS").value;
-    const valor = document.getElementById("valorOS").value;
-    const entrada = document.getElementById("entradaOS").value;
-    const restante = document.getElementById("restanteOS").value;
-    const pagamento = document.getElementById("pagamentoOS").value;
+  const numero = document.getElementById("numeroOS").value;
+  const cliente = document.getElementById("clienteOS").value;
+  const telefone = document.getElementById("telefoneOS").value;
+  const lente = document.getElementById("lenteOS").value;
+  const valor = document.getElementById("valorOS").value;
+  const entrada = document.getElementById("entradaOS").value;
+  const restante = document.getElementById("restanteOS").value;
+  const pagamento = document.getElementById("pagamentoOS").value;
+
   const odEsferico = document.getElementById("odEsferico").value;
-const odCilindrico = document.getElementById("odCilindrico").value;
-const odEixo = document.getElementById("odEixo").value;
+  const odCilindrico = document.getElementById("odCilindrico").value;
+  const odEixo = document.getElementById("odEixo").value;
 
-const oeEsferico = document.getElementById("oeEsferico").value;
-const oeCilindrico = document.getElementById("oeCilindrico").value;
-const oeEixo = document.getElementById("oeEixo").value;
+  const oeEsferico = document.getElementById("oeEsferico").value;
+  const oeCilindrico = document.getElementById("oeCilindrico").value;
+  const oeEixo = document.getElementById("oeEixo").value;
 
-const dnp = document.getElementById("dnpOS").value;
-const altura = document.getElementById("alturaOS").value;
-const add = document.getElementById("addOS").value;
+  const dnp = document.getElementById("dnpOS").value;
+  const altura = document.getElementById("alturaOS").value;
+  const add = document.getElementById("addOS").value;
 
-    const conteudo = `
-<html>
-<head>
-<title>OS ${numero}</title>
-<style>
-body {
-    font-family: Arial, sans-serif;
-    padding: 25px
-    font-size: 20px;
-}
-h2, h3 {
-    text-align: center;
-    margin: 10px 0;
-}
-hr {
-    margin: 15px 0;
-}
-p {
-    margin: 6px 0;
-    font-size: 22px;
-}
-.assinatura {
-    margin-top: 50px;
-    text-align: center;
-}
-</style>
-</head>
-<body>
+  const conteudo = `
+  <html>
+  <head>
+    <title>OS ${numero}</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 25px; color: #111; }
+      .os { max-width: 800px; margin: auto; border: 2px solid #0072ff; padding: 25px; border-radius: 14px; }
+      .topo { text-align: center; border-bottom: 2px solid #0072ff; padding-bottom: 15px; }
+      .topo img { width: 90px; border-radius: 50%; margin-bottom: 8px; }
+      h1 { margin: 0; color: #0072ff; }
+      h2 { margin: 5px 0 0; font-size: 18px; }
+      .box { margin-top: 18px; padding: 14px; border: 1px solid #ccc; border-radius: 10px; }
+      .titulo { font-weight: bold; color: #0072ff; margin-bottom: 8px; font-size: 17px; }
+      p { margin: 6px 0; font-size: 15px; }
+      table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+      th, td { border: 1px solid #999; padding: 8px; text-align: center; }
+      th { background: #e8f3ff; color: #0072ff; }
+      .assinatura { margin-top: 60px; text-align: center; }
+      .linha { border-top: 1px solid #000; width: 280px; margin: auto; padding-top: 6px; }
+      .rodape { margin-top: 30px; text-align: center; font-size: 12px; color: #555; }
+    </style>
+  </head>
+  <body>
+    <div class="os">
+      <div class="topo">
+        <img src="logo.jpg">
+        <h1>Óticas Ventura</h1>
+        <h2>Ordem de Serviço Nº ${numero}</h2>
+      </div>
 
-<h2>Óticas Ventura</h2>
-<h3>Ordem de Serviço Nº ${numero}</h3>
-<hr>
+      <div class="box">
+        <div class="titulo">Dados do Cliente</div>
+        <p><b>Cliente:</b> ${cliente}</p>
+        <p><b>Telefone:</b> ${telefone}</p>
+      </div>
 
-<p><b>Cliente:</b> ${cliente}</p>
-<p><b>Lente / Produto:</b> ${lente}</p>
-<p><b>Valor Total:</b> R$ ${valor}</p>
-<p><b>Entrada:</b> R$ ${entrada}</p>
-<p><b>Restante:</b> R$ ${restante}</p>
-<p><b>Forma de Pagamento:</b> ${pagamento}</p>
+      <div class="box">
+        <div class="titulo">Produto e Pagamento</div>
+        <p><b>Lente / Produto:</b> ${lente}</p>
+        <p><b>Valor Total:</b> R$ ${valor}</p>
+        <p><b>Entrada:</b> R$ ${entrada}</p>
+        <p><b>Restante:</b> R$ ${restante}</p>
+        <p><b>Forma de Pagamento:</b> ${pagamento}</p>
+      </div>
 
-<hr>
+      <div class="box">
+        <div class="titulo">Receita / Dados do Exame</div>
+        <table>
+          <tr>
+            <th>Olho</th>
+            <th>Esférico</th>
+            <th>Cilíndrico</th>
+            <th>Eixo</th>
+          </tr>
+          <tr>
+            <td>OD</td>
+            <td>${odEsferico}</td>
+            <td>${odCilindrico}</td>
+            <td>${odEixo}</td>
+          </tr>
+          <tr>
+            <td>OE</td>
+            <td>${oeEsferico}</td>
+            <td>${oeCilindrico}</td>
+            <td>${oeEixo}</td>
+          </tr>
+        </table>
 
-<p><b>OD:</b> ${odEsferico} / ${odCilindrico} / ${odEixo}</p>
-<p><b>OE:</b> ${oeEsferico} / ${oeCilindrico} / ${oeEixo}</p>
-<p><b>DNP:</b> ${dnp}</p>
-<p><b>Altura:</b> ${altura}</p>
-<p><b>ADD:</b> ${add}</p>
+        <p><b>DNP:</b> ${dnp}</p>
+        <p><b>Altura:</b> ${altura}</p>
+        <p><b>ADD:</b> ${add}</p>
+      </div>
 
-<div class="assinatura">
-<p>________________________________</p>
-<p><b>Assinatura do Cliente</b></p>
-</div>
+      <div class="assinatura">
+        <div class="linha">Assinatura do Cliente</div>
+      </div>
 
-</body>
-</html>
-`;
+      <div class="rodape">
+        Documento gerado pelo Sistema Ventura
+      </div>
+    </div>
+  </body>
+  </html>
+  `;
 
-    const janela = window.open("", "_blank");
-    janela.document.write(conteudo);
-    janela.print();
+  const janela = window.open("", "_blank");
+  janela.document.write(conteudo);
+  janela.document.close();
+  janela.print();
 }
 async function buscarOS() {
     const busca = document.getElementById("buscaOS").value.trim();
