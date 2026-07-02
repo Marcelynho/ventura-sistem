@@ -1430,4 +1430,16 @@ valor: document.getElementById("valorOS").value || ""
 
 window.location.href = "notafiscal.html";
 }
+function mostrarParcelas() {
+  const pagamento = document.getElementById("pagamentoOS")?.value || "";
+  const parcelas = document.getElementById("parcelasCartao");
 
+  if (!parcelas) return;
+
+  if (pagamento === "Cartão de Crédito") {
+    parcelas.style.display = "block";
+  } else {
+    parcelas.style.display = "none";
+    parcelas.value = "";
+  }
+}
