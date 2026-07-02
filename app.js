@@ -1095,7 +1095,7 @@ async function deletarOS() {
   });
 
   const caixaSnap = await db.collection("caixas")
-    .where("os", "==", numero)
+    .where("os", "==", Number(numero))
     .get();
   alert("Encontrados em caixas: " + caixaSnap.size);
 
