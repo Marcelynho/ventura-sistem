@@ -323,12 +323,9 @@ const caixasSnap = await db.collection("caixas").get();
 
     let soma = 0;
 
-caixasSnap.forEach(doc => {
+pedidosSnap.forEach(doc => {
   const item = doc.data();
-
-  if (item.tipo === "entrada") {
-    soma += Number(item.valor || 0);
-  }
+  soma += Number(item.valor || 0);
 });
 
     if (totalFinanceiro) totalFinanceiro.textContent = soma.toFixed(2);
