@@ -61,9 +61,9 @@ document.getElementById("valorNF").value = params.get("valor") || dados.valor ||
     function gerarNota() {
 const dados = JSON.parse(localStorage.getItem("dadosNotaFiscal")) || {};
 
-let cliente = dados.cliente || document.getElementById("clienteNF").value;
-let produto = dados.produto || document.getElementById("produtoNF").value;
-let valor = dados.valor || document.getElementById("valorNF").value;
+let cliente = document.getElementById("clienteNF").value || dados.cliente || "";
+let produto = document.getElementById("produtoNF").value || dados.produto || "";
+let valor = document.getElementById("valorNF").value || dados.valor || "";
       
  document.getElementById("resultadoNF").innerHTML = `
 <div style="width:100%; max-width:700px; margin:0 auto; font-size:18px; line-height:1.6;">
