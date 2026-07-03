@@ -50,12 +50,13 @@ margin-top: 15px;
 🖨️ Imprimir Nota
 </button>
 <script>
-    window.onload = function () {
-  const dados = JSON.parse(localStorage.getItem("dadosNotaFiscal")) || {};
+   window.onload = function () {
+const params = new URLSearchParams(window.location.search);
+const dados = JSON.parse(localStorage.getItem("dadosNotaFiscal")) || {};
 
-  document.getElementById("clienteNF").value = dados.cliente || "";
-  document.getElementById("produtoNF").value = dados.produto || "";
-  document.getElementById("valorNF").value = dados.valor || "";
+document.getElementById("clienteNF").value = params.get("cliente") || dados.cliente || "";
+document.getElementById("produtoNF").value = params.get("produto") || dados.produto || "";
+document.getElementById("valorNF").value = params.get("valor") || dados.valor || "";
 };
     function gerarNota() {
 const dados = JSON.parse(localStorage.getItem("dadosNotaFiscal")) || {};
