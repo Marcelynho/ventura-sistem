@@ -1424,7 +1424,7 @@ function gerarNotaFiscalOS() {
   const produto = document.getElementById("lenteOS")?.value || "";
   const valor = document.getElementById("valorOS")?.value || "";
 
-  const url = notafiscal.html?cliente=${encodeURIComponent(cliente)}&produto=${encodeURIComponent(produto)}&valor=${encodeURIComponent(valor)};
+  const url = `notafiscal.html?cliente=${encodeURIComponent(cliente)}&produto=${encodeURIComponent(produto)}&valor=${encodeURIComponent(valor)}`;
 
   window.location.href = url;
 }
