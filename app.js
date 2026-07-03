@@ -1420,30 +1420,13 @@ window.addEventListener("load", function () {
   }
 });
 function gerarNotaFiscalOS() {
-  const pagamento = document.getElementById("pagamentoOS")?.value || "";
-  const parcelas = document.getElementById("parcelasCartao")?.value || "";
+  const cliente = document.getElementById("clienteOS")?.value || "";
+  const produto = document.getElementById("lenteOS")?.value || "";
+  const valor = document.getElementById("valorOS")?.value || "";
 
-  const dadosNota = {
-    numeroOS: document.getElementById("numeroOS")?.value || "",
-    cliente: document.getElementById("clienteOS")?.value || "",
-    telefone: document.getElementById("telefoneOS")?.value || "",
-    cpf: document.getElementById("cpfOS")?.value || "",
-    cep: document.getElementById("cepOS")?.value || "",
-    endereco: document.getElementById("enderecoOS")?.value || "",
-    bairro: document.getElementById("bairroOS")?.value || "",
-    cidade: document.getElementById("cidadeOS")?.value || "",
-    produto: document.getElementById("lenteOS")?.value || "",
-    valor: document.getElementById("valorOS")?.value || "",
-    entrada: document.getElementById("entradaOS")?.value || "",
-    restante: document.getElementById("restanteOS")?.value || "",
-    pagamento: pagamento,
-    parcelas: parcelas,
-    data: new Date().toLocaleDateString("pt-BR"),
-    status: "Pré-NF / Aguardando emissão oficial"
-  };
+  const url = notafiscal.html?cliente=${encodeURIComponent(cliente)}&produto=${encodeURIComponent(produto)}&valor=${encodeURIComponent(valor)};
 
-  localStorage.setItem("dadosNotaFiscal", JSON.stringify(dadosNota));
-  window.location.href = "notafiscal.html";
+  window.location.href = url;
 }
 function mostrarParcelas() {
   const pagamento = document.getElementById("pagamentoOS")?.value || "";
