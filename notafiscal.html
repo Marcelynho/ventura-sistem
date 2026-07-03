@@ -51,13 +51,11 @@ margin-top: 15px;
 </button>
 <script>
     window.onload = function () {
-  const ultimaOS = JSON.parse(localStorage.getItem("ultimaOS"));
+  const dados = JSON.parse(localStorage.getItem("dadosNotaFiscal")) || {};
 
-  if (!ultimaOS) return;
-
-  document.getElementById("clienteNF").value = ultimaOS.cliente || "";
-  document.getElementById("produtoNF").value = ultimaOS.lente || "";
-  document.getElementById("valorNF").value = ultimaOS.valor || "";
+  document.getElementById("clienteNF").value = dados.cliente || "";
+  document.getElementById("produtoNF").value = dados.produto || "";
+  document.getElementById("valorNF").value = dados.valor || "";
 };
     function gerarNota() {
 const dados = JSON.parse(localStorage.getItem("dadosNotaFiscal")) || {};
