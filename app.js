@@ -1420,13 +1420,14 @@ window.addEventListener("load", function () {
   }
 });
 function gerarNotaFiscalOS() {
-  const cliente = document.getElementById("clienteOS")?.value || "";
-  const produto = document.getElementById("lenteOS")?.value || "";
-  const valor = document.getElementById("valorOS")?.value || "";
+  const dadosNota = {
+    cliente: document.getElementById("clienteOS")?.value || "",
+    produto: document.getElementById("lenteOS")?.value || "",
+    valor: document.getElementById("valorOS")?.value || ""
+  };
 
-  const url = `notafiscal.html?cliente=${encodeURIComponent(cliente)}&produto=${encodeURIComponent(produto)}&valor=${encodeURIComponent(valor)}`;
-
-  window.location.href = url;
+  localStorage.setItem("dadosNotaFiscal", JSON.stringify(dadosNota));
+  window.location.href = "notafiscal.html";
 }
 function mostrarParcelas() {
   const pagamento = document.getElementById("pagamentoOS")?.value || "";
