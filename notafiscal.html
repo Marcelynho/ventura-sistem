@@ -60,10 +60,11 @@ margin-top: 15px;
   document.getElementById("valorNF").value = ultimaOS.valor || "";
 };
     function gerarNota() {
-const config = JSON.parse(localStorage.getItem("configLoja")) || {};
-      let cliente = document.getElementById("clienteNF").value;
-      let produto = document.getElementById("produtoNF").value;
-      let valor = document.getElementById("valorNF").value;
+const dados = JSON.parse(localStorage.getItem("dadosNotaFiscal")) || {};
+
+let cliente = dados.cliente || document.getElementById("clienteNF").value;
+let produto = dados.produto || document.getElementById("produtoNF").value;
+let valor = dados.valor || document.getElementById("valorNF").value;
       
  document.getElementById("resultadoNF").innerHTML = `
   <div style="width: 100%; max-width: 700px; margin: 0 auto; font-size: 18px; line-height: 1.6;">
