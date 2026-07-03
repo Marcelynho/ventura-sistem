@@ -4,6 +4,35 @@
   <meta charset="UTF-8">
   <title>Nota Fiscal</title>
   <link rel="stylesheet" href="style.css">
+  
+<style>
+@media print {
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .sidebar,
+  button,
+  input {
+    display: none !important;
+  }
+
+  #resultadoNF {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #resultadoNF div {
+    max-width: 420px !important;
+    margin: 0 auto !important;
+    padding: 15px !important;
+    page-break-inside: avoid !important;
+  }
+}
+</style>
+
+</head>
 </head>
 <body>
   <div class="sidebar">
