@@ -67,24 +67,26 @@ let produto = dados.produto || document.getElementById("produtoNF").value;
 let valor = dados.valor || document.getElementById("valorNF").value;
       
  document.getElementById("resultadoNF").innerHTML = `
-  <div style="width: 100%; max-width: 700px; margin: 0 auto; font-size: 18px; line-height: 1.6;">
-    <h1 style="text-align:center; color:#0072ff; margin-bottom:5px;">Óticas Ventura</h1>
-    <h2 style="text-align:center; margin-top:0;">Nota / Recibo de Atendimento</h2>
+<div style="width:100%; max-width:700px; margin:0 auto; font-size:18px; line-height:1.6;">
 
-    <hr>
+<h1 style="text-align:center; color:#0072ff; margin-bottom:5px;">Óticas Ventura</h1>
+<h2 style="text-align:center; margin-top:0;">Nota / Recibo de Atendimento</h2>
 
-    <p><b>Cliente:</b> ${cliente}</p>
-    <p><b>Produto:</b> ${produto}</p>
-    <p><b>Valor:</b> R$ ${valor}</p>
+<hr>
 
-    <hr>
+<p><b>Cliente:</b> ${cliente}</p>
+<p><b>Produto:</b> ${produto}</p>
+<p><b>Valor:</b> R$ ${valor}</p>
 
-    <p style="font-size:14px; text-align:center;">
-      Obrigado pela preferência.
-    </p>
-  </div>
+<hr>
+
+<p style="font-size:14px; text-align:center;">
+Obrigado pela preferência.
+</p>
+
+</div>
 `;
-`;
+}
     }
   </script>
 </body>
