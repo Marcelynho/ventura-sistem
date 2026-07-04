@@ -6,8 +6,10 @@
   <link rel="stylesheet" href="style.css">
   
 <style>
+<style>
 @media print {
   body {
+    background: white !important;
     margin: 0 !important;
     padding: 0 !important;
   }
@@ -19,20 +21,22 @@
   }
 
   #resultadoNF {
-    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
     padding: 0 !important;
   }
 
-  #resultadoNF div {
-    max-width: 420px !important;
+  #resultadoNF > div {
+    width: 100% !important;
+    max-width: 800px !important;
     margin: 0 auto !important;
-    padding: 15px !important;
-    page-break-inside: avoid !important;
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
   }
 }
 </style>
 
-</head>
 </head>
 <body>
   <div class="sidebar">
