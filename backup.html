@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Backup do Ventura System</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+body{
+    background:#f5f7fb;
+    font-family:Arial;
+    text-align:center;
+    padding:40px;
+}
+
+.card{
+    max-width:700px;
+    margin:auto;
+    background:white;
+    padding:40px;
+    border-radius:12px;
+    box-shadow:0 0 15px rgba(0,0,0,.15);
+}
+
+button{
+    background:#1565c0;
+    color:white;
+    border:none;
+    padding:15px 35px;
+    font-size:18px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#0d47a1;
+}
+
+h1{
+    color:#1565c0;
+}
+
+p{
+    font-size:18px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>💾 Backup Ventura System</h1>
+
+<p>
+Este módulo exportará todos os dados do Firebase
+para um único arquivo de backup.
+</p>
+
+<br>
+
+<button onclick="fazerBackup()">
+Fazer Backup
+</button>
+
+<p id="status"></p>
+
+</div>
+
+<script>
+
+function fazerBackup(){
+
+document.getElementById("status").innerHTML=
+"Em desenvolvimento...";
+
+}
+
+</script>
+
+</body>
+</html>
+Criar página Backup do Ventura System
