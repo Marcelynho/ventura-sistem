@@ -2,123 +2,114 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Nota Fiscal</title>
-  <link rel="stylesheet" href="style.css">
-  
-<style>
-<style>
-@media print {
-  body {
-    background: white !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
+  <title>Nota / Recibo</title>
 
-  .sidebar,
-  button,
-  input {
-    display: none !important;
-  }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      margin: 0;
+      padding: 30px;
+    }
 
-  #resultadoNF {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
-  }
+    .nota {
+      background: white;
+      color: #000;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 35px;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
 
-  #resultadoNF > div {
-    width: 100% !important;
-    max-width: 800px !important;
-    margin: 0 auto !important;
-    box-shadow: none !important;
-    border: 1px solid #000 !important;
-  }
-}
-</style>
+    h1, h2 {
+      text-align: center;
+      margin: 0;
+    }
 
+    h1 { color: #0072ff; }
+    h2 { margin-top: 8px; }
+
+    .linha {
+      border-top: 1px solid #999;
+      margin: 25px 0;
+    }
+
+    .campo {
+      font-size: 18px;
+      margin: 14px 0;
+    }
+
+    .assinatura {
+      margin-top: 60px;
+      text-align: center;
+    }
+
+    button {
+      display: block;
+      margin: 25px auto 0;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 8px;
+      background: #0072ff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      button {
+        display: none;
+      }
+
+      .nota {
+        max-width: 100%;
+        margin: 0;
+        border-radius: 0;
+        padding: 30px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <div class="sidebar">
-    <button onclick="window.location.href='dashboard.html'">🏠 Início</button>
-    <button onclick="window.location.href='os.html'">📋 Ordem de Serviço</button>
+
+  <div class="nota">
+    <h1>Óticas Ventura</h1>
+    <h2>Nota / Recibo de Atendimento</h2>
+
+    <div class="linha"></div>
+
+    <div class="campo"><b>Cliente:</b> <span id="cliente"></span></div>
+    <div class="campo"><b>Produto:</b> <span id="produto"></span></div>
+    <div class="campo"><b>Valor:</b> R$ <span id="valor"></span></div>
+    <div class="campo"><b>Data:</b> <span id="data"></span></div>
+
+    <div class="linha"></div>
+
+    <p>Obrigado pela preferência.</p>
+
+    <div class="assinatura">
+      ___________________________________<br>
+      Assinatura do cliente
+    </div>
   </div>
 
-  <div style="padding:40px;">
-    <h1>🧾 Nota Fiscal</h1>
+  <button onclick="window.print()">🖨️ Imprimir Nota</button>
 
-    <div class="card" style="padding:20px; max-width:700px;">
-      <input id="clienteNF" placeholder="Cliente" style="color:#000 !important; background:#fff !important;"><br><br>
-<input id="produtoNF" placeholder="Produto" style="color:#000 !important; background:#fff !important;"><br><br>
-<input id="valorNF" placeholder="Valor" style="color:#000 !important; background:#fff !important;"><br><br>
+  <script>
+    const params = new URLSearchParams(window.location.search);
 
-      <button onclick="gerarNota()" style="
-  background: linear-gradient(90deg, #00c6ff, #0072ff);
-  color: white;
-  border: none;
-  padding: 14px 28px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-">
-  🧾 Gerar Nota Fiscal
-</button>
-    </div>
-
-    <div id="resultadoNF" class="card" style="margin-top:20px; padding:20px;"></div>
-
-<button onclick="window.print()" style="
-background: white;
-color: #0072ff;
-border: 2px solid #0072ff;
-padding: 12px 24px;
-border-radius: 12px;
-font-size: 15px;
-font-weight: bold;
-cursor: pointer;
-margin-top: 15px;
-">
-🖨️ Imprimir Nota
-</button>
-<script>
-   window.onload = function () {
-const params = new URLSearchParams(window.location.search);
-const dados = JSON.parse(localStorage.getItem("dadosNotaFiscal")) || {};
-
-document.getElementById("clienteNF").value = params.get("cliente") || dados.cliente || "";
-document.getElementById("produtoNF").value = params.get("produto") || dados.produto || "";
-document.getElementById("valorNF").value = params.get("valor") || dados.valor || "";
-};
-    function gerarNota() {
-const dados = JSON.parse(localStorage.getItem("dadosNotaFiscal")) || {};
-
-let cliente = document.getElementById("clienteNF").value || dados.cliente || "";
-let produto = document.getElementById("produtoNF").value || dados.produto || "";
-let valor = document.getElementById("valorNF").value || dados.valor || "";
-      
- document.getElementById("resultadoNF").innerHTML = `
-<div style="width:100%; max-width:420px; margin:0 auto; font-size:18px; line-height:1.6; color:#000 !important; background:#fff !important; padding:25px; text-align:center; box-sizing:border-box;">
-
-<h1 style="text-align:center; color:#0072ff; margin:0 0 5px 0;">Óticas Ventura</h1>
-<h2 style="text-align:center; margin:0;">Nota / Recibo de Atendimento</h2>
-
-<hr>
-
-<p><b>Cliente:</b> ${cliente}</p>
-<p><b>Produto:</b> ${produto}</p>
-<p><b>Valor:</b> R$ ${valor}</p>
-
-<hr>
-
-<p style="font-size:14px; text-align:center;">
-Obrigado pela preferência.
-</p>
-
-</div>
-`;
-}
+    document.getElementById("cliente").innerText = params.get("cliente") || "";
+    document.getElementById("produto").innerText = params.get("produto") || "";
+    document.getElementById("valor").innerText = params.get("valor") || "";
+    document.getElementById("data").innerText = new Date().toLocaleDateString("pt-BR");
   </script>
+
 </body>
 </html>
