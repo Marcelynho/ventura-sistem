@@ -2,84 +2,90 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Backup do Ventura System</title>
-
+<title>Backup Ventura System</title>
 <link rel="stylesheet" href="style.css">
-
 <style>
-body{
-    background:#f5f7fb;
-    font-family:Arial;
-    text-align:center;
-    padding:40px;
-}
-
-.card{
-    max-width:700px;
-    margin:auto;
-    background:white;
-    padding:40px;
-    border-radius:12px;
-    box-shadow:0 0 15px rgba(0,0,0,.15);
-}
-
-button{
-    background:#1565c0;
-    color:white;
-    border:none;
-    padding:15px 35px;
-    font-size:18px;
-    border-radius:8px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#0d47a1;
-}
-
-h1{
-    color:#1565c0;
-}
-
-p{
-    font-size:18px;
-}
+body{font-family:Arial;background:#f5f7fb;text-align:center;padding:40px}
+.card{max-width:700px;margin:auto;background:white;padding:40px;border-radius:12px;box-shadow:0 0 15px #0003}
+button{background:#1565c0;color:white;border:none;padding:15px 35px;font-size:18px;border-radius:8px;cursor:pointer}
+h1{color:#1565c0}
 </style>
-
 </head>
-
 <body>
 
 <div class="card">
-
 <h1>💾 Backup Ventura System</h1>
-
-<p>
-Este módulo exportará todos os dados do Firebase
-para um único arquivo de backup.
-</p>
-
-<br>
-
-<button onclick="fazerBackup()">
-Fazer Backup
-</button>
-
+<p>Exporta todos os dados do Firebase para um arquivo JSON.</p>
+<button onclick="fazerBackup()">Fazer Backup</button>
 <p id="status"></p>
-
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
 <script>
+const firebaseConfig = {
+  apiKey: "COLE_AQUI_DO_APPJS",
+  authDomain: "ventura-system.firebaseapp.com",
+  projectId: "ventura-system",
+  storageBucket: "ventura-system.firebasestorage.app",
+  messagingSenderId: "302438886661",
+  appId: "COLE_AQUI_DO_APPJS"
+};
 
-function fazerBackup(){
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-document.getElementById("status").innerHTML=
-"Em desenvolvimento...";
+async function buscarColecao(nome) {
+  const snap = await db.collection(nome).get();
+  const dados = [];
 
+  snap.forEach(doc => {
+    dados.push({
+      id: doc.id,
+      ...doc.data()
+    });
+  });
+
+  return dados;
 }
 
+async function fazerBackup() {
+  const status = document.getElementById("status");
+  status.innerHTML = "Gerando backup... aguarde.";
+
+  try {
+    const backup = {
+      dataBackup: new Date().toISOString(),
+      sistema: "Ventura System",
+      clientes: await buscarColecao("clientes"),
+      pedidos: await buscarColecao("pedidos"),
+      ordens: await buscarColecao("ordens"),
+      caixas: await buscarColecao("caixas"),
+      financeiro: await buscarColecao("financeiro"),
+      historicoCaixa: await buscarColecao("historicoCaixa"),
+      notas_fiscais: await buscarColecao("notas_fiscais"),
+      receituarios: await buscarColecao("receituarios")
+    };
+
+    const arquivo = new Blob(
+      [JSON.stringify(backup, null, 2)],
+      { type: "application/json" }
+    );
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(arquivo);
+    link.download = "ventura-backup-" + new Date().toISOString().slice(0,10) + ".json";
+    link.click();
+
+    status.innerHTML = "✅ Backup gerado com sucesso.";
+  } catch (erro) {
+    console.error(erro);
+    status.innerHTML = "❌ Erro ao gerar backup.";
+  }
+}
 </script>
 
 </body>
 </html>
-Criar página Backup do Ventura System
