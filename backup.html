@@ -37,7 +37,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
-let db = null;
+var db = null;
 
 auth.onAuthStateChanged((user) => {
     console.log("Usuário:", user);
@@ -50,8 +50,6 @@ auth.onAuthStateChanged((user) => {
     db = firebase.firestore();
 });
   
-const db = firebase.firestore();
-
 async function buscarColecao(nome) {
   try {
     console.log("Lendo coleção:", nome);
