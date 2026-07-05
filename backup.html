@@ -42,11 +42,6 @@ var db = null;
 auth.onAuthStateChanged((user) => {
     console.log("Usuário:", user);
 
-    if (!user) {
-        window.location.href = "login.html";
-        return;
-    }
-
     db = firebase.firestore();
 });
   
