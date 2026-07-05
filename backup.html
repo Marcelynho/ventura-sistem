@@ -3,23 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>Backup Ventura System</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body style="font-family: Arial; background:#f5f7fb; text-align:center; padding:40px;">
+<body style="font-family:Arial;background:#f5f7fb;text-align:center;padding:40px;">
 
-<div style="max-width:700px; margin:auto; background:white; padding:35px; border-radius:14px; box-shadow:0 0 15px #0002;">
+<div style="max-width:700px;margin:auto;background:white;padding:35px;border-radius:14px;box-shadow:0 0 15px #0002;">
   <h1>💾 Backup Ventura System</h1>
-  <p>Faça login e gere o backup completo do Firebase.</p>
+  <p>Gera backup completo do Firebase.</p>
 
-  <input id="usuario" placeholder="E-mail" style="padding:12px; width:90%; margin:8px;"><br>
-  <input id="senha" type="password" placeholder="Senha" style="padding:12px; width:90%; margin:8px;"><br>
-
-  <button onclick="loginBackup()" style="background:#1565c0;color:white;border:0;padding:13px 30px;border-radius:8px;">
-    Entrar
-  </button>
-
-  <hr>
-
-  <button onclick="fazerBackup()" style="background:#00a651;color:white;border:0;padding:13px 30px;border-radius:8px;">
+  <button onclick="fazerBackup()" style="background:#00a651;color:white;border:0;padding:14px 35px;border-radius:8px;cursor:pointer;">
     Fazer Backup
   </button>
 
@@ -27,7 +19,6 @@
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
@@ -40,36 +31,21 @@ const firebaseConfig = {
   appId: "1:302438886661:web:8c5ce0f51c9a71e4e35b6c"
 };
 
-firebase.initializeApp(firebaseConfig);
-
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-function mostrar(msg) {
-  document.getElementById("status").innerHTML = msg;
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
 }
 
-function loginBackup() {
-  const email = document.getElementById("usuario").value.trim();
-  const senha = document.getElementById("senha").value.trim();
+const db = firebase.firestore();
 
-  mostrar("Entrando...");
-
-  auth.signInWithEmailAndPassword(email, senha)
-    .then(() => {
-      mostrar("✅ Login feito com sucesso. Agora clique em Fazer Backup.");
-    })
-    .catch((erro) => {
-      console.error("ERRO LOGIN:", erro);
-      mostrar("❌ Erro no login: " + erro.code);
-    });
+function statusMsg(msg) {
+  document.getElementById("status").innerHTML = msg;
 }
 
 async function buscarColecao(nome) {
   const snap = await db.collection(nome).get();
   const dados = [];
 
-  snap.forEach((doc) => {
+  snap.forEach(doc => {
     dados.push({
       id: doc.id,
       ...doc.data()
@@ -80,12 +56,7 @@ async function buscarColecao(nome) {
 }
 
 async function fazerBackup() {
-  if (!auth.currentUser) {
-    mostrar("⚠️ Faça login primeiro.");
-    return;
-  }
-
-  mostrar("Gerando backup... aguarde.");
+  statusMsg("⏳ Gerando backup... aguarde.");
 
   try {
     const backup = {
@@ -111,10 +82,10 @@ async function fazerBackup() {
     link.download = "ventura-backup-" + new Date().toISOString().slice(0, 10) + ".json";
     link.click();
 
-    mostrar("✅ Backup gerado com sucesso.");
+    statusMsg("✅ Backup gerado com sucesso.");
   } catch (erro) {
-    console.error("ERRO BACKUP:", erro);
-    mostrar("❌ Erro ao gerar backup: " + erro.code);
+    console.error(erro);
+    statusMsg("❌ Erro ao gerar backup: " + erro.message);
   }
 }
 </script>
