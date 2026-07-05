@@ -35,20 +35,34 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+auth.onAuthStateChanged((user) => {
+  if (!user) {
+    window.location.href = "login.html";
+  }
+});
 const db = firebase.firestore();
 
 async function buscarColecao(nome) {
-  const snap = await db.collection(nome).get();
-  const dados = [];
+  try {
+    console.log("Lendo coleção:", nome);
 
-  snap.forEach(doc => {
-    dados.push({
-      id: doc.id,
-      ...doc.data()
+    const snap = await db.collection(nome).get();
+    const dados = [];
+
+    snap.forEach(doc => {
+      dados.push({
+        id: doc.id,
+        ...doc.data()
+      });
     });
-  });
 
-  return dados;
+    return dados;
+  } catch (erro) {
+    console.error("Erro na coleção:", nome, erro);
+    throw erro;
+  }
 }
 
 async function fazerBackup() {
