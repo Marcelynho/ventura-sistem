@@ -3,118 +3,121 @@
 <head>
   <meta charset="UTF-8">
   <title>Backup Ventura System</title>
-  <link rel="stylesheet" href="style.css">
 </head>
-<body style="font-family:Arial; background:#f5f7fb; text-align:center; padding:40px;">
+<body style="font-family: Arial; background:#f5f7fb; text-align:center; padding:40px;">
 
-  <div style="max-width:700px; margin:auto; background:white; padding:40px; border-radius:12px; box-shadow:0 0 15px #0003;">
-    <h1>💾 Backup Ventura System</h1>
-    <p>Faça login e depois gere o backup completo do Firebase.</p>
+<div style="max-width:700px; margin:auto; background:white; padding:35px; border-radius:14px; box-shadow:0 0 15px #0002;">
+  <h1>💾 Backup Ventura System</h1>
+  <p>Faça login e gere o backup completo do Firebase.</p>
 
-    <input id="usuario" placeholder="E-mail" style="padding:12px; width:90%; margin:8px;"><br>
-    <input id="senha" type="password" placeholder="Senha" style="padding:12px; width:90%; margin:8px;"><br>
+  <input id="usuario" placeholder="E-mail" style="padding:12px; width:90%; margin:8px;"><br>
+  <input id="senha" type="password" placeholder="Senha" style="padding:12px; width:90%; margin:8px;"><br>
 
-    <button onclick="loginBackup()" style="background:#1565c0; color:white; border:none; padding:14px 30px; border-radius:8px; cursor:pointer;">
-      Entrar
-    </button>
+  <button onclick="loginBackup()" style="background:#1565c0;color:white;border:0;padding:13px 30px;border-radius:8px;">
+    Entrar
+  </button>
 
-    <hr>
+  <hr>
 
-    <button onclick="fazerBackup()" style="background:#00a651; color:white; border:none; padding:14px 30px; border-radius:8px; cursor:pointer;">
-      Fazer Backup
-    </button>
+  <button onclick="fazerBackup()" style="background:#00a651;color:white;border:0;padding:13px 30px;border-radius:8px;">
+    Fazer Backup
+  </button>
 
-    <p id="status"></p>
-  </div>
+  <p id="status"></p>
+</div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDkKbihoymG4pYz1ZWSknXtn6xqhZumbNk",
-      authDomain: "ventura-system.firebaseapp.com",
-      projectId: "ventura-system",
-      storageBucket: "ventura-system.firebasestorage.app",
-      messagingSenderId: "302438886661",
-      appId: "1:302438886661:web:8c5ce0f51c9a71e4e35b6c"
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDkKbihoymG4pYz1ZWSknXtn6xqhZumbNk",
+  authDomain: "ventura-system.firebaseapp.com",
+  projectId: "ventura-system",
+  storageBucket: "ventura-system.firebasestorage.app",
+  messagingSenderId: "302438886661",
+  appId: "1:302438886661:web:8c5ce0f51c9a71e4e35b6c"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+function mostrar(msg) {
+  document.getElementById("status").innerHTML = msg;
+}
+
+function loginBackup() {
+  const email = document.getElementById("usuario").value.trim();
+  const senha = document.getElementById("senha").value.trim();
+
+  mostrar("Entrando...");
+
+  auth.signInWithEmailAndPassword(email, senha)
+    .then(() => {
+      mostrar("✅ Login feito com sucesso. Agora clique em Fazer Backup.");
+    })
+    .catch((erro) => {
+      console.error("ERRO LOGIN:", erro);
+      mostrar("❌ Erro no login: " + erro.code);
+    });
+}
+
+async function buscarColecao(nome) {
+  const snap = await db.collection(nome).get();
+  const dados = [];
+
+  snap.forEach((doc) => {
+    dados.push({
+      id: doc.id,
+      ...doc.data()
+    });
+  });
+
+  return dados;
+}
+
+async function fazerBackup() {
+  if (!auth.currentUser) {
+    mostrar("⚠️ Faça login primeiro.");
+    return;
+  }
+
+  mostrar("Gerando backup... aguarde.");
+
+  try {
+    const backup = {
+      dataBackup: new Date().toISOString(),
+      sistema: "Ventura System",
+      clientes: await buscarColecao("clientes"),
+      pedidos: await buscarColecao("pedidos"),
+      ordens: await buscarColecao("ordens"),
+      caixas: await buscarColecao("caixas"),
+      financeiro: await buscarColecao("financeiro"),
+      historicoCaixa: await buscarColecao("historicoCaixa"),
+      notas_fiscais: await buscarColecao("notas_fiscais"),
+      receituarios: await buscarColecao("receituarios")
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    const arquivo = new Blob(
+      [JSON.stringify(backup, null, 2)],
+      { type: "application/json" }
+    );
 
-    function loginBackup() {
-      const email = document.getElementById("usuario").value;
-      const senha = document.getElementById("senha").value;
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(arquivo);
+    link.download = "ventura-backup-" + new Date().toISOString().slice(0, 10) + ".json";
+    link.click();
 
-      auth.signInWithEmailAndPassword(email, senha)
-        .then(() => {
-          document.getElementById("status").innerHTML = "✅ Login feito com sucesso. Agora clique em Fazer Backup.";
-        })
-        .catch((erro) => {
-          console.error(erro);
-          document.getElementById("status").innerHTML = "❌ Erro no login.";
-        });
-    }
-
-    async function buscarColecao(nome) {
-      const snap = await db.collection(nome).get();
-      const dados = [];
-
-      snap.forEach(doc => {
-        dados.push({
-          id: doc.id,
-          ...doc.data()
-        });
-      });
-
-      return dados;
-    }
-
-    async function fazerBackup() {
-      const status = document.getElementById("status");
-      status.innerHTML = "Gerando backup... aguarde.";
-
-      try {
-        const user = auth.currentUser;
-
-        if (!user) {
-          status.innerHTML = "⚠️ Faça login primeiro.";
-          return;
-        }
-
-        const backup = {
-          dataBackup: new Date().toISOString(),
-          sistema: "Ventura System",
-          clientes: await buscarColecao("clientes"),
-          pedidos: await buscarColecao("pedidos"),
-          ordens: await buscarColecao("ordens"),
-          caixas: await buscarColecao("caixas"),
-          financeiro: await buscarColecao("financeiro"),
-          historicoCaixa: await buscarColecao("historicoCaixa"),
-          notas_fiscais: await buscarColecao("notas_fiscais"),
-          receituarios: await buscarColecao("receituarios")
-        };
-
-        const arquivo = new Blob(
-          [JSON.stringify(backup, null, 2)],
-          { type: "application/json" }
-        );
-
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(arquivo);
-        link.download = "ventura-backup-" + new Date().toISOString().slice(0,10) + ".json";
-        link.click();
-
-        status.innerHTML = "✅ Backup gerado com sucesso.";
-      } catch (erro) {
-        console.error(erro);
-        status.innerHTML = "❌ Erro ao gerar backup.";
-      }
-    }
-  </script>
+    mostrar("✅ Backup gerado com sucesso.");
+  } catch (erro) {
+    console.error("ERRO BACKUP:", erro);
+    mostrar("❌ Erro ao gerar backup: " + erro.code);
+  }
+}
+</script>
 
 </body>
 </html>
