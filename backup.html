@@ -35,10 +35,19 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
+
+const auth = firebase.auth();
+let db = null;
 
 auth.onAuthStateChanged((user) => {
     console.log("Usuário:", user);
+
+    if (!user) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    db = firebase.firestore();
 });
   
 const db = firebase.firestore();
