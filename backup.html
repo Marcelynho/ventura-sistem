@@ -39,10 +39,11 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 var db = null;
 
-auth.onAuthStateChanged((user) => {
-    console.log("Usuário:", user);
-
-    db = firebase.firestore();
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+        console.log("Usuário:", user);
+        db = firebase.firestore();
+    });
 });
   
 async function buscarColecao(nome) {
