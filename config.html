@@ -30,6 +30,9 @@
 
 <div class="form-box">
   <h2>Dados da Loja</h2>
+  <button onclick="fazerBackup()">💾 Fazer Backup</button>
+
+<p id="statusBackup"></p>
 
   <input id="nomeLoja" placeholder="Nome da loja"><br><br>
   <input id="telefoneLoja" placeholder="WhatsApp da loja"><br><br>
@@ -50,7 +53,57 @@ function salvarConfig() {
   localStorage.setItem("configLoja", JSON.stringify(config));
   alert("Configurações salvas com sucesso!");
 }
+async function buscarColecaoBackup(nome) {
+    const snap = await db.collection(nome).get();
+    let dados = [];
 
+    snap.forEach(doc => {
+        dados.push({
+            id: doc.id,
+            ...doc.data()
+        });
+    });
+
+    return dados;
+}
+
+async function fazerBackup() {
+    const status = document.getElementById("statusBackup");
+
+    status.innerHTML = "⏳ Gerando backup...";
+
+    try {
+
+        const backup = {
+            clientes: await buscarColecaoBackup("clientes"),
+            pedidos: await buscarColecaoBackup("pedidos"),
+            ordens: await buscarColecaoBackup("ordens"),
+            financeiro: await buscarColecaoBackup("financeiro"),
+            caixas: await buscarColecaoBackup("caixas"),
+            historicoCaixa: await buscarColecaoBackup("historicoCaixa"),
+            receituarios: await buscarColecaoBackup("receituarios"),
+            notas_fiscais: await buscarColecaoBackup("notas_fiscais")
+        };
+
+        const arquivo = new Blob(
+            [JSON.stringify(backup, null, 2)],
+            { type: "application/json" }
+        );
+
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(arquivo);
+        link.download = "ventura-backup.json";
+        link.click();
+
+        status.innerHTML = "✅ Backup criado com sucesso.";
+
+    } catch (e) {
+
+        console.error(e);
+        status.innerHTML = "❌ " + e.message;
+
+    }
+}
 window.onload = function () {
   const config = JSON.parse(localStorage.getItem("configLoja"));
 
@@ -61,7 +114,8 @@ window.onload = function () {
   document.getElementById("enderecoLoja").value = config.enderecoLoja || "";
   document.getElementById("cidadeLoja").value = config.cidadeLoja || "";
 };
-</script>
 <script src="app.js"></script>
+
+<script>
 </body>
 </html>
