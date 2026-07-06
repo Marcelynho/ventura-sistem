@@ -138,8 +138,56 @@ window.onload = function () {
   };
   document.getElementById("arquivoBackup").addEventListener("change", restaurarBackup);
 
-async function restaurarBackup() {
-    alert("Função de restauração iniciada.");
+async function restaurarBackup(event) {
+  const status = document.getElementById("statusBackup");
+  const arquivo = event.target.files[0];
+
+  if (!arquivo) return;
+
+  const confirmar = confirm(
+    "ATENÇÃO: restaurar backup pode sobrescrever dados atuais. Deseja continuar?"
+  );
+
+  if (!confirmar) {
+    status.innerHTML = "⚠️ Restauração cancelada.";
+    return;
+  }
+
+  status.innerHTML = "⏳ Restaurando backup... aguarde.";
+
+  try {
+    const texto = await arquivo.text();
+    const backup = JSON.parse(texto);
+
+    async function restaurarColecao(nome, dados) {
+      if (!Array.isArray(dados)) return;
+
+      for (const item of dados) {
+        const id = item.id;
+        const copia = { ...item };
+        delete copia.id;
+
+        if (id) {
+          await db.collection(nome).doc(id).set(copia);
+        }
+      }
+    }
+
+    await restaurarColecao("clientes", backup.clientes);
+    await restaurarColecao("pedidos", backup.pedidos);
+    await restaurarColecao("ordens", backup.ordens);
+    await restaurarColecao("caixas", backup.caixas);
+    await restaurarColecao("financeiro", backup.financeiro);
+    await restaurarColecao("historicoCaixa", backup.historicoCaixa);
+    await restaurarColecao("notas_fiscais", backup.notas_fiscais);
+    await restaurarColecao("receituarios", backup.receituarios);
+
+    status.innerHTML = "✅ Backup restaurado com sucesso.";
+    alert("Backup restaurado com sucesso!");
+  } catch (e) {
+    console.error(e);
+    status.innerHTML = "❌ Erro ao restaurar backup: " + e.message;
+  }
 }
 
 </script>
