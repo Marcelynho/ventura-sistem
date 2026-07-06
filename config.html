@@ -80,11 +80,23 @@ async function buscarColecaoBackup(nome) {
 
     return dados;
 }
-
+function esperarLogin() {
+  return new Promise((resolve) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      resolve(user);
+    });
+  });
+}
 async function fazerBackup() {
     const status = document.getElementById("statusBackup");
 
     status.innerHTML = "⏳ Gerando backup...";
+  const user = await esperarLogin();
+
+if (!user) {
+  status.innerHTML = "⚠️ Faça login primeiro.";
+  return;
+}
 
     try {
 
