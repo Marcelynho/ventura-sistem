@@ -31,6 +31,11 @@
 <div class="form-box">
   <h2>Dados da Loja</h2>
   <button onclick="fazerBackup()">💾 Fazer Backup</button>
+  <input type="file" id="arquivoBackup" accept=".json" style="display:none">
+
+<button onclick="document.getElementById('arquivoBackup').click()">
+📂 Restaurar Backup
+</button>
 
 <p id="statusBackup"></p>
 
@@ -130,7 +135,12 @@ window.onload = function () {
   document.getElementById("telefoneLoja").value = config.telefoneLoja || "";
   document.getElementById("enderecoLoja").value = config.enderecoLoja || "";
   document.getElementById("cidadeLoja").value = config.cidadeLoja || "";
-};
+  };
+  document.getElementById("arquivoBackup").addEventListener("change", restaurarBackup);
+
+async function restaurarBackup() {
+    alert("Função de restauração iniciada.");
+}
 
 </script>
 </body>
