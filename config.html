@@ -43,19 +43,10 @@
 </div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>  
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script> 
+  <script src="app.js"></script>
 <script>
-  const firebaseConfig = {
-  apiKey: "AIzaSyDkKbihoymG4pYz1ZWSknXtn6xqhZumbNk",
-  authDomain: "ventura-system.firebaseapp.com",
-  projectId: "ventura-system",
-  storageBucket: "ventura-system.firebasestorage.app",
-  messagingSenderId: "302438886661",
-  appId: "1:302438886661:web:8c5ce0f51c9a71e4e35b6c"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+  
 function salvarConfig() {
   const config = {
     nomeLoja: document.getElementById("nomeLoja").value,
