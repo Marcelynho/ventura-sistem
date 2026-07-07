@@ -1205,7 +1205,8 @@ const receita = doc.data();
 
 if (
 String(receita.cpf || "") === String(clienteEncontrado.cpf || "") ||
-String(receita.telefone || "") === String(clienteEncontrado.telefone || "")
+String(receita.telefone || "") === String(clienteEncontrado.telefone || "") ||
+String(receita.nome || "").toLowerCase() === String(clienteEncontrado.nome || "").toLowerCase()
 ) {
 document.getElementById("odEsferico").value = receita.odLongeEsferico || "";
 document.getElementById("odCilindrico").value = receita.odLongeCilindrico || "";
