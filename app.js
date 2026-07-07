@@ -434,9 +434,9 @@ observacoes
 function imprimirReceita() {
     const cliente = document.getElementById("clienteReceita").value;
     const telefone = document.getElementById("telefoneReceita").value;
-    const adicao = document.getElementById("addos").value;
-const dnp = document.getElementById("dnpos").value;
-const altura = document.getElementById("alturaos").value;
+    const adicao = document.getElementById("adicao").value;
+const dnp = document.getElementById("dnp").value;
+const altura = document.getElementById("altura").value;
     const observacoes = document.getElementById("obsReceita").value;
 const odLongeEsferico = document.getElementById("odLongeEsferico").value;
 const odLongeCilindrico = document.getElementById("odLongeCilindrico").value;
