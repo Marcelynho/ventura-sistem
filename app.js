@@ -1043,7 +1043,6 @@ if (filtroData && dataFormatada !== filtroData) return;
   });
 }
 
-carregarHistoricoCaixa();
 async function apagarHistoricoCaixa(id) {
     if (!confirm("Deseja apagar este histórico?")) return;
 
