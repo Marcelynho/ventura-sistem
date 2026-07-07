@@ -1044,6 +1044,18 @@ if (filtroData && dataFormatada !== filtroData) return;
 }
 
 carregarHistoricoCaixa();
+async function apagarHistoricoCaixa(id) {
+    if (!confirm("Deseja apagar este histórico?")) return;
+
+    try {
+        await db.collection("historicoCaixa").doc(id).delete();
+        alert("Histórico apagado com sucesso!");
+        carregarHistoricoCaixa();
+    } catch (e) {
+        console.error(e);
+        alert("Erro ao apagar histórico.");
+    }
+}
 function imprimirCaixa() {
   window.print();
 }
