@@ -431,6 +431,34 @@ observacoes
 
   alert("Receituário salvo com sucesso!");
 }
+async function apagarReceita() {
+const nome = document.getElementById("clienteReceita").value;
+const telefone = document.getElementById("telefoneReceita").value;
+const cpf = document.getElementById("cpfReceita").value;
+
+if (!nome && !telefone && !cpf) {
+alert("Busque uma receita antes de apagar.");
+return;
+}
+
+if (!confirm("Deseja apagar esta receita?")) return;
+
+const snap = await db.collection("receituarios").get();
+
+snap.forEach(async (doc) => {
+const r = doc.data();
+
+if (
+String(r.cpf || "") === String(cpf || "") ||
+String(r.telefone || "") === String(telefone || "") ||
+String(r.cliente || "").toLowerCase() === String(nome || "").toLowerCase()
+) {
+await db.collection("receituarios").doc(doc.id).delete();
+}
+});
+
+alert("Receita apagada com sucesso!");
+}
 function imprimirReceita() {
     const cliente = document.getElementById("clienteReceita").value;
     const telefone = document.getElementById("telefoneReceita").value;
