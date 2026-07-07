@@ -1305,6 +1305,30 @@ async function buscarClienteReceita() {
   document.getElementById("clienteReceita").value = encontrado.nome || "";
   document.getElementById("telefoneReceita").value = encontrado.telefone || "";
   document.getElementById("cpfReceita").value = encontrado.cpf || "";
+  const receitasSnap = await db.collection("receituarios").get();
+
+receitasSnap.forEach(doc => {
+const receita = doc.data();
+
+if (
+String(receita.cpf || "") === String(encontrado.cpf || "") ||
+String(receita.telefone || "") === String(encontrado.telefone || "") ||
+String(receita.cliente || "").toLowerCase() === String(encontrado.nome || "").toLowerCase()
+) {
+document.getElementById("odLongeEsferico").value = receita.odLongeEsferico || "";
+document.getElementById("odLongeCilindrico").value = receita.odLongeCilindrico || "";
+document.getElementById("odLongeEixo").value = receita.odLongeEixo || "";
+
+document.getElementById("oeLongeEsferico").value = receita.oeLongeEsferico || "";
+document.getElementById("oeLongeCilindrico").value = receita.oeLongeCilindrico || "";
+document.getElementById("oeLongeEixo").value = receita.oeLongeEixo || "";
+
+document.getElementById("adicao").value = receita.adicao || "";
+document.getElementById("dnp").value = receita.dnp || "";
+document.getElementById("altura").value = receita.altura || "";
+document.getElementById("obsReceita").value = receita.observacoes || "";
+}
+});
 }
 function calcularRestante() {
   const valor = Number(document.getElementById("valorOS").value) || 0;
