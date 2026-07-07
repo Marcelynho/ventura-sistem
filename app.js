@@ -519,17 +519,26 @@ p {
     <h1>Óticas Ventura</h1>
     <h2>Receituário</h2>
 
-<p><b>OD Longe:</b> ${odLongeEsferico} / ${odLongeCilindrico} / ${odLongeEixo}</p>
-<p><b>OE Longe:</b> ${oeLongeEsferico} / ${oeLongeCilindrico} / ${oeLongeEixo}</p>
+<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+
+    <div style="width:60%;">
+        <p><b>OD Longe:</b> ${odLongeEsferico} / ${odLongeCilindrico} / ${odLongeEixo}</p>
+        <p><b>OE Longe:</b> ${oeLongeEsferico} / ${oeLongeCilindrico} / ${oeLongeEixo}</p>
+    </div>
+
+    <div style="width:30%; padding-left:20px;">
+        <p><b>DNP:</b> ${dnp} mm</p>
+<p><b>Altura:</b> ${altura} mm</p>
+<p><b>Adição:</b> ${adicao}</p>
+    </div>
+
+</div>
 
 <div class="box">
-            <p><b>Cliente:</b> ${cliente}</p>
-            <p><b>Telefone:</b> ${telefone}</p>
-            <p><b>Adição:</b> ${adicao}</p>
-            <p><b>DNP / DP:</b> ${dnp}</p>
-            <p><b>Altura:</b> ${altura}</p>
-            <p><b>Observações:</b> ${observacoes}</p>
-        </div>
+    <p><b>Cliente:</b> ${cliente}</p>
+    <p><b>Telefone:</b> ${telefone}</p>
+    <p><b>Observações:</b> ${observacoes}</p>
+</div>
         <div class="assinatura">_________________________<br>Assinatura do responsável</div>
     </body>
     </html>
