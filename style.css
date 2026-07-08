@@ -159,6 +159,8 @@ th, td {
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
+    padding-left: 35px;
+    box-sizing: border-box;
 }
 
 .grafico-box {
