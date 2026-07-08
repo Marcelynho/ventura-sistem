@@ -605,3 +605,31 @@ left: 80px;
     text-align: center;
   }
 }
+.tabela-receita {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.tabela-receita table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela-receita th,
+.tabela-receita td {
+  border: 1px solid #d6e3f5;
+  padding: 8px;
+  text-align: center;
+}
+
+.tabela-receita th {
+  background: #dbeafe;
+  color: #063b78;
+}
+
+.tabela-receita input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
