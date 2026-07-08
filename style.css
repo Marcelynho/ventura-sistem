@@ -170,7 +170,10 @@ th, td {
     box-shadow: 0 8px 25px rgba(0,0,0,0.12);
     text-align: center;
 }
-
+.grafico-box canvas {
+    max-width: 100% !important;
+    height: auto !important;
+}
 .sidebar {
 
     position: fixed;
