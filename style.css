@@ -658,3 +658,14 @@ left: 80px;
   max-width: none;
   margin: 0;
 }
+.modulo-pedidos {
+    width: calc(100vw - 260px) !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.modulo-pedidos input {
+    width: 100% !important;
+    box-sizing: border-box;
+}
