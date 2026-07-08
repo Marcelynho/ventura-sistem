@@ -291,6 +291,12 @@ input, textarea {
     margin-right: auto;
     overflow-x: auto;
 }
+#conteudoPrincipal .form-box {
+    max-width: none !important;
+    width: calc(100vw - 280px) !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
 
 #listaClientes {
     width: 100%;
