@@ -65,6 +65,13 @@
 <script src="app.js?v=4"></script>
   <script>
 function abrirModulo(pagina) {
+  document.querySelector("h1").style.display = "none";
+  document.querySelector(".dashboard-cards").style.display = "none";
+  document.querySelector(".graficos-container").style.display = "none";
+
+  const bemVindo = document.querySelector("p");
+  if (bemVindo) bemVindo.style.display = "none";
+
   fetch(pagina)
     .then(res => res.text())
     .then(html => {
