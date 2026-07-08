@@ -400,7 +400,35 @@ window.onload = function () {
   if (document.getElementById("totalClientes")) atualizarDashboard();
   if (document.getElementById("graficoVendas")) desenharGrafico();
 };
+function converterGrau(valor) {
+  if (!valor) return null;
+  return Number(String(valor).replace(",", ".").replace("+", ""));
+}
 
+function formatarGrau(valor) {
+  if (valor === null || isNaN(valor)) return "";
+  const sinal = valor > 0 ? "+" : "";
+  return sinal + valor.toFixed(2).replace(".", ",");
+}
+
+function calcularPerto() {
+  const adicao = converterGrau(document.getElementById("adicao")?.value);
+  const odLonge = converterGrau(document.getElementById("odLongeEsferico")?.value);
+  const oeLonge = converterGrau(document.getElementById("oeLongeEsferico")?.value);
+
+  if (adicao !== null && odLonge !== null) {
+    document.getElementById("odPertoEsferico").value = formatarGrau(odLonge + adicao);
+  }
+
+  if (adicao !== null && oeLonge !== null) {
+    document.getElementById("oePertoEsferico").value = formatarGrau(oeLonge + adicao);
+  }
+
+  document.getElementById("odPertoCilindrico").value = document.getElementById("odLongeCilindrico").value;
+  document.getElementById("odPertoEixo").value = document.getElementById("odLongeEixo").value;
+  document.getElementById("oePertoCilindrico").value = document.getElementById("oeLongeCilindrico").value;
+  document.getElementById("oePertoEixo").value = document.getElementById("oeLongeEixo").value;
+}
 async function salvarReceituario() {
   const cliente = document.getElementById("clienteReceita").value;
   const telefone = document.getElementById("telefoneReceita").value;
