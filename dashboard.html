@@ -12,7 +12,7 @@
 </div>
   <button onclick="window.location.href='dashboard.html'">🏠 Início</button>
 <button onclick="window.location.href='clientes.html'">👥 Clientes</button>
-<button onclick="window.location.href='pedidos.html'">📦 Pedidos</button>
+<button onclick="abrirModulo('pedidos.html')">📦 Pedidos</button>
 <button onclick="window.location.href='financeiro.html'">💰 Financeiro</button>
   <button onclick="window.location.href='caixa.html'">💵 Caixa</button>
   <button onclick="window.location.href='historico.html'">📊 Histórico</button>
@@ -63,5 +63,18 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="app.js?v=4"></script>
+  <script>
+function abrirModulo(pagina) {
+  fetch(pagina)
+    .then(res => res.text())
+    .then(html => {
+      const inicio = html.indexOf('<div class="form-box">');
+      const fim = html.indexOf('<script src=');
+
+      document.getElementById("conteudoPrincipal").innerHTML =
+        html.substring(inicio, fim);
+    });
+}
+</script>
 </body>
 </html>
