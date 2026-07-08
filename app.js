@@ -424,11 +424,6 @@ function calcularPerto() {
     document.getElementById("oePertoEsferico").value = formatarGrau(oeLonge + adicao);
   }
 
-  document.getElementById("odPertoCilindrico").value = document.getElementById("odLongeCilindrico").value;
-  document.getElementById("odPertoEixo").value = document.getElementById("odLongeEixo").value;
-  document.getElementById("oePertoCilindrico").value = document.getElementById("oeLongeCilindrico").value;
-  document.getElementById("oePertoEixo").value = document.getElementById("oeLongeEixo").value;
-}
 async function salvarReceituario() {
   const cliente = document.getElementById("clienteReceita").value;
   const telefone = document.getElementById("telefoneReceita").value;
