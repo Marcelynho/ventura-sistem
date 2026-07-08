@@ -1,4 +1,4 @@
-body {
+ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
@@ -647,13 +647,10 @@ left: 80px;
   box-sizing: border-box;
 }
 #conteudoPrincipal {
-  margin-left: 230px;
-  padding: 30px;
-}
-
-#conteudoPrincipal {
-  margin-left: 230px;
-  padding: 30px;
+    margin-left: 210px;
+    padding: 20px;
+    width: calc(100vw - 210px);
+    box-sizing: border-box;
 }
 
 #conteudoPrincipal .form-box {
