@@ -639,3 +639,11 @@ left: 80px;
   padding: 10px;
   box-sizing: border-box;
 }
+.sidebar ~ h1,
+.sidebar ~ p,
+.sidebar ~ .dashboard-cards,
+.sidebar ~ .graficos-container {
+  margin-left: 230px;
+  max-width: calc(100% - 250px);
+  box-sizing: border-box;
+}
