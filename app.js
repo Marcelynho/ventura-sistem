@@ -423,7 +423,7 @@ function calcularPerto() {
   if (adicao !== null && oeLonge !== null) {
     document.getElementById("oePertoEsferico").value = formatarGrau(oeLonge + adicao);
   }
-
+ }
 async function salvarReceituario() {
   const cliente = document.getElementById("clienteReceita").value;
   const telefone = document.getElementById("telefoneReceita").value;
