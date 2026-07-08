@@ -640,3 +640,13 @@ left: 80px;
   padding: 10px;
   box-sizing: border-box;
 }
+#conteudoPrincipal {
+  margin-left: 230px;
+  padding: 30px;
+}
+
+#conteudoPrincipal .form-box {
+  width: 90%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
