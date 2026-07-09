@@ -201,23 +201,10 @@ if (
     <td>${status}</td>
 
     <td>
-        <button onclick="abrirWhatsApp('${cliente.telefone}')">
-            WhatsApp
-        </button>
-
-        <br><br>
-     
-
-        <button onclick="editarCliente('${doc.id}')">
-            Editar
-        </button>
-
-        <br><br>
-
-        <button onclick="excluirCliente('${doc.id}')">
-            Excluir
-        </button>
-    </td>
+  <button onclick="abrirWhatsApp('${cliente.telefone || ""}')">WhatsApp</button>
+  <button onclick="editarCliente('${doc.id}')">Editar</button>
+  <button onclick="excluirCliente('${doc.id}')">Excluir</button>
+</td>
 </tr>
 `;
     });
