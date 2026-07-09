@@ -63,9 +63,9 @@ p {
 .card{
     background: linear-gradient(135deg,#ffffff,#eef7ff);
     border-radius:24px;
-    padding:40px;
-    min-width:260px;
-    width:260px;
+    padding:28px;
+    min-width:220px;
+    width:220px;
     text-align:center;
     box-shadow:0 12px 30px rgba(0,0,0,.15);
     transition:all .30s ease;
