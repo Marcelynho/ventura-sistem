@@ -1540,3 +1540,27 @@ document.addEventListener("DOMContentLoaded", () => {
     mostrarClientes();
   }
 });
+/* AJUSTE DO MÓDULO CAIXA */
+#conteudoPrincipal .form-box h1,
+#conteudoPrincipal .form-box h2,
+#conteudoPrincipal .form-box h3 {
+    color: #063b78 !important;
+    font-weight: 700;
+}
+
+#conteudoPrincipal .form-box {
+    width: calc(100% - 40px) !important;
+    max-width: none !important;
+    margin: 20px 20px 0 20px !important;
+    padding: 30px !important;
+    box-sizing: border-box;
+    background: rgba(255,255,255,.92);
+    border-radius: 22px;
+}
+
+#conteudoPrincipal .form-box input,
+#conteudoPrincipal .form-box select {
+    width: 100% !important;
+    box-sizing: border-box;
+    margin-bottom: 14px;
+}
