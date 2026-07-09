@@ -777,4 +777,38 @@ left: 80px;
     margin-top: 8px;
     color: #031f45;
 }
+/* CAIXA - alinhamento seguro */
+.modulo-caixa {
+  background: rgba(255,255,255,0.94);
+  color: #063b78;
+  width: calc(100vw - 270px);
+  max-width: none;
+  margin: 20px 20px 20px 0;
+  padding: 30px;
+  border-radius: 24px;
+  box-sizing: border-box;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+}
 
+.modulo-caixa h1,
+.modulo-caixa h2 {
+  color: #063b78;
+  margin-bottom: 18px;
+}
+
+.modulo-caixa input,
+.modulo-caixa select {
+  width: 100%;
+  height: 44px;
+  margin: 8px 0 14px 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #d6e3f5;
+  box-sizing: border-box;
+}
+
+.modulo-caixa button {
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 12px;
+}
