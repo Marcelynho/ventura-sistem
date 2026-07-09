@@ -1535,3 +1535,8 @@ function mostrarParcelas() {
     parcelas.value = "";
   }
 }
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("listaClientes")) {
+    mostrarClientes();
+  }
+});
