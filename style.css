@@ -714,3 +714,32 @@ left: 80px;
 #btnSairTopo:hover{
     background: #c0392b;
 }
+/* DASHBOARD PREMIUM */
+.dashboard-cards {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.card {
+    flex: 1;
+    min-width: 220px;
+    background: white;
+    border-radius: 22px;
+    padding: 28px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.15);
+    font-size: 22px;
+    font-weight: bold;
+    color: #063b78;
+}
+
+.card span {
+    display: block;
+    font-size: 38px;
+    margin-top: 8px;
+}
+
+.graficos-container {
+    gap: 25px;
+}
