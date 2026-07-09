@@ -81,6 +81,9 @@ function abrirModulo(pagina) {
 
       document.getElementById("conteudoPrincipal").innerHTML =
         html.substring(inicio, fim);
+      if (pagina.includes("clientes.html")) {
+  setTimeout(() => mostrarClientes(), 300);
+}
     });
 }
 </script>
