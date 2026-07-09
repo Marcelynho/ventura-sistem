@@ -60,18 +60,19 @@ p {
   justify-content: center;
 }
 
-.card {
-    background: linear-gradient(135deg, #4facfe, #00c6ff);
-    color: white;
-    padding: 30px;
-    border-radius: 24px;
-    min-width: 200px;
-  width: 200px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.20);
-    text-align: center;
-    font-size: 32px;
-    font-weight: bold;
-    transition: transform 0.3s ease;
+.card{
+    background: linear-gradient(135deg,#ffffff,#eef7ff);
+    border-radius:24px;
+    padding:28px;
+    text-align:center;
+    box-shadow:0 12px 30px rgba(0,0,0,.15);
+    transition:all .30s ease;
+    border:1px solid rgba(255,255,255,.6);
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 22px 40px rgba(0,0,0,.25);
 }
 
 .sidebar {
