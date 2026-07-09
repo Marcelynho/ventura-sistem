@@ -135,10 +135,10 @@ th, td {
     justify-content: flex-start;
     width: 90%;
     min-width: 0;
-    height: 42px;
-    padding-left: 16px;
-    font-size: 15px;
-    margin: 6px auto;
+    height: 36px;
+    padding-left: 14px;
+    font-size: 14px;
+    margin: 4px auto;
     text-align: left;
     gap: 8px;
 }
