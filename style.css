@@ -96,6 +96,12 @@ table {
     top: 0;
     width: 230px;
     height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow-y: auto;
+
     background: linear-gradient(180deg, #063b78, #031f45);
     padding: 25px 18px;
     box-shadow: 4px 0 18px rgba(0,0,0,0.2);
