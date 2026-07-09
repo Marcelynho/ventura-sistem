@@ -103,13 +103,13 @@ table {
     overflow-y: auto;
 
     background: linear-gradient(180deg, #063b78, #031f45);
-    padding: 25px 18px;
+    padding: 10px 18px;
     box-shadow: 4px 0 18px rgba(0,0,0,0.2);
 }
 .sidebar h2 {
   color: white;
 font-size: 28px;
-margin-bottom: 30px;
+margin-bottom: 12px;
 }
 
 .sidebar button {
