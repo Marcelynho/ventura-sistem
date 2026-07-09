@@ -660,12 +660,6 @@ left: 80px;
     padding: 25px;
     box-sizing: border-box;
 }
-.modulo-pedidos {
-    width: calc(100vw - 260px) !important;
-    max-width: none !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-}
 
 .modulo-pedidos input {
     width: 100% !important;
