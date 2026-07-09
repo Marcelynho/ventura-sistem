@@ -654,9 +654,11 @@ left: 80px;
 }
 
 #conteudoPrincipal .form-box {
-  width: 100%;
-  max-width: none;
-  margin: 0;
+    width: calc(100% - 20px);
+    max-width: none;
+    margin: 0;
+    padding: 25px;
+    box-sizing: border-box;
 }
 .modulo-pedidos {
     width: calc(100vw - 260px) !important;
