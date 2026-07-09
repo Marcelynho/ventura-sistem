@@ -177,12 +177,15 @@ th, td {
     height: auto !important;
 }
 .sidebar {
-
     position: fixed;
     left: 0;
     top: 0;
     width: 210px;
     height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
     background: linear-gradient(180deg, #063b78, #031f45);
     padding: 12px 18px;
     border-radius: 0;
