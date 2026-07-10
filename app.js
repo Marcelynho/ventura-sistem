@@ -1145,11 +1145,20 @@ ano = parseInt(partes[2]);
     }
   });
 
-  document.getElementById("totalFinanceiro").innerText =
-    totalMes.toFixed(2);
+  const painelFinanceiro = document.getElementById("conteudoPrincipal");
 
-  document.getElementById("totalPedidos").innerText =
-    totalPedidos;
+const totalFinanceiroTela =
+  painelFinanceiro.querySelector("#totalFinanceiro");
+
+const totalPedidosTela =
+  painelFinanceiro.querySelector("#totalPedidos");
+
+if (totalFinanceiroTela) {
+  totalFinanceiroTela.innerText = totalMes.toFixed(2);
+}
+
+if (totalPedidosTela) {
+  totalPedidosTela.innerText = totalPedidos;
 }
 if (window.location.pathname.includes("financeiro")) {
   carregarFinanceiro();
