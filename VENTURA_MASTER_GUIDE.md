@@ -131,3 +131,30 @@ Firebase
 
 Este documento deverá ser atualizado sempre que houver alterações importantes no Ventura System.
 Criar documentação master do Ventura System
+# VENTURA SYSTEM - MASTER GUIDE
+
+## Repositório Oficial
+
+https://github.com/Marcelynho/ventura-system
+
+## Como continuar este projeto
+
+Se este projeto for aberto em uma nova conversa com uma IA:
+
+1. Leia primeiro este arquivo (`VENTURA_MASTER_GUIDE.md`).
+2. Leia também o README.md.
+3. Analise a estrutura completa do repositório.
+4. Não altere funcionalidades já prontas sem necessidade.
+5. Preserve o padrão visual do Ventura System.
+6. Continue exatamente do ponto onde o desenvolvimento parou.
+
+## Informações do Projeto
+
+- Nome: Ventura System
+- Empresa: Óticas Ventura
+- Banco de dados: Firebase
+- Linguagens: HTML, CSS e JavaScript
+
+## Observação
+
+Todas as alterações devem manter a identidade visual e a organização do sistema.
