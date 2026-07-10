@@ -829,3 +829,44 @@ left: 80px;
   max-width: 100%;
   overflow-x: auto;
 }
+/* Painel Financeiro */
+
+.financeiro-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 20px 0 28px;
+}
+
+.financeiro-card {
+  background: #ffffff;
+  border: 1px solid #dbe7f3;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 55, 110, 0.08);
+}
+
+.financeiro-card span {
+  display: block;
+  margin-bottom: 10px;
+  color: #5f6f82;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.financeiro-card strong {
+  color: #0757a6;
+  font-size: 24px;
+}
+
+@media (max-width: 900px) {
+  .financeiro-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .financeiro-cards {
+    grid-template-columns: 1fr;
+  }
+}
