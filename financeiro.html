@@ -18,11 +18,42 @@
 <div class="form-box">
     <h1>Financeiro</h1>
 
-    <h2>Total vendido: R$ <span id="totalFinanceiro">0</span></h2>
-    <h2>Total de pedidos: <span id="totalPedidos">0</span></h2>
-  <h3>Lançamentos</h3>
-<div id="listaFinanceiro"></div>
+<div class="financeiro-cards">
+
+  <div class="financeiro-card">
+    <span>Total vendido</span>
+    <strong>R$ <span id="totalFinanceiro">0</span></strong>
+  </div>
+
+  <div class="financeiro-card">
+    <span>Recebido hoje</span>
+    <strong>R$ <span id="recebidoHoje">0</span></strong>
+  </div>
+
+  <div class="financeiro-card">
+    <span>A receber</span>
+    <strong>R$ <span id="totalReceber">0</span></strong>
+  </div>
+
+  <div class="financeiro-card">
+    <span>Total de pedidos</span>
+    <strong><span id="totalPedidos">0</span></strong>
+  </div>
+
+  <div class="financeiro-card">
+    <span>Despesas</span>
+    <strong>R$ <span id="totalDespesas">0</span></strong>
+  </div>
+
+  <div class="financeiro-card">
+    <span>Lucro</span>
+    <strong>R$ <span id="totalLucro">0</span></strong>
+  </div>
+
 </div>
+
+<h3>Lançamentos</h3>
+<div id="listaFinanceiro"></div>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="app.js"></script>
