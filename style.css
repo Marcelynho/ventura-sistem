@@ -667,7 +667,7 @@ left: 80px;
 #conteudoPrincipal .form-box {
     width: calc(100% - 80px);
     max-width: 1100px;
-   margin: 10px 20px 20px -70px !important;
+   margin: -10px 20px 20px -70px !important;
     padding: 30px;
     box-sizing: border-box;
 }
