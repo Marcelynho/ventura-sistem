@@ -812,3 +812,20 @@ left: 80px;
   padding: 0 18px;
   border-radius: 12px;
 }
+/* Ajuste seguro da tela de Ordem de Serviço */
+.modulo-os {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.modulo-os input,
+.modulo-os select {
+  max-width: 100%;
+}
+
+.modulo-os #listaOS {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+}
