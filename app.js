@@ -605,29 +605,49 @@ setTimeout(() => {
     }
 }, 1000);
 async function buscarClienteOS() {
-  
-    const busca = document.getElementById("buscaClienteOS").value.toLowerCase();
+const campoBusca = document.getElementById("buscaClienteOS");
+const buscaOriginal = campoBusca.value.trim();
 
-    const snapshot = await db.collection("clientes").get();
-  
-    let achou = false;
+if (!buscaOriginal) {
+alert("Digite o nome completo, telefone ou CPF do cliente.");
+return;
+}
 
-    snapshot.forEach(doc => {
-        const cliente = doc.data();
+const buscaTexto = buscaOriginal.toLowerCase();
+const buscaNumerica = buscaOriginal.replace(/\D/g, "");
 
-        if (
-            (cliente.nome && cliente.nome.toLowerCase().includes(busca)) ||
-            (cliente.telefone && cliente.telefone.includes(busca)) ||
-            (cliente.cpf && cliente.cpf.includes(busca))
-        ) {
-            document.getElementById("clienteOS").value = cliente.nome || "";
-          document.getElementById("telefoneOS").value = cliente.telefone || "";
+const snapshot = await db.collection("clientes").get();
+
+const clienteEncontrado = snapshot.docs
+.map(doc => doc.data())
+.find(cliente => {
+const nome = String(cliente.nome || "").trim().toLowerCase();
+const telefone = String(cliente.telefone || "").replace(/\D/g, "");
+const cpf = String(cliente.cpf || "").replace(/\D/g, "");
+
+return (
+nome === buscaTexto ||
+(buscaNumerica && telefone === buscaNumerica) ||
+(buscaNumerica && cpf === buscaNumerica)
+);
+});
+
+if (!clienteEncontrado) {
+alert("Cliente não encontrado. Digite o nome completo, telefone ou CPF.");
+return;
+}
+
+const cliente = clienteEncontrado;
+
+document.getElementById("clienteOS").value = cliente.nome || "";
+document.getElementById("telefoneOS").value = cliente.telefone || "";
 document.getElementById("cpfOS").value = cliente.cpf || "";
 document.getElementById("cepOS").value = cliente.cep || "";
 document.getElementById("enderecoOS").value = cliente.endereco || "";
 document.getElementById("bairroOS").value = cliente.bairro || "";
 document.getElementById("cidadeOS").value = cliente.cidade || "";
-          document.getElementById("odEsferico").value = cliente.odEsferico || "";
+
+document.getElementById("odEsferico").value = cliente.odEsferico || "";
 document.getElementById("odCilindrico").value = cliente.odCilindrico || "";
 document.getElementById("odEixo").value = cliente.odEixo || "";
 
@@ -638,38 +658,56 @@ document.getElementById("oeEixo").value = cliente.oeEixo || "";
 document.getElementById("dnpOS").value = cliente.dnp || "";
 document.getElementById("alturaOS").value = cliente.altura || "";
 document.getElementById("addOS").value = cliente.adicao || "";
-            achou = true;
-        }
-    });
-  alert("Entrou na busca da receita");
-  const receitasSnap = await db.collection("receituarios").get();
 
-receitasSnap.forEach(doc => {
-const receita = doc.data();
+const receitasSnap = await db.collection("receituarios").get();
 
-if (
-String(receita.cpf || "") === document.getElementById("cpfOS").value ||
-String(receita.telefone || "") === document.getElementById("telefoneOS").value
-) {
-alert("Receita encontrada!");
-  document.getElementById("odEsferico").value = receita.odLongeEsferico || "";
-document.getElementById("odCilindrico").value = receita.odLongeCilindrico || "";
-document.getElementById("odEixo").value = receita.odLongeEixo || "";
+const cpfCliente = String(cliente.cpf || "").replace(/\D/g, "");
+const telefoneCliente = String(cliente.telefone || "").replace(/\D/g, "");
 
-document.getElementById("oeEsferico").value = receita.oeLongeEsferico || "";
-document.getElementById("oeCilindrico").value = receita.oeLongeCilindrico || "";
-document.getElementById("oeEixo").value = receita.oeLongeEixo || "";
+const receitaEncontrada = receitasSnap.docs
+.map(doc => doc.data())
+.find(receita => {
+const cpfReceita = String(receita.cpf || "").replace(/\D/g, "");
+const telefoneReceita = String(receita.telefone || "").replace(/\D/g, "");
 
-document.getElementById("dnpOS").value = receita.dnp || "";
-document.getElementById("alturaOS").value = receita.altura || "";
-document.getElementById("addOS").value = receita.adicao || "";
-
-achou = true;
-}
+return (
+(cpfCliente && cpfReceita === cpfCliente) ||
+(telefoneCliente && telefoneReceita === telefoneCliente)
+);
 });
-    if (!achou) {
-        alert("Cliente não encontrado");
-    }
+
+if (receitaEncontrada) {
+const receita = receitaEncontrada;
+
+document.getElementById("odEsferico").value =
+receita.odLongeEsferico || cliente.odEsferico || "";
+
+document.getElementById("odCilindrico").value =
+receita.odLongeCilindrico || cliente.odCilindrico || "";
+
+document.getElementById("odEixo").value =
+receita.odLongeEixo || cliente.odEixo || "";
+
+document.getElementById("oeEsferico").value =
+receita.oeLongeEsferico || cliente.oeEsferico || "";
+
+document.getElementById("oeCilindrico").value =
+receita.oeLongeCilindrico || cliente.oeCilindrico || "";
+
+document.getElementById("oeEixo").value =
+receita.oeLongeEixo || cliente.oeEixo || "";
+
+document.getElementById("dnpOS").value =
+receita.dnp || cliente.dnp || "";
+
+document.getElementById("alturaOS").value =
+receita.altura || cliente.altura || "";
+
+document.getElementById("addOS").value =
+receita.adicao || cliente.adicao || "";
+}
+
+alert("Cliente encontrado!");
 }
 async function salvarOS() {
     const dadosOS = {
