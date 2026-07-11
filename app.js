@@ -712,7 +712,7 @@ localStorage.setItem("ultimaOS", JSON.stringify(dadosOS));
   await db.collection("caixas").add({
   tipo: "entrada",
   descricao: "OS " + dadosOS.numero + " - " + dadosOS.cliente,
-  valor: Number(dadosOS.valor || 0),
+  valor: Number(dadosOS.entrada || 0),
   pagamento: dadosOS.pagamento || "",
   origem: "ordem_servico",
   os: dadosOS.numero,
