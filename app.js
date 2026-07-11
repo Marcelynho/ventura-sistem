@@ -1108,8 +1108,19 @@ function imprimirCaixa() {
 async function carregarFinanceiro() {
   let totalMes = 0;
   let totalPedidos = 0;
+  let totalReceber = 0;
 
   const snapshot = await db.collection("caixas").get();
+  const ordensSnapshot = await db.collection("ordens").get();
+
+ordensSnapshot.forEach(doc => {
+  const os = doc.data();
+  const restante = parseFloat(
+    String(os.restante || 0).replace(",", ".")
+  ) || 0;
+
+  totalReceber += restante;
+});
   const mesAtual = new Date().getMonth() + 1;
   const anoAtual = new Date().getFullYear();
 
@@ -1150,6 +1161,11 @@ document.getElementById("totalFinanceiro").innerText =
 
 document.getElementById("totalPedidos").innerText =
   totalPedidos;
+  const campoReceber = document.getElementById("totalReceber");
+
+if (campoReceber) {
+  campoReceber.innerText = totalReceber.toFixed(2);
+}
   }
 if (window.location.pathname.includes("financeiro")) {
   carregarFinanceiro();
