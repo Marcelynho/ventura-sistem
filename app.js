@@ -1164,8 +1164,8 @@ if (
     }
   });
 
-document.getElementById("totalVendido").innerText =
-    totalMes.toFixed(2);
+document.getElementById("totalFinanceiro").innerText =
+  totalMes.toFixed(2);
 
 document.getElementById("totalPedidos").innerText =
   totalPedidos;
