@@ -1132,16 +1132,24 @@ if (lista) lista.innerHTML = "";
     if (!pedido.valor) return;
 
     
-let ano = anoAtual;
-let mes = mesAtual;
+let dataLancamento = null;
 
-if (pedido.data) {
-const partes = pedido.data.split("/");
-mes = parseInt(partes[1]);
-ano = parseInt(partes[2]);
+if (pedido.criadoEm && pedido.criadoEm.toDate) {
+    dataLancamento = pedido.criadoEm.toDate();
+} else if (pedido.data) {
+    const partes = pedido.data.split("/");
+    dataLancamento = new Date(
+        parseInt(partes[2]),
+        parseInt(partes[1]) - 1,
+        parseInt(partes[0])
+    );
 }
 
-    if (mes === mesAtual && ano === anoAtual) {
+if (
+    dataLancamento &&
+    dataLancamento.getMonth() === mesAtual - 1 &&
+    dataLancamento.getFullYear() === anoAtual
+) {
       totalMes += Number(pedido.valor);
       totalPedidos++;
       if (lista) {
