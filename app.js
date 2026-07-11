@@ -1173,6 +1173,64 @@ if (window.location.pathname.includes("financeiro")) {
 if (document.getElementById("graficoFinanceiro")) {
   desenharGrafico();
 }
+async function corrigirLancamentosOS() {
+if (!confirm("Corrigir os lançamentos antigos das Ordens de Serviço?")) {
+return;
+}
+
+try {
+const ordensSnapshot = await db.collection("ordens").get();
+const caixasSnapshot = await db.collection("caixas").get();
+
+const ordensPorNumero = {};
+
+ordensSnapshot.forEach(doc => {
+const os = doc.data();
+ordensPorNumero[String(os.numero || "").trim()] = os;
+});
+
+const batch = db.batch();
+let corrigidos = 0;
+
+caixasSnapshot.forEach(doc => {
+const caixa = doc.data();
+
+if (caixa.origem !== "ordem_servico") return;
+
+const numeroOS = String(caixa.os || "").trim();
+const ordem = ordensPorNumero[numeroOS];
+
+if (!ordem) return;
+
+const entradaCorreta =
+Number(String(ordem.entrada || 0).replace(",", ".")) || 0;
+
+batch.update(doc.ref, {
+valor: entradaCorreta,
+pagamento: ordem.pagamento || caixa.pagamento || "",
+cliente: ordem.cliente || caixa.cliente || ""
+});
+
+corrigidos++;
+});
+
+if (corrigidos === 0) {
+alert("Nenhum lançamento de OS foi encontrado para corrigir.");
+return;
+}
+
+await batch.commit();
+
+alert(corrigidos + " lançamento(s) corrigido(s) com sucesso!");
+
+if (typeof carregarFinanceiro === "function") {
+carregarFinanceiro();
+}
+} catch (erro) {
+console.error(erro);
+alert("Erro ao corrigir os lançamentos.");
+}
+}
 async function deletarOS() {
   const numero = document.getElementById("numeroOS").value;
 
