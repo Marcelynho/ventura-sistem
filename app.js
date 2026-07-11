@@ -746,8 +746,9 @@ if (window.osEditandoId) {
     
 
 localStorage.setItem("ultimaOS", JSON.stringify(dadosOS));
-    await db.collection("ordens").add(dadosOS);
+   const ordemRef = await db.collection("ordens").add(dadosOS);
   await db.collection("caixas").add({
+    ordemId: ordemRef.id,
   tipo: "entrada",
   descricao: "OS " + dadosOS.numero + " - " + dadosOS.cliente,
   valor: Number(dadosOS.entrada || 0),
@@ -1343,15 +1344,13 @@ return;
 
 await db.collection("ordens").doc(id).delete();
 
-const caixaSnap = await db.collection("caixas").get();
+const caixasSnap = await db
+  .collection("caixas")
+  .where("ordemId", "==", id)
+  .get();
 
-caixaSnap.forEach(async (doc) => {
-const item = doc.data();
-
-if (numero && String(item.os || "") === String(numero)) {
-await db.collection("caixas").doc(doc.id).delete();
-}
-});
+const exclusoes = caixasSnap.docs.map(doc => doc.ref.delete());
+await Promise.all(exclusoes);
 
 alert("OS deletada com sucesso!");
 listarOS();
