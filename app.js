@@ -1109,6 +1109,7 @@ async function carregarFinanceiro() {
   let totalMes = 0;
   let totalPedidos = 0;
   let totalReceber = 0;
+  let recebidoHoje = 0;
 
   const snapshot = await db.collection("caixas").get();
   const ordensSnapshot = await db.collection("ordens").get();
@@ -1144,7 +1145,17 @@ if (pedido.criadoEm && pedido.criadoEm.toDate) {
         parseInt(partes[0])
     );
 }
+const hoje = new Date();
 
+if (
+    dataLancamento &&
+    pedido.tipo === "entrada" &&
+    dataLancamento.getDate() === hoje.getDate() &&
+    dataLancamento.getMonth() === hoje.getMonth() &&
+    dataLancamento.getFullYear() === hoje.getFullYear()
+) {
+    recebidoHoje += Number(pedido.valor) || 0;
+}
 if (
     dataLancamento &&
     dataLancamento.getMonth() === mesAtual - 1 &&
@@ -1169,6 +1180,8 @@ const painelFinanceiro = document.getElementById("conteudoPrincipal");
 const campoTotal = painelFinanceiro.querySelector("#totalFinanceiro");
 const campoPedidos = painelFinanceiro.querySelector("#totalPedidos");
 const campoReceber = painelFinanceiro.querySelector("#totalReceber");
+  const campoRecebidoHoje =
+    painelFinanceiro.querySelector("#recebidoHoje");
 
 if (campoTotal) {
     campoTotal.innerText = totalMes.toFixed(2);
@@ -1177,7 +1190,9 @@ if (campoTotal) {
 if (campoPedidos) {
     campoPedidos.innerText = totalPedidos;
 }
-
+if (campoRecebidoHoje) {
+    campoRecebidoHoje.innerText = recebidoHoje.toFixed(2);
+}
 if (campoReceber) {
     campoReceber.innerText = totalReceber.toFixed(2);
 }
