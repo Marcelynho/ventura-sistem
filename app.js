@@ -1147,7 +1147,7 @@ ano = parseInt(partes[2]);
 
 document.getElementById("totalFinanceiro").innerText =
   totalMes.toFixed(2);
-
+}
 document.getElementById("totalPedidos").innerText =
   totalPedidos;
 if (window.location.pathname.includes("financeiro")) {
