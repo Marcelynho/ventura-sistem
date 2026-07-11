@@ -1164,15 +1164,22 @@ if (
     }
   });
 
-document.getElementById("totalFinanceiro").innerText =
-  totalMes.toFixed(2);
+const painelFinanceiro = document.getElementById("conteudoPrincipal");
 
-document.getElementById("totalPedidos").innerText =
-  totalPedidos;
-  const campoReceber = document.getElementById("totalReceber");
+const campoTotal = painelFinanceiro.querySelector("#totalFinanceiro");
+const campoPedidos = painelFinanceiro.querySelector("#totalPedidos");
+const campoReceber = painelFinanceiro.querySelector("#totalReceber");
+
+if (campoTotal) {
+    campoTotal.innerText = totalMes.toFixed(2);
+}
+
+if (campoPedidos) {
+    campoPedidos.innerText = totalPedidos;
+}
 
 if (campoReceber) {
-  campoReceber.innerText = totalReceber.toFixed(2);
+    campoReceber.innerText = totalReceber.toFixed(2);
 }
   }
 if (window.location.pathname.includes("financeiro")) {
