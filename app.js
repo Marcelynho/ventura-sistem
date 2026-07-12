@@ -1761,11 +1761,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 async function receberSaldoOS(id) {
-    const ref = db.collection("orders").doc(id);
+    const ref = db.collection("ordens").doc(id);
     const doc = await ref.get();
 
-    if (!doc.exists) return;
-
+    if (!doc.exists) {
+  alert("OS não encontrada.");
+  return;
+}
     const os = doc.data();
 
     if (Number(os.restante || 0) <= 0) {
