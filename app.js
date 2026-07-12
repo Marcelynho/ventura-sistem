@@ -1037,6 +1037,11 @@ async function listarOS() {
 style="background:orange; color:white; border:none; padding:8px; cursor:pointer; border-radius:5px; margin-right:5px;">
 ✏ Editar
 </button>
+<button
+  onclick="receberSaldoOS('${doc.id}')"
+  style="background:green; color:white; border:none; padding:8px; cursor:pointer; border-radius:5px; margin-right:5px;">
+  Receber saldo
+</button>
 
 <button onclick="deletarOSPorId('${doc.id}', '${os.numero || ""}')"
 style="background:red; color:white; border:none; padding:8px; cursor:pointer; border-radius:5px;">
@@ -1755,3 +1760,54 @@ document.addEventListener("DOMContentLoaded", () => {
     mostrarClientes();
   }
 });
+async function receberSaldoOS(id) {
+    const ref = db.collection("orders").doc(id);
+    const doc = await ref.get();
+
+    if (!doc.exists) return;
+
+    const os = doc.data();
+
+    if (Number(os.restante || 0) <= 0) {
+        alert("Esta OS já está quitada.");
+        return;
+    }
+
+    const valor = prompt(
+        "Valor recebido:",
+        String(os.restante).replace(".", ",")
+    );
+
+    if (valor === null) return;
+
+    const recebido = parseFloat(valor.replace(",", "."));
+
+    if (isNaN(recebido) || recebido <= 0) {
+        alert("Valor inválido.");
+        return;
+    }
+
+    const restante = Math.max(
+        Number(os.restante || 0) - recebido,
+        0
+    );
+
+    await ref.update({
+        entrada: Number(os.entrada || 0) + recebido,
+        restante: restante
+    });
+
+    await db.collection("caixas").add({
+        tipo: "entrada",
+        descricao: "Recebimento restante - OS " + os.numero,
+        valor: recebido,
+        cliente: os.cliente,
+        origem: "recebimento_os",
+        data: new Date().toLocaleDateString("pt-BR"),
+        criadoEm: new Date()
+    });
+
+    alert("Pagamento registrado!");
+    listarOS();
+    carregarFinanceiro();
+}
