@@ -292,8 +292,16 @@ async function mostrarPedidos() {
 }
 
 async function excluirPedido(id) {
+    if (!confirm("Deseja realmente excluir este pedido?")) {
+        return;
+    }
+
     await db.collection("pedidos").doc(id).delete();
+
     mostrarPedidos();
+    atualizarDashboard();
+
+    alert("Pedido excluído com sucesso!");
 }
 
 // DASHBOARD
