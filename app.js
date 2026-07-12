@@ -287,17 +287,6 @@ data,
 criadoEm: new Date()
 });
 
-await db.collection("caixas").add({
-pedidoId: pedidoRef.id,
-tipo: "entrada",
-descricao: "Pedido - " + nome + " - " + produto,
-valor,
-cliente: nome,
-origem: "pedido",
-data,
-criadoEm: new Date()
-});
-
 document.getElementById("nomePedido").value = "";
 document.getElementById("produtoPedido").value = "";
 document.getElementById("valorPedido").value = "";
