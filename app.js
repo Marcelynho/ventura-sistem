@@ -218,8 +218,19 @@ document.getElementById("totalPrazoCard").innerText = totalPrazo;
 }
 
 async function excluirCliente(id) {
-    await db.collection("clientes").doc(id).delete();
-    mostrarClientes();
+  if (!confirm("Deseja realmente excluir este cliente?")) {
+    return;
+  }
+
+  await db.collection("clientes").doc(id).delete();
+
+  await mostrarClientes();
+
+  if (typeof atualizarDashboard === "function") {
+    await atualizarDashboard();
+  }
+
+  alert("Cliente excluído com sucesso!");
 }
 
 async function editarCliente(id) {
