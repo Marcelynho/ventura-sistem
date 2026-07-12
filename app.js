@@ -1351,6 +1351,13 @@ const caixasSnap = await db
 
 const exclusoes = caixasSnap.docs.map(doc => doc.ref.delete());
 await Promise.all(exclusoes);
+  if (typeof carregarDashboard === "function") {
+  carregarDashboard();
+}
+
+if (typeof carregarFinanceiro === "function") {
+  carregarFinanceiro();
+}
 
 alert("OS deletada com sucesso!");
 listarOS();
