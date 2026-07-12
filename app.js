@@ -762,13 +762,22 @@ receita.adicao || cliente.adicao || "";
 alert("Cliente encontrado!");
 }
 async function salvarOS() {
+  const valorTotal = Number(
+  String(document.getElementById("valorOS").value || 0).replace(",", ".")
+);
+
+const valorEntrada = Number(
+  String(document.getElementById("entradaOS").value || 0).replace(",", ".")
+);
+
+const valorRestante = Math.max(valorTotal - valorEntrada, 0);
     const dadosOS = {
         numero: document.getElementById("numeroOS").value,
         cliente: document.getElementById("clienteOS").value,
         lente: document.getElementById("lenteOS").value,
-        valor: document.getElementById("valorOS").value,
-        entrada: document.getElementById("entradaOS").value,
-        restante: document.getElementById("restanteOS").value,
+        valor: valorTotal,
+entrada: valorEntrada,
+restante: valorRestante,
         pagamento: document.getElementById("pagamentoOS").value,
       parcelasCartao: document.getElementById("parcelasCartao")?.value || "",
       telefone: document.getElementById("telefoneOS").value,
