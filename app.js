@@ -1216,10 +1216,17 @@ async function carregarFinanceiro() {
 
 ordensSnapshot.forEach(doc => {
   const os = doc.data();
+
+  const valorTotal = parseFloat(
+    String(os.valor || 0).replace(",", ".")
+  ) || 0;
+
   const restante = parseFloat(
     String(os.restante || 0).replace(",", ".")
   ) || 0;
 
+  totalMes += valorTotal;
+  totalPedidos++;
   totalReceber += restante;
 });
   const mesAtual = new Date().getMonth() + 1;
@@ -1261,9 +1268,8 @@ if (
     dataLancamento.getMonth() === mesAtual - 1 &&
     dataLancamento.getFullYear() === anoAtual
 ) {
-      totalMes += Number(pedido.valor);
-      totalPedidos++;
-      if (lista) {
+  
+  if (lista) {
         
   lista.innerHTML += `
     <div style="margin-bottom:10px; border:1px solid #ccc; padding:8px;">
@@ -1272,7 +1278,7 @@ if (
     </div>
   `;
 }
-    }
+}
   });
 
 const painelFinanceiro = document.getElementById("conteudoPrincipal");
