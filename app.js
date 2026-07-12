@@ -218,9 +218,17 @@ document.getElementById("totalPrazoCard").innerText = totalPrazo;
 }
 
 async function excluirCliente(id) {
-  if (!confirm("Deseja realmente excluir este cliente?")) {
+  if (!confirm("Deseja realmente excluir este cliente e suas receitas?")) {
     return;
   }
+
+  const receitasSnap = await db
+    .collection("receituarios")
+    .where("clienteId", "==", id)
+    .get();
+
+  const exclusoesReceitas = receitasSnap.docs.map(doc => doc.ref.delete());
+  await Promise.all(exclusoesReceitas);
 
   await db.collection("clientes").doc(id).delete();
 
@@ -230,7 +238,7 @@ async function excluirCliente(id) {
     await atualizarDashboard();
   }
 
-  alert("Cliente excluído com sucesso!");
+  alert("Cliente e receitas excluídos com sucesso!");
 }
 
 async function editarCliente(id) {
