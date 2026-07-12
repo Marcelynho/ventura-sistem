@@ -250,19 +250,43 @@ function abrirWhatsApp(telefone) {
 }
 // PEDIDOS
 async function salvarPedido() {
-  const nome = document.getElementById("nomePedido").value;
-  const produto = document.getElementById("produtoPedido").value;
-  const valor = Number(document.getElementById("valorPedido").value);
-  const data = new Date().toLocaleDateString("pt-BR");
+const nome = document.getElementById("nomePedido").value.trim();
+const produto = document.getElementById("produtoPedido").value.trim();
+const valor = Number(document.getElementById("valorPedido").value);
+const data = new Date().toLocaleDateString("pt-BR");
 
-  await db.collection("pedidos").add({
-    nome,
-    produto,
-    valor,
-    data
-  });
+if (!nome || !produto || !valor) {
+alert("Preencha nome, produto e valor.");
+return;
+}
 
-  mostrarPedidos();
+const pedidoRef = await db.collection("pedidos").add({
+nome,
+produto,
+valor,
+data,
+criadoEm: new Date()
+});
+
+await db.collection("caixas").add({
+pedidoId: pedidoRef.id,
+tipo: "entrada",
+descricao: "Pedido - " + nome + " - " + produto,
+valor,
+cliente: nome,
+origem: "pedido",
+data,
+criadoEm: new Date()
+});
+
+document.getElementById("nomePedido").value = "";
+document.getElementById("produtoPedido").value = "";
+document.getElementById("valorPedido").value = "";
+
+await mostrarPedidos();
+await atualizarDashboard();
+
+alert("Pedido salvo com sucesso!");
 }
 
 async function mostrarPedidos() {
@@ -292,16 +316,28 @@ async function mostrarPedidos() {
 }
 
 async function excluirPedido(id) {
-    if (!confirm("Deseja realmente excluir este pedido?")) {
-        return;
-    }
+  if (!confirm("Deseja realmente excluir este pedido?")) {
+    return;
+  }
 
-    await db.collection("pedidos").doc(id).delete();
+  await db.collection("pedidos").doc(id).delete();
 
-    mostrarPedidos();
-    atualizarDashboard();
+  const caixasSnap = await db
+    .collection("caixas")
+    .where("pedidoId", "==", id)
+    .get();
 
-    alert("Pedido excluído com sucesso!");
+  const exclusoes = caixasSnap.docs.map(doc => doc.ref.delete());
+  await Promise.all(exclusoes);
+
+  await mostrarPedidos();
+  await atualizarDashboard();
+
+  if (typeof carregarFinanceiro === "function") {
+    await carregarFinanceiro();
+  }
+
+  alert("Pedido excluído com sucesso!");
 }
 
 // DASHBOARD
