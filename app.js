@@ -1024,6 +1024,11 @@ async function listarOS() {
 
   snapshot.forEach(doc => {
     const os = doc.data();
+    const restante = Number(
+  String(os.restante || 0).replace(",", ".")
+);
+
+const estaQuitada = restante <= 0;
 
     html += `
   <div style="border:1px solid #ccc; margin:5px; padding:5px; display:flex; justify-content:space-between; align-items:center;">
@@ -1031,17 +1036,30 @@ async function listarOS() {
       <b>OS:</b> ${os.numero || ""}<br>
       <b>Cliente:</b> ${os.cliente || ""}<br>
       <b>Telefone:</b> ${os.telefone || ""}<br>
+      <b>Status:</b> ${
+  estaQuitada
+    ? '<span style="color:green;font-weight:bold;">✅ Quitada</span>'
+    : <span style="color:#d97706;font-weight:bold;">Em aberto — R$ ${restante.toFixed(2)}</span>
+}<br>
     </div>
 
     <button onclick="editarOS('${doc.id}')"
 style="background:orange; color:white; border:none; padding:8px; cursor:pointer; border-radius:5px; margin-right:5px;">
 ✏ Editar
 </button>
-<button
-  onclick="receberSaldoOS('${doc.id}')"
-  style="background:green; color:white; border:none; padding:8px; cursor:pointer; border-radius:5px; margin-right:5px;">
-  Receber saldo
-</button>
+${
+    !estaQuitada ? `
+        <button
+            onclick="receberSaldoOS('${doc.id}')"
+            style="background:green;color:white;border:none;padding:8px;cursor:pointer;border-radius:5px;margin-right:5px;">
+            Receber saldo
+        </button>
+     : 
+        <span style="background:#22c55e;color:white;padding:8px 12px;border-radius:5px;font-weight:bold;">
+            ✓ Quitada
+        </span>
+    `
+}
 
 <button onclick="deletarOSPorId('${doc.id}', '${os.numero || ""}')"
 style="background:red; color:white; border:none; padding:8px; cursor:pointer; border-radius:5px;">
