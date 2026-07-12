@@ -1039,7 +1039,7 @@ const estaQuitada = restante <= 0;
       <b>Status:</b> ${
   estaQuitada
     ? '<span style="color:green;font-weight:bold;">✅ Quitada</span>'
-    : <span style="color:#d97706;font-weight:bold;">Em aberto — R$ ${restante.toFixed(2)}</span>
+    : '<span style="color:#d97706;font-weight:bold;">Em aberto - R$ ' + restante.toFixed(2) + '</span>'
 }<br>
     </div>
 
@@ -1057,7 +1057,7 @@ style="background:orange; color:white; border:none; padding:8px; cursor:pointer;
 style="background:red; color:white; border:none; padding:8px; cursor:pointer; border-radius:5px;">
 🗑 Deletar
 </button>
-    </button>
+   
   </div>
 `;
   });
