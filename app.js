@@ -281,6 +281,9 @@ return;
 
 const pedidoRef = await db.collection("pedidos").add({
 nome,
+  clienteId: window.clientePedidoId || "",
+telefone: window.clientePedidoTelefone || "",
+cpf: window.clientePedidoCpf || "",
 produto,
 valor,
 data,
