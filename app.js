@@ -492,7 +492,8 @@ oeLongeEsferico: document.getElementById("oeLongeEsferico").value,
 oeLongeCilindrico: document.getElementById("oeLongeCilindrico").value,
 oeLongeEixo: document.getElementById("oeLongeEixo").value,
 
-observacoes
+observacoes,
+criadoEm: new Date()
   });
 
   alert("Receituário salvo com sucesso!");
