@@ -1614,6 +1614,7 @@ async function editarOS(id) {
   }
 
   const os = doc.data();
+  window.osEditandoId = id;
 
   document.getElementById("numeroOS").value = os.numero || "";
   document.getElementById("clienteOS").value = os.cliente || "";
