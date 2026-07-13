@@ -1809,3 +1809,85 @@ async function receberSaldoOS(id) {
     listarOS();
     carregarFinanceiro();
 }
+async function listarReceitasCliente() {
+    const lista = document.getElementById("listaReceitasCliente");
+
+    if (!lista) {
+        alert("Área da lista não encontrada.");
+        return;
+    }
+
+    if (!window.clienteReceitaId) {
+        alert("Busque um cliente primeiro.");
+        return;
+    }
+
+    lista.innerHTML = "Carregando receitas...";
+
+    const snapshot = await db.collection("receituarios")
+        .where("clienteId", "==", window.clienteReceitaId)
+        .get();
+
+    if (snapshot.empty) {
+        lista.innerHTML = "<p>Nenhuma receita encontrada para este cliente.</p>";
+        return;
+    }
+
+    const receitas = snapshot.docs
+        .map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }))
+        .sort((a, b) => {
+            const dataA = a.criadoEm && a.criadoEm.toMillis
+                ? a.criadoEm.toMillis()
+                : 0;
+
+            const dataB = b.criadoEm && b.criadoEm.toMillis
+                ? b.criadoEm.toMillis()
+                : 0;
+
+            return dataB - dataA;
+        });
+
+    lista.innerHTML = "";
+
+    receitas.forEach((receita, indice) => {
+        const item = document.createElement("div");
+
+        item.style.border = "1px solid #ccc";
+        item.style.padding = "10px";
+        item.style.marginTop = "10px";
+        item.style.borderRadius = "6px";
+
+        item.innerHTML = `
+            <strong>Receita ${indice + 1}</strong><br>
+            OD: ${receita.odLongeEsferico || "-"}<br>
+            OE: ${receita.oeLongeEsferico || "-"}<br>
+            DNP: ${receita.dnp || "-"}<br>
+            Adição: ${receita.adicao || "-"}<br><br>
+
+            <button
+                type="button"
+                onclick="excluirReceitaPorId('${receita.id}')"
+                style="background:red;color:white;border:none;padding:8px;border-radius:5px;cursor:pointer;"
+            >
+                Excluir receita
+            </button>
+        `;
+
+        lista.appendChild(item);
+    });
+}
+
+async function excluirReceitaPorId(id) {
+    if (!confirm("Tem certeza que deseja excluir esta receita?")) {
+        return;
+    }
+
+    await db.collection("receituarios").doc(id).delete();
+
+    alert("Receita excluída com sucesso!");
+
+    await listarReceitasCliente();
+}
