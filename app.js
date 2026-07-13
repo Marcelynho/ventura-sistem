@@ -725,16 +725,17 @@ const cpfCliente = String(cliente.cpf || "").replace(/\D/g, "");
 const telefoneCliente = String(cliente.telefone || "").replace(/\D/g, "");
 
 const receitaEncontrada = receitasSnap.docs
-.map(doc => doc.data())
-.find(receita => {
-const cpfReceita = String(receita.cpf || "").replace(/\D/g, "");
-const telefoneReceita = String(receita.telefone || "").replace(/\D/g, "");
+    .map(doc => doc.data())
+    .find(receita => {
+        const cpfReceita = String(receita.cpf || "").replace(/\D/g, "");
+        const telefoneReceita = String(receita.telefone || "").replace(/\D/g, "");
 
-return (
-(cpfCliente && cpfReceita === cpfCliente) ||
-(telefoneCliente && telefoneReceita === telefoneCliente)
-);
-});
+        return (
+            receita.clienteId === cliente.id ||
+            (cpfCliente && cpfReceita === cpfCliente) ||
+            (telefoneCliente && telefoneReceita === telefoneCliente)
+        );
+    });
 
 if (receitaEncontrada) {
 const receita = receitaEncontrada;
