@@ -1463,7 +1463,10 @@ async function buscarClientePedido() {
   let encontrado = null;
 
   snapshot.forEach(doc => {
-    const cliente = doc.data();
+  const cliente = {
+    id: doc.id,
+    ...doc.data()
+  };
 
     const nome = String(cliente.nome || "").toLowerCase();
     const telefone = String(cliente.telefone || "");
@@ -1482,6 +1485,9 @@ async function buscarClientePedido() {
     alert("Cliente não encontrado.");
     return;
   }
+  window.clientePedidoId = encontrado.id;
+window.clientePedidoTelefone = encontrado.telefone || "";
+window.clientePedidoCpf = encontrado.cpf || "";
 
   document.getElementById("nomePedido").value = encontrado.nome || "";
 }
