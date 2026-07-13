@@ -477,6 +477,7 @@ async function salvarReceituario() {
 
   await db.collection("receituarios").add({
     cliente,
+    clienteId: window.clienteReceitaId || "",
     telefone,
     cpf,
     adicao,
@@ -1529,8 +1530,11 @@ async function buscarClienteReceita() {
   const snapshot = await db.collection("clientes").get();
   let encontrado = null;
 
-  snapshot.forEach(doc => {
-    const cliente = doc.data();
+ snapshot.forEach(doc => {
+    const cliente = {
+        id: doc.id,
+        ...doc.data()
+    };
 
     const nome = String(cliente.nome || "").toLowerCase();
     const telefone = String(cliente.telefone || "");
@@ -1549,7 +1553,7 @@ async function buscarClienteReceita() {
     alert("Cliente não encontrado.");
     return;
   }
-
+window.clienteReceitaId = encontrado.id;
   document.getElementById("clienteReceita").value = encontrado.nome || "";
   document.getElementById("telefoneReceita").value = encontrado.telefone || "";
   document.getElementById("cpfReceita").value = encontrado.cpf || "";
