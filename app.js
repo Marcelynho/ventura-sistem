@@ -671,7 +671,10 @@ const buscaNumerica = buscaOriginal.replace(/\D/g, "");
 const snapshot = await db.collection("clientes").get();
 
 const clienteEncontrado = snapshot.docs
-.map(doc => doc.data())
+.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+}))
 .find(cliente => {
 const nome = String(cliente.nome || "").trim().toLowerCase();
 const telefone = String(cliente.telefone || "").replace(/\D/g, "");
@@ -690,6 +693,7 @@ return;
 }
 
 const cliente = clienteEncontrado;
+  window.clienteOSId = cliente.id;
 
 document.getElementById("clienteOS").value = cliente.nome || "";
 document.getElementById("telefoneOS").value = cliente.telefone || "";
