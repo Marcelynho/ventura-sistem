@@ -843,6 +843,7 @@ add: document.getElementById("addOS").value
 
 if (window.osEditandoId) {
     await db.collection("ordens").doc(window.osEditandoId).update(dadosOS);
+  window.osEditandoId = null;
     alert("OS atualizada com sucesso!");
 } else {
     
