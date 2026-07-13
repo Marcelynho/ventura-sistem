@@ -1047,11 +1047,13 @@ const estaQuitada = restante <= 0;
 style="background:orange; color:white; border:none; padding:8px; cursor:pointer; border-radius:5px; margin-right:5px;">
 ✏ Editar
 </button>
+${!estaQuitada ? `
 <button
   onclick="receberSaldoOS('${doc.id}')"
   style="background:green;color:white;border:none;padding:8px;cursor:pointer;border-radius:5px;margin-right:5px;">
   Receber saldo
 </button>
+` : ''}
 
 <button onclick="deletarOSPorId('${doc.id}', '${os.numero || ""}')"
 style="background:red; color:white; border:none; padding:8px; cursor:pointer; border-radius:5px;">
