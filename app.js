@@ -765,6 +765,30 @@ receita.altura || cliente.altura || "";
 document.getElementById("addOS").value =
 receita.adicao || cliente.adicao || "";
 }
+  // Buscar último pedido do cliente
+const pedidosSnapshot = await db.collection("pedidos")
+    .where("clienteId", "==", cliente.id)
+    .get();
+
+let ultimoPedido = null;
+
+pedidosSnapshot.forEach(doc => {
+    const pedido = doc.data();
+
+    if (
+        !ultimoPedido ||
+        (pedido.criadoEm &&
+         ultimoPedido.criadoEm &&
+         pedido.criadoEm.toMillis() > ultimoPedido.criadoEm.toMillis())
+    ) {
+        ultimoPedido = pedido;
+    }
+});
+
+if (ultimoPedido) {
+  document.getElementById("lenteOS").value = ultimoPedido.produto || "";
+    document.getElementById("valorOS").value = ultimoPedido.valor || "";
+}
 
 alert("Cliente encontrado!");
 }
