@@ -725,9 +725,9 @@ const receitasSnap = await db.collection("receituarios").get();
 const cpfCliente = String(cliente.cpf || "").replace(/\D/g, "");
 const telefoneCliente = String(cliente.telefone || "").replace(/\D/g, "");
 
-const receitaEncontrada = receitasSnap.docs
+const receitasDoCliente = receitasSnap.docs
     .map(doc => doc.data())
-    .find(receita => {
+    .filter(receita => {
         const cpfReceita = String(receita.cpf || "").replace(/\D/g, "");
         const telefoneReceita = String(receita.telefone || "").replace(/\D/g, "");
 
@@ -737,6 +737,13 @@ const receitaEncontrada = receitasSnap.docs
             (telefoneCliente && telefoneReceita === telefoneCliente)
         );
     });
+
+const receitaEncontrada = receitasDoCliente.sort((a, b) => {
+    const dataA = a.criadoEm && a.criadoEm.toMillis ? a.criadoEm.toMillis() : 0;
+const dataB = b.criadoEm && b.criadoEm.toMillis ? b.criadoEm.toMillis() : 0;
+
+    return dataB - dataA;
+})[0] || null;
 
 if (receitaEncontrada) {
 const receita = receitaEncontrada;
