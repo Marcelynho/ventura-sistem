@@ -870,3 +870,24 @@ left: 80px;
     grid-template-columns: 1fr;
   }
 }
+#btnSairTopo {
+  position: static !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin-top: 10px;
+  padding: 12px;
+  background: #d9534f !important;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  display: block;
+  box-sizing: border-box;
+  transform: none !important;
+}
+
+#btnSairTopo:hover {
+  background: #c9302c !important;
+  transform: none !important;
+}
