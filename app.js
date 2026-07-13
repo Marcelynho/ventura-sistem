@@ -1891,3 +1891,52 @@ async function excluirReceitaPorId(id) {
 
     await listarReceitasCliente();
 }
+async function fazerBackup() {
+    try {
+        const colecoes = [
+            "clientes",
+            "pedidos",
+            "receituarios",
+            "ordens",
+            "caixas"
+        ];
+
+        const backup = {
+            criadoEm: new Date().toISOString(),
+            dados: {}
+        };
+
+        for (const nomeColecao of colecoes) {
+            const snapshot = await db.collection(nomeColecao).get();
+
+            backup.dados[nomeColecao] = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+        }
+
+        const conteudo = JSON.stringify(backup, null, 2);
+        const blob = new Blob([conteudo], {
+            type: "application/json"
+        });
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = `backup-oticas-ventura-${new Date()
+            .toISOString()
+            .slice(0, 10)}.json`;
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(url);
+
+        alert("Backup criado com sucesso!");
+    } catch (erro) {
+        console.error("Erro ao fazer backup:", erro);
+        alert("Não foi possível criar o backup.");
+    }
+}
