@@ -247,9 +247,9 @@ th {
   background: white;
   padding: 30px;
   border-radius: 20px;
-  width: calc(100% - 40px);
-  max-width: none;
-  margin: 35px 20px 20px 20px;
+  width: calc(100% - 80px);
+max-width: 900px;
+margin: 35px auto 20px auto;
   box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 input, textarea {
