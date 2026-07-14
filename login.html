@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Login - Óticas Ventura</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(44, 161, 255, 0.28), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(19, 105, 220, 0.26), transparent 30%),
+        linear-gradient(135deg, #031225 0%, #063b73 55%, #082a52 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 980px;
+      min-height: 560px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      overflow: hidden;
+      border-radius: 28px;
+      background: rgba(4, 23, 46, 0.94);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.42);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .brand-area {
+      position: relative;
+      padding: 54px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background:
+        linear-gradient(145deg, rgba(8, 66, 126, 0.95), rgba(3, 29, 59, 0.97)),
+        url("logo.jpg") center/cover no-repeat;
+      isolation: isolate;
+    }
+
+    .brand-area::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(5, 35, 69, 0.88), rgba(3, 18, 37, 0.94));
+      z-index: -1;
+    }
+
+    .logo-box {
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+      overflow: hidden;
+    }
+
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .brand-area h1 {
+      margin: 0 0 16px;
+      font-size: 44px;
+      line-height: 1.08;
+    }
+
+    .brand-area p {
+      margin: 0;
+      max-width: 440px;
+      color: #d6e9fb;
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      margin-top: 26px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #e9f5ff;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .form-area {
+      padding: 54px 46px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(5, 24, 47, 0.98);
+    }
+
+    .form-area h2 {
+      margin: 0 0 8px;
+      font-size: 34px;
+    }
+
+    .form-area .subtitle {
+      margin: 0 0 34px;
+      color: #a8c5df;
+      line-height: 1.5;
+    }
+
+    .campo {
+      margin-bottom: 18px;
+    }
+
+    .campo label {
+      display: block;
+      margin-bottom: 8px;
+      color: #d7e8f8;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      height: 52px;
+      padding: 0 48px 0 16px;
+      border: 1px solid rgba(132, 187, 235, 0.25);
+      border-radius: 13px;
+      outline: none;
+      background: #f7fbff;
+      color: #0d2842;
+      font-size: 16px;
+      transition: 0.2s ease;
+    }
+
+    .input-wrap input:focus {
+      border-color: #3ca6ff;
+      box-shadow: 0 0 0 4px rgba(60, 166, 255, 0.14);
+    }
+
+    .icone-campo {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #4b7ca7;
+      font-size: 18px;
+      pointer-events: none;
+    }
+
+    .mostrar-senha {
+      pointer-events: auto;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      padding: 0;
+    }
+
+    .botao-entrar {
+      width: 100%;
+      height: 54px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #1687e8, #20a7ff);
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(22, 135, 232, 0.26);
+      transition: 0.2s ease;
+    }
+
+    .botao-entrar:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+    }
+
+    .seguranca {
+      margin-top: 20px;
+      padding: 13px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.055);
+      color: #aec8de;
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .rodape {
+      margin-top: 22px;
+      color: #6f94b4;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    @media (max-width: 800px) {
+      .login-wrapper {
+        grid-template-columns: 1fr;
+        max-width: 520px;
+      }
+
+      .brand-area {
+        padding: 34px 28px;
+      }
+
+      .brand-area h1 {
+        font-size: 34px;
+      }
+
+      .logo-box {
+        width: 88px;
+        height: 88px;
+        margin-bottom: 20px;
+      }
+
+      .form-area {
+        padding: 36px 28px 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="login-wrapper">
+
+    <section class="brand-area">
+      <div class="logo-box">
+        <img src="logo.jpg" alt="Logo Óticas Ventura">
+      </div>
+
+      <h1>Ventura System</h1>
+
+      <p>
+        Gestão completa da Óticas Ventura em um ambiente seguro,
+        simples e organizado.
+      </p>
+
+      <div class="brand-badge">
+        🔒 Acesso restrito à equipe
+      </div>
+    </section>
+
+    <section class="form-area">
+      <h2>Bem-vindo</h2>
+
+      <p class="subtitle">
+        Entre com seu usuário e senha para acessar o painel.
+      </p>
+
+      <div class="campo">
+        <label for="usuario">Usuário</label>
+
+        <div class="input-wrap">
+          <input
+            id="usuario"
+            type="email"
+            placeholder="Digite seu e-mail"
+            autocomplete="username"
+          >
+
+          <span class="icone-campo">✉️</span>
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="senha">Senha</label>
+
+        <div class="input-wrap">
+          <input
+            id="senha"
+            type="password"
+            placeholder="Digite sua senha"
+            autocomplete="current-password"
+          >
+
+          <button
+            class="icone-campo mostrar-senha"
+            type="button"
+            onclick="alternarSenha()"
+            aria-label="Mostrar ou ocultar senha"
+            id="botaoMostrarSenha"
+          >
+            👁️
+          </button>
+        </div>
+      </div>
+
+      <button class="botao-entrar" type="button" onclick="fazerLogin()">
+        Entrar no sistema
+      </button>
+
+      <div class="seguranca">
+        Seus dados de acesso são protegidos pelo Firebase Authentication.
+      </div>
+
+      <div class="rodape">
+        © 2026 Óticas Ventura
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function alternarSenha() {
+      const campoSenha = document.getElementById("senha");
+      const botao = document.getElementById("botaoMostrarSenha");
+
+      if (campoSenha.type === "password") {
+        campoSenha.type = "text";
+        botao.textContent = "🙈";
+      } else {
+        campoSenha.type = "password";
+        botao.textContent = "👁️";
+      }
+    }
+
+    document.addEventListener("keydown", function (evento) {
+      if (evento.key === "Enter") {
+        fazerLogin();
+      }
+    });
+  </script>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
