@@ -249,7 +249,7 @@ th {
     border-radius: 20px;
     width: 90%;
     max-width: 650px;
-   margin: 100px auto 20px auto;
+   margin: 35px auto 20px 30px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 input, textarea {
