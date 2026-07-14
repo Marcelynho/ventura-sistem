@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pupilômetro Digital - Óticas Ventura</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#031225,#073b70);color:#fff;min-height:100vh}header{padding:18px;text-align:center;background:#061a33}header h1{margin:0}header p{margin:6px 0 0;color:#c7d9eb}.layout{width:95%;max-width:1300px;margin:22px auto;display:grid;grid-template-columns:250px 1fr 260px;gap:18px}.painel,.principal{padding:18px;border-radius:15px;background:rgba(5,31,59,.96);box-shadow:0 8px 25px #0005}.painel h2{margin-top:0;color:#7fc5ff}.etapa{padding:10px;margin-bottom:8px;border-radius:9px;background:#ffffff12}.etapa.ativa{background:#1687e8;font-weight:bold}.controles{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:12px}button,.arquivo{padding:11px 15px;border:0;border-radius:9px;color:#fff;background:#1687e8;font-weight:bold;cursor:pointer}.cinza{background:#596979}.vermelho{background:#c62828}.verde{background:#279a4b}input[type=file]{display:none}.mensagem{padding:12px;margin-bottom:12px;border-left:5px solid #47aaff;border-radius:8px;background:#103a65;font-weight:bold}.area{width:100%;height:600px;overflow:auto;padding:10px;border-radius:12px;background:#06111e;text-align:center}canvas{display:block;margin:auto;max-width:none;border-radius:8px;background:#111;cursor:crosshair;touch-action:none}.zoom{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin-top:12px;padding:10px;border-radius:8px;background:#ffffff12}.campo{margin-bottom:15px}.campo label{display:block;margin-bottom:6px;font-weight:bold}.campo input,.campo select{width:100%;padding:11px;border:0;border-radius:8px;font-size:16px}.resultado{display:none;margin-top:15px}.item{padding:12px;margin-bottom:8px;border-radius:8px;background:#ffffff14}.item strong{display:block;margin-top:4px;color:#77c5ff;font-size:24px}.aviso{margin-top:15px;padding:12px;border-radius:8px;background:#ffb30026;color:#ffe2a0;font-size:13px;line-height:1.5}@media(max-width:1000px){.layout{grid-template-columns:1fr}.area{height:500px}}
+</style>
+</head>
+<body>
+<header style="position:relative;">
+  <button
+    onclick="window.location.href='dashboard.html'"
+    style="
+      position:absolute;
+      left:20px;
+      top:18px;
+      padding:10px 14px;
+      border:none;
+      border-radius:8px;
+      background:#1687e8;
+      color:white;
+      font-weight:bold;
+      cursor:pointer;
+    "
+  >
+    ← Voltar ao Painel
+  </button>
+
+  <h1>👁 Pupilômetro Digital</h1>
+  <p>Óticas Ventura — medição digital auxiliar</p>
+</header>
+<main class="layout">
+<aside class="painel"><h2>Etapas</h2><div class="etapa ativa" id="e0">1. Carregar a foto</div><div class="etapa" id="e1">2. Pupila direita</div><div class="etapa" id="e2">3. Pupila esquerda</div><div class="etapa" id="e3">4. Centro da ponte nasal</div><div class="etapa" id="e4">5. Primeiro ponto da referência</div><div class="etapa" id="e5">6. Segundo ponto da referência</div><div class="etapa" id="e6">7. Calcular resultado</div><div class="aviso" id="avisoEtapas">Use câmera traseira em 1x, sem zoom. Cabeça reta e celular na altura dos olhos.</div></aside>
+<section class="principal"><div class="controles"><label class="arquivo">📷 Escolher foto<input id="foto" type="file" accept="image/*" capture="environment"></label><button class="cinza" onclick="desfazer()">↩ Desfazer</button><button class="vermelho" onclick="limpar()">🗑 Limpar</button><button class="verde" onclick="calcular()">📏 Calcular DP</button></div><div class="mensagem" id="msg">Escolha ou tire uma foto para começar.</div><div class="area"><canvas id="canvas"></canvas></div><div class="zoom"><span>🔍 Zoom</span><input id="zoom" type="range" min="40" max="200" value="100" step="5"><strong id="zoomTxt">100%</strong></div></section>
+<aside class="painel"><h2>Configuração</h2><div class="campo"><label>Nome do cliente</label><input id="nome" type="text" placeholder="Digite o nome"></div><div class="campo">
+  <label>Método de referência</label>
+  <select id="metodoReferencia" onchange="atualizarMetodoReferencia()">
+    <option value="armacao">Armação</option>
+    <option value="cartao">Cartão</option>
+  </select>
+</div>
+
+<div id="camposArmacao">
+  <div class="campo">
+    <label>Largura da lente (A)</label>
+    <input id="larguraLente" type="number" value="52" min="1" step="0.1">
+  </div>
+  <div class="campo">
+    <label>Ponte (DBL)</label>
+    <input id="ponteArmacao" type="number" value="18" min="1" step="0.1">
+  </div>
+  <div class="aviso">
+    Exemplo: 52□18. O sistema usa DBC = 70 mm entre os centros geométricos das lentes.
+  </div>
+</div>
+
+<div id="campoCartao" style="display:none;">
+  <div class="campo">
+    <label>Largura do cartão (mm)</label>
+    <input id="ref" type="number" value="85.60" min="1" step=".01">
+  </div>
+  <div class="aviso">Cartão bancário padrão: 85,60 mm.</div>
+</div><div class="resultado" id="resultado"><h2>Resultado estimado</h2><div class="item">DP total<strong id="total">--</strong></div><div class="item">DNP direita<strong id="dir">--</strong></div><div class="item">DNP esquerda<strong id="esq">--</strong></div><button class="verde" style="width:100%" onclick="salvar()">💾 Salvar resultado</button></div><div class="aviso">Ferramenta auxiliar. Compare com pupilômetro profissional antes de usar em montagem.</div></aside>
+</main>
+<script>
+const c=document.getElementById('canvas');
+const x=c.getContext('2d');
+const img=new Image();
+const foto=document.getElementById('foto');
+const zoom=document.getElementById('zoom');
+
+let carregada=false;
+let p=[];
+let z=1;
+let inst=[];
+
+const cores=['#1687e8','#27ae60','#fff','#ffb300','#ffb300'];
+
+function instrucoesAtuais(){
+  const metodo=document.getElementById('metodoReferencia').value;
+
+  if(metodo==='armacao'){
+    return [
+      'Escolha ou tire uma foto para começar.',
+      'Clique no centro da pupila direita.',
+      'Clique no centro da pupila esquerda.',
+      'Clique no centro da ponte nasal.',
+      'Clique no centro geométrico da lente direita.',
+      'Clique no centro geométrico da lente esquerda.',
+      'Tudo marcado. Clique em Calcular DP.'
+    ];
+  }
+
+  return [
+    'Escolha ou tire uma foto para começar.',
+    'Clique no centro da pupila direita.',
+    'Clique no centro da pupila esquerda.',
+    'Clique no centro da ponte nasal.',
+    'Clique no lado esquerdo do cartão.',
+    'Clique no lado direito do cartão.',
+    'Tudo marcado. Clique em Calcular DP.'
+  ];
+}
+
+function atualizarMetodoReferencia(){
+  const metodo=document.getElementById('metodoReferencia').value;
+
+  document.getElementById('camposArmacao').style.display=
+    metodo==='armacao' ? 'block' : 'none';
+
+  document.getElementById('campoCartao').style.display=
+    metodo==='cartao' ? 'block' : 'none';
+
+  document.getElementById('e4').textContent=
+    metodo==='armacao'
+      ? '5. Centro geométrico da lente direita'
+      : '5. Lado esquerdo do cartão';
+
+  document.getElementById('e5').textContent=
+    metodo==='armacao'
+      ? '6. Centro geométrico da lente esquerda'
+      : '6. Lado direito do cartão';
+
+  document.getElementById('avisoEtapas').textContent=
+    metodo==='armacao'
+      ? 'Use a medida gravada na armação, como 52□18. A armação deve estar reta e de frente para a câmera.'
+      : 'Use câmera traseira em 1x, sem zoom. Cabeça reta, celular na altura dos olhos e cartão no mesmo plano do rosto.';
+
+  p=[];
+  if(carregada)desenhar();
+
+  document.getElementById('resultado').style.display='none';
+  atualizar();
+}
+
+foto.onchange=e=>{
+  const arquivo=e.target.files[0];
+  if(!arquivo)return;
+
+  const leitor=new FileReader();
+
+  leitor.onload=evento=>{
+    img.onload=()=>{
+      let w=img.naturalWidth;
+      let h=img.naturalHeight;
+
+      if(w>1600){
+        h=Math.round(h*1600/w);
+        w=1600;
+      }
+
+      c.width=w;
+      c.height=h;
+      carregada=true;
+      p=[];
+      zoom.value=100;
+      z=1;
+
+      aplicarZoom();
+      desenhar();
+      atualizar();
+
+      document.getElementById('resultado').style.display='none';
+    };
+
+    img.src=evento.target.result;
+  };
+
+  leitor.readAsDataURL(arquivo);
+};
+
+c.onclick=e=>{
+  if(!carregada){
+    alert('Escolha uma foto primeiro.');
+    return;
+  }
+
+  if(p.length>=5){
+    alert('Todos os pontos já foram marcados.');
+    return;
+  }
+
+  const r=c.getBoundingClientRect();
+  const sx=c.width/r.width;
+  const sy=c.height/r.height;
+
+  p.push({
+    x:(e.clientX-r.left)*sx,
+    y:(e.clientY-r.top)*sy
+  });
+
+  desenhar();
+  atualizar();
+};
+
+zoom.oninput=()=>{
+  z=Number(zoom.value)/100;
+  aplicarZoom();
+  document.getElementById('zoomTxt').textContent=zoom.value+'%';
+};
+
+function aplicarZoom(){
+  if(!carregada)return;
+
+  c.style.width=Math.round(c.width*z)+'px';
+  c.style.height=Math.round(c.height*z)+'px';
+}
+
+function desenhar(){
+  if(!carregada)return;
+
+  x.clearRect(0,0,c.width,c.height);
+  x.drawImage(img,0,0,c.width,c.height);
+
+  if(p.length>=2){
+    linha(p[0],p[1],'#47aaff');
+  }
+
+  if(p.length>=3){
+    linha(p[0],p[2],'#fff');
+    linha(p[2],p[1],'#fff');
+  }
+
+  if(p.length>=5){
+    linha(p[3],p[4],'#ffb300');
+  }
+
+  p.forEach((q,i)=>marcador(q,cores[i],i+1));
+}
+
+function marcador(q,cor,n){
+  const r=Math.max(10,c.width/140);
+
+  x.beginPath();
+  x.arc(q.x,q.y,r,0,Math.PI*2);
+  x.fillStyle=cor;
+  x.fill();
+
+  x.lineWidth=3;
+  x.strokeStyle='#000';
+  x.stroke();
+
+  x.beginPath();
+  x.moveTo(q.x-r*2,q.y);
+  x.lineTo(q.x+r*2,q.y);
+  x.moveTo(q.x,q.y-r*2);
+  x.lineTo(q.x,q.y+r*2);
+  x.strokeStyle=cor;
+  x.stroke();
+
+  x.fillStyle='#000';
+  x.font='bold 14px Arial';
+  x.textAlign='center';
+  x.textBaseline='middle';
+  x.fillText(n,q.x,q.y);
+}
+
+function linha(a,b,cor){
+  x.beginPath();
+  x.moveTo(a.x,a.y);
+  x.lineTo(b.x,b.y);
+  x.strokeStyle=cor;
+  x.lineWidth=3;
+  x.setLineDash([12,8]);
+  x.stroke();
+  x.setLineDash([]);
+}
+
+function atualizar(){
+  inst=instrucoesAtuais();
+
+  const etapa=carregada
+    ? Math.min(p.length+1,6)
+    : 0;
+
+  document.getElementById('msg').textContent=inst[etapa];
+
+  for(let i=0;i<=6;i++){
+    document
+      .getElementById('e'+i)
+      .classList.toggle('ativa',i===etapa);
+  }
+}
+
+function desfazer(){
+  if(!p.length)return;
+
+  p.pop();
+  desenhar();
+  atualizar();
+
+  document.getElementById('resultado').style.display='none';
+}
+
+function limpar(){
+  p=[];
+
+  if(carregada){
+    desenhar();
+  }
+
+  atualizar();
+  document.getElementById('resultado').style.display='none';
+}
+
+function dist(a,b){
+  return Math.hypot(b.x-a.x,b.y-a.y);
+}
+
+function calcular(){
+  if(!carregada){
+    alert('Escolha uma foto primeiro.');
+    return;
+  }
+
+  if(p.length<5){
+    alert('Marque os cinco pontos.');
+    return;
+  }
+
+  const metodo=document.getElementById('metodoReferencia').value;
+  let referenciaMm;
+
+  if(metodo==='armacao'){
+    const larguraLente=
+      Number(document.getElementById('larguraLente').value);
+
+    const ponte=
+      Number(document.getElementById('ponteArmacao').value);
+
+    if(!larguraLente || larguraLente<=0 || !ponte || ponte<=0){
+      alert('Informe corretamente a largura da lente e a ponte.');
+      return;
+    }
+
+    referenciaMm=larguraLente+ponte;
+  }else{
+    referenciaMm=
+      Number(document.getElementById('ref').value);
+
+    if(!referenciaMm || referenciaMm<=0){
+      alert('Informe uma largura de cartão válida.');
+      return;
+    }
+  }
+
+  const referenciaPixels=dist(p[3],p[4]);
+
+  if(referenciaPixels<20){
+    alert('Confira os dois pontos da referência.');
+    return;
+  }
+
+  const mmPorPixel=referenciaMm/referenciaPixels;
+
+  const total=
+    dist(p[0],p[1])*mmPorPixel;
+
+  const direita=
+    dist(p[0],p[2])*mmPorPixel;
+
+  const esquerda=
+    dist(p[2],p[1])*mmPorPixel;
+
+  if(total<40 || total>85){
+    const continuar=confirm(
+      'O resultado parece fora da faixa esperada. Deseja exibir mesmo assim?'
+    );
+
+    if(!continuar)return;
+  }
+
+  document.getElementById('total').textContent=
+    total.toFixed(1)+' mm';
+
+  document.getElementById('dir').textContent=
+    direita.toFixed(1)+' mm';
+
+  document.getElementById('esq').textContent=
+    esquerda.toFixed(1)+' mm';
+
+  document.getElementById('resultado').style.display='block';
+
+  window.res={
+    nome:document.getElementById('nome').value.trim(),
+    metodoReferencia:metodo,
+    dpTotal:Number(total.toFixed(1)),
+    dpDireita:Number(direita.toFixed(1)),
+    dpEsquerda:Number(esquerda.toFixed(1)),
+    referencia:referenciaMm,
+    criadoEm:new Date().toISOString()
+  };
+}
+
+function salvar(){
+  if(!window.res){
+    alert('Calcule primeiro.');
+    return;
+  }
+
+  let historico=[];
+
+  try{
+    historico=JSON.parse(
+      localStorage.getItem('historicoPupilometro')||'[]'
+    );
+  }catch{}
+
+  historico.push(window.res);
+
+  localStorage.setItem(
+    'historicoPupilometro',
+    JSON.stringify(historico)
+  );
+
+  alert('Resultado salvo neste aparelho.');
+}
+
+atualizarMetodoReferencia();
+</script>
+</body>
+</html>
