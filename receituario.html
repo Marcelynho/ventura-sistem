@@ -1,105 +1,436 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Receituário - Óticas Ventura</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Receituário - Óticas Ventura</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(48, 145, 230, 0.18), transparent 28%),
+        linear-gradient(135deg, #062449, #0b4c86);
+      color: #15314d;
+    }
+
+    body {
+      padding: 28px;
+    }
+
+    .receita-wrapper {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 24px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .receita-topo {
+      padding: 26px 30px;
+      color: white;
+      background: linear-gradient(135deg, #082b54, #0d5d9f);
+    }
+
+    .receita-topo h1 {
+      margin: 0;
+      font-size: 34px;
+    }
+
+    .receita-topo p {
+      margin: 7px 0 0;
+      color: #d8ebfb;
+    }
+
+    .receita-conteudo {
+      padding: 28px 30px 32px;
+    }
+
+    .secao {
+      margin-bottom: 24px;
+      padding: 20px;
+      border: 1px solid #d9e5ef;
+      border-radius: 16px;
+      background: #f8fbfe;
+    }
+
+    .secao h2 {
+      margin: 0 0 16px;
+      color: #0d4d84;
+      font-size: 20px;
+    }
+
+    .linha-busca {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .grade-cliente {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 14px;
+    }
+
+    input,
+    textarea,
+    button {
+      font: inherit;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      padding: 12px 13px;
+      border: 1px solid #cfdce8;
+      border-radius: 10px;
+      background: white;
+      color: #18334d;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #1a84d8;
+      box-shadow: 0 0 0 3px rgba(26, 132, 216, 0.12);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: white;
+      background: #1687e8;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .btn-excluir {
+      background: #c62828;
+    }
+
+    .btn-secundario {
+      background: #5c6f82;
+    }
+
+    .btn-verde {
+      background: #239a55;
+    }
+
+    .tabela-scroll {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid #dbe6ef;
+      background: white;
+    }
+
+    table {
+      width: 100%;
+      min-width: 860px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #e2eaf1;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    th {
+      color: white;
+      background: #0d5d9f;
+      font-size: 14px;
+    }
+
+    td:first-child,
+    td:nth-child(2) {
+      font-weight: 700;
+      color: #0d4d84;
+      background: #f3f8fc;
+    }
+
+    td input {
+      min-width: 105px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .linha-adicao {
+      display: grid;
+      grid-template-columns: 220px;
+      margin-top: 14px;
+    }
+
+    .acoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    #listaReceitasCliente {
+      margin-top: 18px;
+    }
+
+    @media (max-width: 850px) {
+      body {
+        padding: 14px;
+      }
+
+      .receita-conteudo {
+        padding: 20px 16px 24px;
+      }
+
+      .receita-topo {
+        padding: 22px 18px;
+      }
+
+      .receita-topo h1 {
+        font-size: 28px;
+      }
+
+      .linha-busca {
+        grid-template-columns: 1fr;
+      }
+
+      .grade-cliente {
+        grid-template-columns: 1fr;
+      }
+
+      .linha-adicao {
+        grid-template-columns: 1fr;
+      }
+
+      .acoes button,
+      .linha-busca button {
+        width: 100%;
+      }
+    }
+
+    @media print {
+      body {
+        padding: 0;
+        background: white;
+      }
+
+      .receita-wrapper {
+        max-width: none;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      .acoes,
+      .linha-busca,
+      #listaReceitasCliente {
+        display: none !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="caixa-login">
-<h1>Receituário</h1>
-  <input id="buscaClienteReceita" placeholder="Buscar cliente por nome / telefone / CPF">
-<button onclick="buscarClienteReceita()">🔍 Buscar</button>
-  <button onclick="apagarReceita()" style="background:#d32f2f;color:white;margin-left:8px;">
-🗑️ Excluir Receita
-</button>
-<br><br>
+  <main class="receita-wrapper">
 
-<input id="clienteReceita" type="text" placeholder="Nome do Cliente"><br><br>
-<input id="telefoneReceita" type="text" placeholder="Telefone"><br><br>
-  <input id="cpfReceita" type="text" placeholder="CPF"><br><br>
-<div class="tabela-receita">
+    <header class="receita-topo">
+      <h1>📄 Receituário</h1>
+      <p>Óticas Ventura — cadastro e acompanhamento de prescrições</p>
+    </header>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Tipo</th>
-        <th>Olho</th>
-        <th>Esférico</th>
-        <th>Cilíndrico</th>
-        <th>Eixo</th>
-        <th>Altura</th>
-        <th>DNP</th>
-      </tr>
-    </thead>
+    <div class="receita-conteudo">
 
-    <tbody>
-      <tr>
-        <td>LONGE</td>
-        <td>OD</td>
-        <td><input id="odLongeEsferico" placeholder="Esférico" oninput="calcularPerto()"></td>
-        <td><input id="odLongeCilindrico" placeholder="Cilíndrico" oninput="calcularPerto()"></td>
-        <td><input id="odLongeEixo" placeholder="Eixo" oninput="calcularPerto()"></td>
-        <td><input id="altura" placeholder="Altura"></td>
-        <td><input id="dnp" placeholder="DNP"></td>
-      </tr>
+      <section class="secao">
+        <h2>Buscar cliente</h2>
 
-      <tr>
-        <td>LONGE</td>
-        <td>OE</td>
-        <td><input id="oeLongeEsferico" placeholder="Esférico" oninput="calcularPerto()"></td>
-        <td><input id="oeLongeCilindrico" placeholder="Cilíndrico" oninput="calcularPerto()"></td>
-        <td><input id="oeLongeEixo" placeholder="Eixo" oninput="calcularPerto()"></td>
-        <td><input id="alturaOE" placeholder="Altura"></td>
-        <td><input id="dnpOE" placeholder="DNP"></td>
-      </tr>
+        <div class="linha-busca">
+          <input
+            id="buscaClienteReceita"
+            type="text"
+            placeholder="Buscar cliente por nome, telefone ou CPF"
+          >
 
-      <tr>
-  <td>PERTO</td>
-  <td>OD</td>
-  <td><input id="odPertoEsferico" placeholder="Esférico"></td>
-  <td><input id="odPertoCilindrico" placeholder="Cilíndrico"></td>
-  <td><input id="odPertoEixo" placeholder="Eixo"></td>
-  <td><input id="alturaPertoOD" placeholder="Altura"></td>
-  <td><input id="dnpPertoOD" placeholder="DNP"></td>
-</tr>
+          <button type="button" onclick="buscarClienteReceita()">
+            🔍 Buscar
+          </button>
 
-<tr>
-  <td>PERTO</td>
-  <td>OE</td>
-  <td><input id="oePertoEsferico" placeholder="Esférico"></td>
-  <td><input id="oePertoCilindrico" placeholder="Cilíndrico"></td>
-  <td><input id="oePertoEixo" placeholder="Eixo"></td>
-  <td><input id="alturaPertoOE" placeholder="Altura"></td>
-  <td><input id="dnpPertoOE" placeholder="DNP"></td>
-</tr>
-    </tbody>
-  </table>
+          <button
+            type="button"
+            class="btn-excluir"
+            onclick="apagarReceita()"
+          >
+            🗑 Excluir Receita
+          </button>
+        </div>
+      </section>
 
-  <div style="margin-top:15px;">
-    <input id="adicao" placeholder="Adição" oninput="calcularPerto()">
-  </div>
+      <section class="secao">
+        <h2>Dados do cliente</h2>
 
-</div>
+        <div class="grade-cliente">
+          <input
+            id="clienteReceita"
+            type="text"
+            placeholder="Nome do cliente"
+          >
 
+          <input
+            id="telefoneReceita"
+            type="text"
+            placeholder="Telefone"
+          >
 
-<textarea id="obsReceita" placeholder="Observações"></textarea><br><br>
+          <input
+            id="cpfReceita"
+            type="text"
+            placeholder="CPF"
+          >
+        </div>
+      </section>
 
-<button onclick="salvarReceituario()">Salvar Receituário</button>
-  <button type="button" onclick="listarReceitasCliente()">
-  Ver receitas salvas
-</button>
+      <section class="secao">
+        <h2>Prescrição</h2>
 
-<div id="listaReceitasCliente"></div>
-  <br><br>
-<button onclick="imprimirReceita()">Imprimir Receita</button>
-</div>
+        <div class="tabela-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Olho</th>
+                <th>Esférico</th>
+                <th>Cilíndrico</th>
+                <th>Eixo</th>
+                <th>Altura</th>
+                <th>DNP</th>
+              </tr>
+            </thead>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+            <tbody>
+              <tr>
+                <td>LONGE</td>
+                <td>OD</td>
+                <td><input id="odLongeEsferico" placeholder="Esférico" oninput="calcularPerto()"></td>
+                <td><input id="odLongeCilindrico" placeholder="Cilíndrico" oninput="calcularPerto()"></td>
+                <td><input id="odLongeEixo" placeholder="Eixo" oninput="calcularPerto()"></td>
+                <td><input id="altura" placeholder="Altura"></td>
+                <td><input id="dnp" placeholder="DNP"></td>
+              </tr>
+
+              <tr>
+                <td>LONGE</td>
+                <td>OE</td>
+                <td><input id="oeLongeEsferico" placeholder="Esférico" oninput="calcularPerto()"></td>
+                <td><input id="oeLongeCilindrico" placeholder="Cilíndrico" oninput="calcularPerto()"></td>
+                <td><input id="oeLongeEixo" placeholder="Eixo" oninput="calcularPerto()"></td>
+                <td><input id="alturaOE" placeholder="Altura"></td>
+                <td><input id="dnpOE" placeholder="DNP"></td>
+              </tr>
+
+              <tr>
+                <td>PERTO</td>
+                <td>OD</td>
+                <td><input id="odPertoEsferico" placeholder="Esférico"></td>
+                <td><input id="odPertoCilindrico" placeholder="Cilíndrico"></td>
+                <td><input id="odPertoEixo" placeholder="Eixo"></td>
+                <td><input id="alturaPertoOD" placeholder="Altura"></td>
+                <td><input id="dnpPertoOD" placeholder="DNP"></td>
+              </tr>
+
+              <tr>
+                <td>PERTO</td>
+                <td>OE</td>
+                <td><input id="oePertoEsferico" placeholder="Esférico"></td>
+                <td><input id="oePertoCilindrico" placeholder="Cilíndrico"></td>
+                <td><input id="oePertoEixo" placeholder="Eixo"></td>
+                <td><input id="alturaPertoOE" placeholder="Altura"></td>
+                <td><input id="dnpPertoOE" placeholder="DNP"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="linha-adicao">
+          <input
+            id="adicao"
+            type="text"
+            placeholder="Adição"
+            oninput="calcularPerto()"
+          >
+        </div>
+      </section>
+
+      <section class="secao">
+        <h2>Observações</h2>
+
+        <textarea
+          id="obsReceita"
+          placeholder="Digite as observações da receita"
+        ></textarea>
+
+        <div class="acoes">
+          <button
+            type="button"
+            class="btn-verde"
+            onclick="salvarReceituario()"
+          >
+            💾 Salvar Receituário
+          </button>
+
+          <button
+            type="button"
+            class="btn-secundario"
+            onclick="listarReceitasCliente()"
+          >
+            📋 Ver receitas salvas
+          </button>
+
+          <button
+            type="button"
+            onclick="imprimirReceita()"
+          >
+            🖨 Imprimir Receita
+          </button>
+        </div>
+
+        <div id="listaReceitasCliente"></div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="app.js"></script>
 
 </body>
 </html>
