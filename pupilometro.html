@@ -9,7 +9,28 @@
 </style>
 </head>
 <body>
-<header><h1>👁 Pupilômetro Digital</h1><p>Óticas Ventura — medição digital auxiliar</p></header>
+<header style="position:relative;">
+  <button
+    onclick="window.location.href='dashboard.html'"
+    style="
+      position:absolute;
+      left:20px;
+      top:18px;
+      padding:10px 14px;
+      border:none;
+      border-radius:8px;
+      background:#1687e8;
+      color:white;
+      font-weight:bold;
+      cursor:pointer;
+    "
+  >
+    ← Voltar ao Painel
+  </button>
+
+  <h1>👁 Pupilômetro Digital</h1>
+  <p>Óticas Ventura — medição digital auxiliar</p>
+</header>
 <main class="layout">
 <aside class="painel"><h2>Etapas</h2><div class="etapa ativa" id="e0">1. Carregar a foto</div><div class="etapa" id="e1">2. Pupila direita</div><div class="etapa" id="e2">3. Pupila esquerda</div><div class="etapa" id="e3">4. Centro da ponte nasal</div><div class="etapa" id="e4">5. Lado esquerdo do cartão</div><div class="etapa" id="e5">6. Lado direito do cartão</div><div class="etapa" id="e6">7. Calcular resultado</div><div class="aviso">Use câmera traseira em 1x, sem zoom. Cabeça reta, celular na altura dos olhos e cartão no mesmo plano do rosto.</div></aside>
 <section class="principal"><div class="controles"><label class="arquivo">📷 Escolher foto<input id="foto" type="file" accept="image/*" capture="environment"></label><button class="cinza" onclick="desfazer()">↩ Desfazer</button><button class="vermelho" onclick="limpar()">🗑 Limpar</button><button class="verde" onclick="calcular()">📏 Calcular DP</button></div><div class="mensagem" id="msg">Escolha ou tire uma foto para começar.</div><div class="area"><canvas id="canvas"></canvas></div><div class="zoom"><span>🔍 Zoom</span><input id="zoom" type="range" min="40" max="200" value="100" step="5"><strong id="zoomTxt">100%</strong></div></section>
