@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Painel Ventura</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(52, 151, 235, 0.18), transparent 28%),
+        linear-gradient(135deg, #062449, #0b4c86);
+      color: #17324b;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 220px;
+      padding: 22px 16px;
+      overflow-y: auto;
+      background: linear-gradient(180deg, #082b54, #0b4c86);
+      box-shadow: 8px 0 28px rgba(0, 0, 0, 0.18);
+      z-index: 10;
+    }
+
+    .logo-area {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-area img {
+      width: 86px;
+      height: 86px;
+      object-fit: cover;
+      border: 3px solid rgba(255, 255, 255, 0.35);
+      border-radius: 50%;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+    }
+
+    .menu {
+      display: grid;
+      gap: 9px;
+    }
+
+    .menu button {
+      width: 100%;
+      border: 0;
+      border-radius: 11px;
+      padding: 11px 13px;
+      color: #07345f;
+      background: #55c7df;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: left;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .menu button:hover {
+      filter: brightness(1.08);
+      transform: translateX(3px);
+    }
+
+    .menu .ativo {
+      color: #ffffff;
+      background: #1687e8;
+      box-shadow: 0 7px 16px rgba(0, 0, 0, 0.16);
+    }
+
+    .menu .sair {
+      margin-top: 8px;
+      color: #ffffff;
+      background: #d95368;
+    }
+
+    .painel-conteudo {
+      width: calc(100% - 220px);
+      min-height: 100vh;
+      margin-left: 220px;
+      padding: 28px;
+    }
+
+    .dashboard-home {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .painel-topo {
+      margin-bottom: 24px;
+      padding: 28px 30px;
+      border-radius: 22px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #082b54, #0d5d9f);
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.2);
+    }
+
+    .painel-topo h1 {
+      margin: 0;
+      color: #ffffff;
+      font-size: 38px;
+    }
+
+    .painel-topo p {
+      margin: 8px 0 0;
+      color: #d9ecfb;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      min-height: 150px;
+      padding: 22px;
+      border: 1px solid #d8e4ee;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+      color: #0d4d84;
+      font-size: 20px;
+      font-weight: 700;
+      opacity: 1;
+    }
+
+    .card .rotulo {
+      display: block;
+      margin-bottom: 16px;
+      color: #60788f;
+      font-size: 15px;
+    }
+
+    .card .valor {
+      display: block;
+      color: #0d4d84;
+      font-size: 38px;
+      line-height: 1;
+    }
+
+    .graficos-container {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grafico-box {
+      min-width: 0;
+      padding: 22px;
+      border: 1px solid #d8e4ee;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+      opacity: 1;
+    }
+
+    .grafico-box h2 {
+      margin: 0 0 18px;
+      color: #0d4d84;
+      font-size: 20px;
+    }
+
+    .grafico-box canvas {
+      width: 100% !important;
+      max-width: 100%;
+    }
+
+    #conteudoPrincipal {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 950px) {
+      .sidebar {
+        position: static;
+        width: 100%;
+      }
+
+      body {
+        display: block;
+      }
+
+      .painel-conteudo {
+        width: 100%;
+        margin-left: 0;
+        padding: 16px;
+      }
+
+      .menu {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .dashboard-cards,
+      .graficos-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .menu {
+        grid-template-columns: 1fr;
+      }
+
+      .painel-topo {
+        padding: 22px 18px;
+      }
+
+      .painel-topo h1 {
+        font-size: 30px;
+      }
+    }
+  
+    .modulo-frame {
+      display: none;
+      width: 100%;
+      height: calc(100vh - 56px);
+      min-height: 760px;
+      border: 0;
+      border-radius: 22px;
+      background: #ffffff;
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.20);
+    }
+
+    @media (max-width: 950px) {
+      .modulo-frame {
+        height: 900px;
+        min-height: 900px;
+        border-radius: 16px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+
+    <div class="logo-area">
+      <img src="logo.jpg" alt="Logo Óticas Ventura">
+    </div>
+
+    <div class="menu">
+      <button class="ativo" onclick="window.location.href='dashboard.html'">🏠 Início</button>
+      <button onclick="abrirModulo('clientes.html')">👥 Clientes</button>
+      <button onclick="abrirModulo('pedidos.html')">📦 Pedidos</button>
+      <button onclick="abrirModulo('financeiro.html')">💰 Financeiro</button>
+      <button onclick="abrirModulo('caixa.html')">💳 Caixa</button>
+      <button onclick="abrirModulo('historico.html')">📊 Histórico</button>
+      <button onclick="abrirModulo('os.html')">📋 Ordem de Serviço</button>
+      <button onclick="abrirModulo('receituario.html')">📄 Receituário</button>
+      <button onclick="abrirModulo('pupilometro.html')">👁 Pupilômetro Digital</button>
+      <button onclick="window.location.href='config.html'">⚙️ Configurações</button>
+      <button id="btnSairTopo" class="sair" onclick="logout()">🚪 Sair</button>
+    </div>
+
+  </aside>
+
+  <main class="painel-conteudo">
+
+    <div class="dashboard-home">
+
+      <header class="painel-topo">
+        <h1>Painel Ventura</h1>
+        <p>Bem-vindo ao sistema da Óticas Ventura</p>
+      </header>
+
+      <section class="dashboard-cards">
+
+        <div class="card">
+          <span class="rotulo">👥 Clientes cadastrados</span>
+          <span class="valor" id="totalClientes">0</span>
+        </div>
+
+        <div class="card">
+          <span class="rotulo">📦 Pedidos cadastrados</span>
+          <span class="valor" id="totalPedidos">0</span>
+        </div>
+
+        <div class="card">
+          <span class="rotulo">💰 Total financeiro</span>
+          <span class="valor">R$ <span id="totalFinanceiro">0</span></span>
+        </div>
+
+      </section>
+
+      <section class="graficos-container">
+
+        <div class="grafico-box">
+          <h2>Clientes e pedidos</h2>
+          <canvas id="graficoVendas" width="400" height="250"></canvas>
+        </div>
+
+        <div class="grafico-box">
+          <h2>Financeiro</h2>
+          <canvas id="graficoFinanceiro" width="400" height="250"></canvas>
+        </div>
+
+      </section>
+
+    </div>
+
+    <iframe id="moduloFrame" class="modulo-frame" title="Módulo do sistema"></iframe>
+
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="app.js?v=4"></script>
+
+  <script>
+    function abrirModulo(pagina) {
+      const home = document.querySelector(".dashboard-home");
+      const frame = document.getElementById("moduloFrame");
+
+      if (home) {
+        home.style.display = "none";
+      }
+
+      frame.style.display = "block";
+      frame.src = pagina;
+
+      document.querySelectorAll(".menu button").forEach(function(botao) {
+        botao.classList.remove("ativo");
+      });
+
+      const botoes = document.querySelectorAll(".menu button");
+      botoes.forEach(function(botao) {
+        const acao = botao.getAttribute("onclick") || "";
+        if (acao.indexOf("'" + pagina + "'") !== -1) {
+          botao.classList.add("ativo");
+        }
+      });
+
+      window.scrollTo(0, 0);
+    }
+  </script>
+
+</body>
+</html>
