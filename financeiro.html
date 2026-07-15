@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financeiro - Óticas Ventura</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(52,151,235,.18), transparent 28%),
+        linear-gradient(135deg, #062449, #0b4c86);
+      color: #17324b;
+    }
+    body { padding: 14px; }
+    .financeiro-wrapper {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 18px 50px rgba(0,0,0,.22);
+    }
+    .financeiro-topo {
+      padding: 18px 24px;
+      color: #fff;
+      background: linear-gradient(135deg, #082b54, #0d5d9f);
+    }
+    .financeiro-topo h1 {
+      margin: 0;
+      color: #fff;
+      font-size: 30px;
+    }
+    .financeiro-conteudo {
+      padding: 16px 20px 20px;
+      background: #fff;
+    }
+    .secao {
+      margin-bottom: 14px;
+      padding: 14px;
+      border: 1px solid #d9e5ef;
+      border-radius: 16px;
+      background: #f8fbfe;
+      opacity: 1;
+    }
+    .secao h2 {
+      margin: 0 0 10px;
+      color: #0d4d84;
+      font-size: 18px;
+    }
+    .financeiro-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 10px;
+    }
+    .financeiro-card {
+      min-height: 92px;
+      padding: 13px 14px;
+      border: 1px solid #d7e3ee;
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 7px 18px rgba(13,77,132,.08);
+      color: #18334d;
+      opacity: 1;
+    }
+    .financeiro-card span {
+      display: block;
+      margin-bottom: 5px;
+      color: #60788f;
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 1;
+    }
+    .financeiro-card strong {
+      display: block;
+      color: #0d4d84;
+      font-size: 22px;
+      line-height: 1.2;
+      opacity: 1;
+    }
+    .acoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #fff;
+      background: #1687e8;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s;
+    }
+    button:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+    .btn-corrigir { background: #6f42c1; }
+    #listaFinanceiro {
+      margin-top: 8px;
+      max-height: 220px;
+      overflow-y: auto;
+      overflow-x: auto;
+      color: #17324b;
+      opacity: 1;
+    }
+    #listaFinanceiro > * { opacity: 1; }
+    #listaFinanceiro table {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
+      background: #fff;
+      color: #17324b;
+    }
+    #listaFinanceiro th,
+    #listaFinanceiro td {
+      padding: 12px;
+      border-bottom: 1px solid #e3ebf2;
+      text-align: left;
+      vertical-align: middle;
+    }
+    #listaFinanceiro th {
+      background: #0d5d9f;
+      color: #fff;
+      white-space: nowrap;
+    }
+    #listaFinanceiro tr:nth-child(even) td { background: #f7fafc; }
+    @media (max-width: 900px) {
+      body { padding: 14px; }
+      .financeiro-topo { padding: 22px 18px; }
+      .financeiro-topo h1 { font-size: 28px; }
+      .financeiro-conteudo { padding: 20px 16px 24px; }
+      .financeiro-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .acoes button { width: 100%; }
+    }
+  
+    @media (max-width: 560px) {
+      .financeiro-cards { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+  <main class="financeiro-wrapper">
+    <header class="financeiro-topo">
+      <h1>💰 Financeiro</h1>
+    </header>
+    <div class="financeiro-conteudo">
+      <section class="secao">
+        <h2>Resumo financeiro</h2>
+        <div class="financeiro-cards">
+          <div class="financeiro-card">
+            <span>Total vendido</span>
+            <strong>R$ <span id="totalFinanceiro">0</span></strong>
+          </div>
+          <div class="financeiro-card">
+            <span>Recebido hoje</span>
+            <strong>R$ <span id="recebidoHoje">0</span></strong>
+          </div>
+          <div class="financeiro-card">
+            <span>A receber</span>
+            <strong>R$ <span id="totalReceber">0</span></strong>
+          </div>
+          <div class="financeiro-card">
+            <span>Total de pedidos</span>
+            <strong><span id="totalPedidos">0</span></strong>
+          </div>
+          <div class="financeiro-card">
+            <span>Despesas</span>
+            <strong>R$ <span id="totalDespesas">0</span></strong>
+          </div>
+          <div class="financeiro-card">
+            <span>Lucro</span>
+            <strong>R$ <span id="totalLucro">0</span></strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="secao">
+        <h2>Lançamentos</h2>
+        <div class="acoes">
+          <button type="button" class="btn-corrigir" onclick="corrigirLancamentosOS()">
+            🔧 Corrigir lançamentos das OS
+          </button>
+        </div>
+        <div id="listaFinanceiro"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
