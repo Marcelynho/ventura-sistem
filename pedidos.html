@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Pedidos - Óticas Ventura</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(52, 151, 235, 0.18), transparent 28%),
+        linear-gradient(135deg, #062449, #0b4c86);
+      color: #17324b;
+    }
+
+    body {
+      padding: 28px;
+    }
+
+    .pedidos-wrapper {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+    }
+
+    .pedidos-topo {
+      padding: 26px 30px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #082b54, #0d5d9f);
+    }
+
+    .pedidos-topo h1 {
+      margin: 0;
+      color: #ffffff;
+      font-size: 34px;
+    }
+
+    .pedidos-conteudo {
+      padding: 28px 30px 32px;
+      background: #ffffff;
+    }
+
+    .secao {
+      margin-bottom: 24px;
+      padding: 20px;
+      border: 1px solid #d9e5ef;
+      border-radius: 16px;
+      background: #f8fbfe;
+      opacity: 1;
+    }
+
+    .secao h2 {
+      margin: 0 0 16px;
+      color: #0d4d84;
+      font-size: 20px;
+    }
+
+    .linha-busca {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .grade {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grade-3 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    input,
+    select,
+    button {
+      font: inherit;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-width: 0;
+      padding: 12px 13px;
+      border: 1px solid #cfdce8;
+      border-radius: 10px;
+      background: #ffffff;
+      color: #18334d;
+      opacity: 1;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #6c8194;
+      opacity: 1;
+    }
+
+    input:focus {
+      border-color: #1a84d8;
+      box-shadow: 0 0 0 3px rgba(26, 132, 216, 0.12);
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #ffffff;
+      background: #1687e8;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .btn-salvar {
+      background: #239a55;
+    }
+
+    .acoes {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+
+    #listaPedidos {
+      margin-top: 12px;
+      padding: 4px 0;
+      color: #17324b;
+      opacity: 1;
+    }
+
+    #listaPedidos > * {
+      opacity: 1;
+    }
+
+    @media (max-width: 800px) {
+      body {
+        padding: 14px;
+      }
+
+      .pedidos-topo {
+        padding: 22px 18px;
+      }
+
+      .pedidos-topo h1 {
+        font-size: 28px;
+      }
+
+      .pedidos-conteudo {
+        padding: 20px 16px 24px;
+      }
+
+      .linha-busca,
+      .grade-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .linha-busca button,
+      .acoes button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="pedidos-wrapper">
+
+    <header class="pedidos-topo">
+      <h1>📦 Cadastro de Pedidos</h1>
+    </header>
+
+    <div class="pedidos-conteudo">
+
+      <section class="secao">
+        <h2>Buscar cliente</h2>
+
+        <div class="linha-busca">
+          <input
+            id="buscaClientePedido"
+            type="text"
+            placeholder="Buscar cliente por nome, telefone ou CPF"
+          >
+
+          <button type="button" onclick="buscarClientePedido()">
+            🔍 Buscar
+          </button>
+        </div>
+      </section>
+
+      <section class="secao">
+        <h2>Dados do pedido</h2>
+
+        <div class="grade grade-3">
+          <input id="nomePedido" type="text" placeholder="Nome do cliente">
+          <select id="lentePedido">
+<option value="">Selecione a lente</option>
+<option>Visão Simples Branco</option>
+<option>Visão Simples AR</option>
+<option>Visão Simples Fotocromática</option>
+<option>Multifocal Branco</option>
+<option>Multifocal AR</option>
+<option>Multifocal Fotocromática</option>
+<option value="__nova__">➕ Nova lente</option>
+</select>
+<select id="armacaoPedido">
+<option value="">Selecione a armação</option>
+<option>Acetato</option>
+<option>Zyl</option>
+<option>Balgriff</option>
+<option>Metal</option>
+<option value="__nova__">➕ Nova armação</option>
+</select>
+          <input id="valorPedido" type="number" placeholder="Valor">
+        </div>
+
+        <div class="acoes">
+          <button
+            type="button"
+            class="btn-salvar"
+            onclick="salvarPedido()"
+          >
+            💾 Salvar pedido
+          </button>
+        </div>
+      </section>
+
+      <section class="secao">
+        <h2>Pedidos cadastrados</h2>
+
+        <div id="listaPedidos"></div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="app.js"></script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+ ['lentePedido','armacaoPedido'].forEach(id=>{
+   const s=document.getElementById(id);
+   if(!s) return;
+   s.addEventListener('change',()=>{
+      if(s.value==='__nova__'){
+        const tipo=id==='lentePedido'?'lente':'armação';
+        const nome=prompt('Digite o nome da nova '+tipo+':');
+        if(nome){
+          const o=document.createElement('option');
+          o.value=nome;o.textContent=nome;
+          s.insertBefore(o,s.lastElementChild);
+          s.value=nome;
+        }else s.selectedIndex=0;
+      }
+   });
+ });
+});
+</script>
+</body>
+</html>
