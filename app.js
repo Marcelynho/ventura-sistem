@@ -67,6 +67,50 @@ function logout() {
         });
 }
 
+async function buscarCepClienteAutomatico() {
+  const campoCep = document.getElementById("cepCliente");
+  if (!campoCep) return;
+
+  const cep = String(campoCep.value || "").replace(/\D/g, "");
+
+  if (!cep) return;
+
+  if (cep.length !== 8) {
+    alert("Digite um CEP válido com 8 números.");
+    return;
+  }
+
+  try {
+    campoCep.disabled = true;
+
+    const resposta = await fetch("https://viacep.com.br/ws/" + cep + "/json/");
+    const dados = await resposta.json();
+
+    if (dados.erro) {
+      alert("CEP não encontrado.");
+      return;
+    }
+
+    campoCep.value = dados.cep || campoCep.value;
+
+    const endereco = document.getElementById("enderecoCliente");
+    const bairro = document.getElementById("bairroCliente");
+    const cidade = document.getElementById("cidadeCliente");
+    const estado = document.getElementById("estadoCliente");
+
+    if (endereco) endereco.value = dados.logradouro || "";
+    if (bairro) bairro.value = dados.bairro || "";
+    if (cidade) cidade.value = dados.localidade || "";
+    if (estado) estado.value = dados.uf || "";
+  } catch (erro) {
+    console.error("Erro ao consultar CEP do cliente:", erro);
+    alert("Não foi possível consultar o CEP agora.");
+  } finally {
+    campoCep.disabled = false;
+  }
+}
+
+
 // CLIENTES
 async function salvarCliente() {
   if (!(await garantirCaixaAberto())) return;
@@ -437,98 +481,26 @@ async function excluirPedido(id) {
   alert("Pedido excluído com sucesso!");
 }
 
-
-let mesDashboardAtual = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-let graficoVendasInstancia = null;
-let graficoFinanceiroInstancia = null;
-
-function obterDataRegistro(item) {
-  if (item && item.criadoEm) {
-    if (typeof item.criadoEm.toDate === "function") {
-      return item.criadoEm.toDate();
-    }
-
-    if (item.criadoEm.seconds) {
-      return new Date(item.criadoEm.seconds * 1000);
-    }
-
-    const dataDireta = new Date(item.criadoEm);
-    if (!isNaN(dataDireta.getTime())) return dataDireta;
-  }
-
-  if (item && item.data) {
-    const partes = String(item.data).split("/");
-    if (partes.length === 3) {
-      return new Date(Number(partes[2]), Number(partes[1]) - 1, Number(partes[0]));
-    }
-  }
-
-  return null;
-}
-
-function pertenceAoMesDashboard(item) {
-  const data = obterDataRegistro(item);
-  if (!data) return false;
-
-  return data.getMonth() === mesDashboardAtual.getMonth() &&
-    data.getFullYear() === mesDashboardAtual.getFullYear();
-}
-
-function atualizarRotuloMesDashboard() {
-  const campo = document.getElementById("mesDashboard");
-  if (!campo) return;
-
-  const texto = mesDashboardAtual.toLocaleDateString("pt-BR", {
-    month: "long",
-    year: "numeric"
-  });
-
-  campo.textContent = texto.charAt(0).toUpperCase() + texto.slice(1);
-}
-
-async function mudarMesDashboard(direcao) {
-  mesDashboardAtual = new Date(
-    mesDashboardAtual.getFullYear(),
-    mesDashboardAtual.getMonth() + direcao,
-    1
-  );
-
-  atualizarRotuloMesDashboard();
-  await atualizarDashboard();
-  await desenharGrafico();
-}
-
-
 // DASHBOARD
 async function atualizarDashboard() {
-  const clientesSnap = await db.collection("clientes").get();
-  const pedidosSnap = await db.collection("pedidos").get();
+    const clientesSnap = await db.collection("clientes").get();
+const pedidosSnap = await db.collection("pedidos").get();
+const caixasSnap = await db.collection("caixas").get();
+    const totalClientes = document.getElementById("totalClientes");
+    const totalPedidos = document.getElementById("totalPedidos");
+    const totalFinanceiro = document.getElementById("totalFinanceiro");
 
-  const totalClientes = document.getElementById("totalClientes");
-  const totalPedidos = document.getElementById("totalPedidos");
-  const totalFinanceiro = document.getElementById("totalFinanceiro");
+    if (totalClientes) totalClientes.textContent = clientesSnap.size;
+    if (totalPedidos) totalPedidos.textContent = pedidosSnap.size;
 
-  let pedidosDoMes = 0;
-  let faturamentoDoMes = 0;
+    let soma = 0;
 
-  pedidosSnap.forEach(doc => {
-    const item = doc.data();
+pedidosSnap.forEach(doc => {
+  const item = doc.data();
+  soma += Number(item.valor || 0);
+});
 
-    if (pertenceAoMesDashboard(item)) {
-      pedidosDoMes++;
-      faturamentoDoMes += Number(item.valor || 0);
-    }
-  });
-
-  if (totalClientes) totalClientes.textContent = clientesSnap.size;
-  if (totalPedidos) totalPedidos.textContent = pedidosDoMes;
-  if (totalFinanceiro) {
-    totalFinanceiro.textContent = faturamentoDoMes
-      .toFixed(2)
-      .replace(".", ",");
-  }
-
-  atualizarRotuloMesDashboard();
+    if (totalFinanceiro) totalFinanceiro.textContent = soma.toFixed(2);
 }
 
 // GRÁFICO
@@ -539,29 +511,23 @@ async function desenharGrafico() {
   if (!canvas || !canvasFinanceiro) return;
 
   const clientesSnap = await db.collection("clientes").get();
-  const pedidosSnap = await db.collection("pedidos").get();
+const pedidosSnap = await db.collection("pedidos").get();
+const caixasSnap = await db.collection("caixas").get();
+  let totalFinanceiro = 0;
 
-  let pedidosDoMes = 0;
-  let totalFinanceiroMes = 0;
+  
 
-  pedidosSnap.forEach(doc => {
-    const item = doc.data();
+pedidosSnap.forEach(doc => {
+  const item = doc.data();
+  totalFinanceiro += Number(item.valor || 0);
+});
 
-    if (pertenceAoMesDashboard(item)) {
-      pedidosDoMes++;
-      totalFinanceiroMes += Number(item.valor || 0);
-    }
-  });
-
-  if (graficoVendasInstancia) graficoVendasInstancia.destroy();
-  if (graficoFinanceiroInstancia) graficoFinanceiroInstancia.destroy();
-
-  graficoVendasInstancia = new Chart(canvas, {
+  new Chart(canvas, {
     type: "bar",
     data: {
-      labels: ["Clientes", "Pedidos do mês"],
+      labels: ["Clientes", "Pedidos"],
       datasets: [{
-        data: [clientesSnap.size, pedidosDoMes],
+        data: [clientesSnap.size, pedidosSnap.size],
         borderRadius: 12
       }]
     },
@@ -578,12 +544,12 @@ async function desenharGrafico() {
     }
   });
 
-  graficoFinanceiroInstancia = new Chart(canvasFinanceiro, {
+  new Chart(canvasFinanceiro, {
     type: "bar",
     data: {
-      labels: ["Faturamento do mês"],
+      labels: ["Faturamento"],
       datasets: [{
-        data: [totalFinanceiroMes],
+        data: [totalFinanceiro],
         borderRadius: 12
       }]
     },
@@ -599,12 +565,8 @@ async function desenharGrafico() {
       }
     }
   });
-
-  atualizarRotuloMesDashboard();
 }
-
 window.onload = function () {
-  atualizarRotuloMesDashboard();
   if (document.getElementById("listaClientes")) mostrarClientes();
   if (document.getElementById("listaPedidos")) mostrarPedidos();
   if (document.getElementById("totalClientes")) atualizarDashboard();
@@ -2084,6 +2046,11 @@ function mostrarParcelas() {
   }
 }
 document.addEventListener("DOMContentLoaded", () => {
+  const cepCliente = document.getElementById("cepCliente");
+  if (cepCliente) {
+    cepCliente.addEventListener("blur", buscarCepClienteAutomatico);
+  }
+
   if (document.getElementById("listaClientes")) {
     mostrarClientes();
   }
