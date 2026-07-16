@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Central Administrativa - Óticas Ventura</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(52, 151, 235, 0.18), transparent 28%),
+        linear-gradient(135deg, #062449, #0b4c86);
+      color: #17324b;
+    }
+
+    body {
+      padding: 28px;
+    }
+
+    .config-wrapper {
+      width: 100%;
+      max-width: 1050px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+    }
+
+    .config-topo {
+      padding: 26px 30px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #082b54, #0d5d9f);
+    }
+
+    .config-topo h1 {
+      margin: 0;
+      color: #ffffff;
+      font-size: 34px;
+    }
+
+    .config-conteudo {
+      padding: 28px 30px 32px;
+      background: #ffffff;
+    }
+
+    .secao {
+      margin-bottom: 24px;
+      padding: 20px;
+      border: 1px solid #d9e5ef;
+      border-radius: 16px;
+      background: #f8fbfe;
+    }
+
+    .secao h2 {
+      margin: 0 0 16px;
+      color: #0d4d84;
+      font-size: 20px;
+    }
+
+    .grade {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    input,
+    button {
+      font: inherit;
+    }
+
+    input {
+      width: 100%;
+      min-width: 0;
+      padding: 12px 13px;
+      border: 1px solid #cfdce8;
+      border-radius: 10px;
+      background: #ffffff;
+      color: #18334d;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #6c8194;
+      opacity: 1;
+    }
+
+    input:focus {
+      border-color: #1a84d8;
+      box-shadow: 0 0 0 3px rgba(26, 132, 216, 0.12);
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #ffffff;
+      background: #1687e8;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .btn-verde {
+      background: #239a55;
+    }
+
+    .btn-roxo {
+      background: #6f42c1;
+    }
+
+    .acoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    #statusBackup {
+      min-height: 24px;
+      margin: 14px 0 0;
+      color: #0d4d84;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 14px;
+      }
+
+      .config-topo {
+        padding: 22px 18px;
+      }
+
+      .config-topo h1 {
+        font-size: 28px;
+      }
+
+      .config-conteudo {
+        padding: 20px 16px 24px;
+      }
+
+      .grade {
+        grid-template-columns: 1fr;
+      }
+
+      .acoes button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="config-wrapper">
+
+    <header class="config-topo">
+      <h1>⚙️ Central Administrativa</h1>
+    </header>
+
+    
+    <div class="config-conteudo">
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:28px;">
+        <div style="background:#fff;border:1px solid #d9e5ef;border-radius:16px;padding:18px;">
+          <h3>👤 Minha Conta</h3>
+          <p>Nome, e-mail, telefone e senha.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #d9e5ef;border-radius:16px;padding:18px;">
+          <h3>🏢 Empresa</h3>
+          <p>Dados da Óticas Ventura.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #d9e5ef;border-radius:16px;padding:18px;">
+          <h3>👥 Usuários</h3>
+          <p>Preparado para futuras permissões.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #d9e5ef;border-radius:16px;padding:18px;">
+          <h3>🔐 Segurança</h3>
+          <p>Proteção e senha da conta.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #d9e5ef;border-radius:16px;padding:18px;">
+          <h3>💾 Backup</h3>
+          <p>Exportar e restaurar dados.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #d9e5ef;border-radius:16px;padding:18px;">
+          <h3>ℹ️ Sobre</h3>
+          <p>Ventura System 2.0</p>
+        </div>
+      </div>
+
+
+      <section class="secao">
+        <h2>Backup do sistema</h2>
+
+        <input
+          type="file"
+          id="arquivoBackup"
+          accept=".json"
+          style="display:none"
+        >
+
+        <div class="acoes">
+          <button type="button" class="btn-verde" onclick="fazerBackup()">
+            💾 Fazer backup
+          </button>
+
+          <button
+            type="button"
+            class="btn-roxo"
+            onclick="document.getElementById('arquivoBackup').click()"
+          >
+            📂 Restaurar backup
+          </button>
+        </div>
+
+        <p id="statusBackup"></p>
+      </section>
+
+      <section class="secao">
+        <h2>Dados da loja</h2>
+
+        <div class="grade">
+          <input id="nomeLoja" placeholder="Nome da loja">
+          <input id="telefoneLoja" placeholder="WhatsApp da loja">
+          <input id="enderecoLoja" placeholder="Endereço">
+          <input id="cidadeLoja" placeholder="Cidade">
+        </div>
+
+        <div class="acoes">
+          <button type="button" class="btn-verde" onclick="salvarConfig()">
+            💾 Salvar configurações
+          </button>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="app.js"></script>
+
+  <script>
+    function salvarConfig() {
+      const config = {
+        nomeLoja: document.getElementById("nomeLoja").value,
+        telefoneLoja: document.getElementById("telefoneLoja").value,
+        enderecoLoja: document.getElementById("enderecoLoja").value,
+        cidadeLoja: document.getElementById("cidadeLoja").value
+      };
+
+      localStorage.setItem("configLoja", JSON.stringify(config));
+      alert("Configurações salvas com sucesso!");
+    }
+
+    async function buscarColecaoBackup(nome) {
+      const snap = await db.collection(nome).get();
+      let dados = [];
+
+      snap.forEach(doc => {
+        dados.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+
+      return dados;
+    }
+
+    function esperarLogin() {
+      return new Promise((resolve) => {
+        firebase.auth().onAuthStateChanged((user) => {
+          resolve(user);
+        });
+      });
+    }
+
+    async function fazerBackup() {
+      const status = document.getElementById("statusBackup");
+
+      status.innerHTML = "⏳ Gerando backup...";
+
+      const user = await esperarLogin();
+
+      if (!user) {
+        status.innerHTML = "⚠️ Faça login primeiro.";
+        return;
+      }
+
+      try {
+        const backup = {
+          clientes: await buscarColecaoBackup("clientes"),
+          pedidos: await buscarColecaoBackup("pedidos"),
+          ordens: await buscarColecaoBackup("ordens"),
+          financeiro: await buscarColecaoBackup("financeiro"),
+          caixas: await buscarColecaoBackup("caixas"),
+          historicoCaixa: await buscarColecaoBackup("historicoCaixa"),
+          receituarios: await buscarColecaoBackup("receituarios"),
+          notas_fiscais: await buscarColecaoBackup("notas_fiscais")
+        };
+
+        const arquivo = new Blob(
+          [JSON.stringify(backup, null, 2)],
+          { type: "application/json" }
+        );
+
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(arquivo);
+        link.download = "ventura-backup.json";
+        link.click();
+
+        status.innerHTML = "✅ Backup criado com sucesso.";
+      } catch (e) {
+        console.error(e);
+        status.innerHTML = "❌ " + e.message;
+      }
+    }
+
+    window.onload = function () {
+      const config = JSON.parse(localStorage.getItem("configLoja"));
+
+      if (config) {
+        document.getElementById("nomeLoja").value = config.nomeLoja || "";
+        document.getElementById("telefoneLoja").value = config.telefoneLoja || "";
+        document.getElementById("enderecoLoja").value = config.enderecoLoja || "";
+        document.getElementById("cidadeLoja").value = config.cidadeLoja || "";
+      }
+
+      document
+        .getElementById("arquivoBackup")
+        .addEventListener("change", restaurarBackup);
+    };
+
+    async function restaurarBackup(event) {
+      const status = document.getElementById("statusBackup");
+      const arquivo = event.target.files[0];
+
+      if (!arquivo) return;
+
+      const confirmar = confirm(
+        "ATENÇÃO: restaurar backup pode sobrescrever dados atuais. Deseja continuar?"
+      );
+
+      if (!confirmar) {
+        status.innerHTML = "⚠️ Restauração cancelada.";
+        return;
+      }
+
+      status.innerHTML = "⏳ Restaurando backup... aguarde.";
+
+      try {
+        const texto = await arquivo.text();
+        const backup = JSON.parse(texto);
+
+        async function restaurarColecao(nome, dados) {
+          if (!Array.isArray(dados)) return;
+
+          for (const item of dados) {
+            const id = item.id;
+            const copia = { ...item };
+            delete copia.id;
+
+            if (id) {
+              await db.collection(nome).doc(id).set(copia);
+            }
+          }
+        }
+
+        await restaurarColecao("clientes", backup.clientes);
+        await restaurarColecao("pedidos", backup.pedidos);
+        await restaurarColecao("ordens", backup.ordens);
+        await restaurarColecao("caixas", backup.caixas);
+        await restaurarColecao("financeiro", backup.financeiro);
+        await restaurarColecao("historicoCaixa", backup.historicoCaixa);
+        await restaurarColecao("notas_fiscais", backup.notas_fiscais);
+        await restaurarColecao("receituarios", backup.receituarios);
+
+        status.innerHTML = "✅ Backup restaurado com sucesso.";
+        alert("Backup restaurado com sucesso!");
+      } catch (e) {
+        console.error(e);
+        status.innerHTML = "❌ Erro ao restaurar backup: " + e.message;
+      }
+    }
+  </script>
+
+</body>
+</html>
