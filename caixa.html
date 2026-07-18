@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Caixa - Óticas Ventura</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(52, 151, 235, 0.18), transparent 28%),
+        linear-gradient(135deg, #062449, #0b4c86);
+      color: #17324b;
+    }
+
+    body {
+      padding: 28px;
+    }
+
+    .caixa-wrapper {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+    }
+
+    .caixa-topo {
+      padding: 26px 30px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #082b54, #0d5d9f);
+    }
+
+    .caixa-topo h1 {
+      margin: 0;
+      color: #ffffff;
+      font-size: 34px;
+    }
+
+    .caixa-conteudo {
+      padding: 28px 30px 32px;
+      background: #ffffff;
+    }
+
+    .secao {
+      margin-bottom: 24px;
+      padding: 20px;
+      border: 1px solid #d9e5ef;
+      border-radius: 16px;
+      background: #f8fbfe;
+      opacity: 1;
+    }
+
+    .secao h2 {
+      margin: 0 0 16px;
+      color: #0d4d84;
+      font-size: 20px;
+    }
+
+    .grade {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grade-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grade-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    input,
+    select,
+    button {
+      font: inherit;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-width: 0;
+      padding: 12px 13px;
+      border: 1px solid #cfdce8;
+      border-radius: 10px;
+      background: #ffffff;
+      color: #18334d;
+      opacity: 1;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #6c8194;
+      opacity: 1;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #1a84d8;
+      box-shadow: 0 0 0 3px rgba(26, 132, 216, 0.12);
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #ffffff;
+      background: #1687e8;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .btn-verde {
+      background: #239a55;
+    }
+
+    .btn-vermelho {
+      background: #c62828;
+    }
+
+    .btn-cinza {
+      background: #5c6f82;
+    }
+
+    .acoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    #resumoCaixa {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .linha-resumo {
+      padding: 16px;
+      border: 1px solid #d7e3ee;
+      border-radius: 12px;
+      background: #ffffff;
+      color: #18334d;
+      font-weight: 700;
+      opacity: 1;
+    }
+
+    .linha-resumo span {
+      color: #0d4d84;
+      font-size: 20px;
+      opacity: 1;
+    }
+
+    @media (max-width: 850px) {
+      body {
+        padding: 14px;
+      }
+
+      .caixa-topo {
+        padding: 22px 18px;
+      }
+
+      .caixa-topo h1 {
+        font-size: 28px;
+      }
+
+      .caixa-conteudo {
+        padding: 20px 16px 24px;
+      }
+
+      .grade-2,
+      .grade-3,
+      #resumoCaixa {
+        grid-template-columns: 1fr;
+      }
+
+      .acoes button {
+        width: 100%;
+      }
+    }
+
+    @media print {
+      body {
+        padding: 0;
+        background: #ffffff;
+      }
+
+      .caixa-wrapper {
+        max-width: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .acoes {
+        display: none !important;
+      }
+    }
+  
+    /* Resumo profissional do caixa */
+    .grade-4 {
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+    }
+
+    .resumo-pagamentos {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .pagamento-card {
+      padding: 14px;
+      border: 1px solid #d7e3ee;
+      border-radius: 12px;
+      background: #ffffff;
+      text-align: center;
+    }
+
+    .pagamento-card small {
+      display: block;
+      margin-bottom: 5px;
+      color: #60788f;
+      font-weight: 700;
+    }
+
+    .pagamento-card strong {
+      color: #0d4d84;
+      font-size: 18px;
+    }
+
+    .diferenca-positiva { color: #16833c !important; }
+    .diferenca-negativa { color: #c62828 !important; }
+    .diferenca-zero { color: #0d4d84 !important; }
+
+    .status-caixa {
+      margin: 0 0 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: #eaf4fc;
+      color: #0d4d84;
+      font-weight: 700;
+    }
+
+    @media (max-width: 850px) {
+      .grade-4,
+      .resumo-pagamentos {
+        grid-template-columns: 1fr;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <main class="caixa-wrapper">
+
+    <header class="caixa-topo">
+      <h1>💵 Caixa</h1>
+    </header>
+
+    <div class="caixa-conteudo">
+
+      <p class="status-caixa" id="statusCaixaAtual">Verificando caixa...</p>
+
+      <section class="secao">
+        <h2>Abrir caixa</h2>
+
+        <div class="grade grade-2">
+          <input id="valorInicialCaixa" placeholder="Valor inicial">
+          <input id="funcionarioCaixa" placeholder="Funcionário">
+        </div>
+
+        <div class="acoes">
+          <button type="button" class="btn-verde" onclick="abrirCaixa()">
+            🔓 Abrir caixa
+          </button>
+        </div>
+      </section>
+
+      <section class="secao">
+        <h2>Movimentação</h2>
+
+        <div class="grade grade-4">
+          <input id="descricaoMovimento" placeholder="Descrição">
+          <input id="valorMovimento" placeholder="Valor">
+
+          <select id="tipoMovimento">
+            <option value="entrada">Entrada</option>
+            <option value="saida">Saída</option>
+          </select>
+
+          <select id="pagamentoMovimento">
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Pix">Pix</option>
+            <option value="Débito">Débito</option>
+            <option value="Crédito">Crédito</option>
+            <option value="Outros">Outros</option>
+          </select>
+        </div>
+
+        <div class="acoes">
+          <button type="button" onclick="registrarMovimento()">
+            ➕ Registrar movimentação
+          </button>
+        </div>
+      </section>
+
+      <section class="secao">
+        <h2>Fechar caixa</h2>
+
+        <div class="grade grade-2">
+          <input id="valorConferidoCaixa" placeholder="Valor conferido">
+        </div>
+
+        <div class="acoes">
+          <button type="button" class="btn-vermelho" onclick="fecharCaixa()">
+            🔒 Fechar caixa
+          </button>
+
+          <button type="button" class="btn-cinza" onclick="imprimirCaixa()">
+            🖨️ Imprimir relatório
+          </button>
+        </div>
+      </section>
+
+      <section class="secao">
+        <h2>Resumo do caixa</h2>
+
+        <div id="resumoCaixa">
+          <div class="linha-resumo">
+            Valor inicial: R$ <span id="resumoInicial">0</span>
+          </div>
+
+          <div class="linha-resumo">
+            Entradas: R$ <span id="resumoEntradas">0</span>
+          </div>
+
+          <div class="linha-resumo">
+            Saídas: R$ <span id="resumoSaidas">0</span>
+          </div>
+
+          <div class="linha-resumo">
+            Saldo esperado: R$ <span id="resumoSaldo">0</span>
+          </div>
+
+          <div class="linha-resumo">
+            Valor conferido: R$ <span id="resumoConferido">0</span>
+          </div>
+
+          <div class="linha-resumo">
+            Diferença: R$ <span id="resumoDiferenca">0</span>
+          </div>
+        </div>
+
+          <div class="resumo-pagamentos">
+            <div class="pagamento-card"><small>Dinheiro</small><strong>R$ <span id="resumoDinheiro">0,00</span></strong></div>
+            <div class="pagamento-card"><small>Pix</small><strong>R$ <span id="resumoPix">0,00</span></strong></div>
+            <div class="pagamento-card"><small>Débito</small><strong>R$ <span id="resumoDebito">0,00</span></strong></div>
+            <div class="pagamento-card"><small>Crédito</small><strong>R$ <span id="resumoCredito">0,00</span></strong></div>
+            <div class="pagamento-card"><small>Outros</small><strong>R$ <span id="resumoOutros">0,00</span></strong></div>
+          </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="app.js?v=13"></script>
+
+</body>
+</html>
