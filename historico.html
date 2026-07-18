@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Histórico de Caixas - Óticas Ventura</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(52, 151, 235, 0.18), transparent 28%),
+        linear-gradient(135deg, #062449, #0b4c86);
+      color: #17324b;
+    }
+
+    body {
+      padding: 28px;
+    }
+
+    .historico-wrapper {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+    }
+
+    .historico-topo {
+      padding: 26px 30px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #082b54, #0d5d9f);
+    }
+
+    .historico-topo h1 {
+      margin: 0;
+      color: #ffffff;
+      font-size: 34px;
+    }
+
+    .historico-conteudo {
+      padding: 28px 30px 32px;
+      background: #ffffff;
+    }
+
+    .secao {
+      margin-bottom: 24px;
+      padding: 20px;
+      border: 1px solid #d9e5ef;
+      border-radius: 16px;
+      background: #f8fbfe;
+      opacity: 1;
+    }
+
+    .secao h2 {
+      margin: 0 0 16px;
+      color: #0d4d84;
+      font-size: 20px;
+    }
+
+    .filtros-historico {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 240px) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    input,
+    button {
+      font: inherit;
+    }
+
+    input {
+      width: 100%;
+      min-width: 0;
+      padding: 12px 13px;
+      border: 1px solid #cfdce8;
+      border-radius: 10px;
+      background: #ffffff;
+      color: #18334d;
+      opacity: 1;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #6c8194;
+      opacity: 1;
+    }
+
+    input:focus {
+      border-color: #1a84d8;
+      box-shadow: 0 0 0 3px rgba(26, 132, 216, 0.12);
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 18px;
+      color: #ffffff;
+      background: #1687e8;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .tabela-wrapper {
+      overflow-x: auto;
+      border: 1px solid #d9e5ef;
+      border-radius: 12px;
+      background: #ffffff;
+    }
+
+    table {
+      width: 100%;
+      min-width: 980px;
+      border-collapse: collapse;
+      background: #ffffff;
+      color: #17324b;
+      opacity: 1;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #e3ebf2;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      background: #0d5d9f;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+
+    tr:nth-child(even) td {
+      background: #f7fafc;
+    }
+
+    tbody tr:hover td {
+      background: #edf6fd;
+    }
+
+    @media (max-width: 850px) {
+      body {
+        padding: 14px;
+      }
+
+      .historico-topo {
+        padding: 22px 18px;
+      }
+
+      .historico-topo h1 {
+        font-size: 28px;
+      }
+
+      .historico-conteudo {
+        padding: 20px 16px 24px;
+      }
+
+      .filtros-historico {
+        grid-template-columns: 1fr;
+      }
+
+      .filtros-historico button {
+        width: 100%;
+      }
+    }
+  
+    /* Ajuste da tabela e dos botões da coluna Ações */
+    #tabelaHistorico {
+      table-layout: fixed;
+      min-width: 860px;
+    }
+
+    #tabelaHistorico th,
+    #tabelaHistorico td {
+      padding: 10px 9px;
+      font-size: 14px;
+    }
+
+    #tabelaHistorico th:last-child,
+    #tabelaHistorico td:last-child {
+      width: 105px;
+      min-width: 105px;
+      max-width: 105px;
+      text-align: center;
+    }
+
+    #tabelaHistorico td:last-child button {
+      width: auto;
+      min-width: 78px;
+      max-width: 92px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin: 0 auto;
+    }
+
+    #tabelaHistorico th:nth-child(1),
+    #tabelaHistorico td:nth-child(1) {
+      width: 145px;
+    }
+
+    #tabelaHistorico th:nth-child(2),
+    #tabelaHistorico td:nth-child(2),
+    #tabelaHistorico th:nth-child(3),
+    #tabelaHistorico td:nth-child(3),
+    #tabelaHistorico th:nth-child(4),
+    #tabelaHistorico td:nth-child(4),
+    #tabelaHistorico th:nth-child(5),
+    #tabelaHistorico td:nth-child(5),
+    #tabelaHistorico th:nth-child(7),
+    #tabelaHistorico td:nth-child(7) {
+      width: 105px;
+    }
+
+    #tabelaHistorico th:nth-child(6),
+    #tabelaHistorico td:nth-child(6) {
+      width: 115px;
+    }
+
+    @media (max-width: 850px) {
+      #tabelaHistorico {
+        min-width: 820px;
+      }
+
+      #tabelaHistorico th,
+      #tabelaHistorico td {
+        padding: 9px 8px;
+        font-size: 13px;
+      }
+
+      #tabelaHistorico td:last-child button {
+        min-width: 72px;
+        padding: 7px 8px;
+        font-size: 11px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <main class="historico-wrapper">
+
+    <header class="historico-topo">
+      <h1>📊 Histórico de Caixas</h1>
+    </header>
+
+    <div class="historico-conteudo">
+
+      <section class="secao">
+        <h2>Filtros</h2>
+
+        <div class="filtros-historico">
+          <input
+            type="text"
+            id="filtroFuncionario"
+            placeholder="Buscar funcionário"
+          >
+
+          <input
+            type="date"
+            id="filtroData"
+          >
+
+          <button type="button" onclick="carregarHistoricoCaixa()">
+            🔍 Filtrar
+          </button>
+        </div>
+      </section>
+
+      <section class="secao">
+        <h2>Caixas registrados</h2>
+
+        <div class="tabela-wrapper">
+          <table id="tabelaHistorico">
+            <thead>
+              <tr>
+                <th>Funcionário</th>
+                <th>Inicial</th>
+                <th>Entradas</th>
+                <th>Saídas</th>
+                <th>Fechamento</th>
+                <th>Data</th>
+                <th>Diferença</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="app.js?v=12"></script>
+
+  <script>
+    window.addEventListener("load", carregarHistoricoCaixa);
+  </script>
+
+</body>
+</html>
