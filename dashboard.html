@@ -1,0 +1,3149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Painel Ventura</title>
+  <!-- Gráficos antigos removidos -->
+  <!-- Painel executivo inteligente - v1 -->
+  <!-- Resumo diário corrigido - v2 -->
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(52, 151, 235, 0.18), transparent 28%),
+        linear-gradient(135deg, #062449, #0b4c86);
+      color: #17324b;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 220px;
+      padding: 22px 16px;
+      overflow-y: auto;
+      background: linear-gradient(180deg, #082b54, #0b4c86);
+      box-shadow: 8px 0 28px rgba(0, 0, 0, 0.18);
+      z-index: 10;
+    }
+
+    .logo-area {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-area img {
+      width: 86px;
+      height: 86px;
+      object-fit: cover;
+      border: 3px solid rgba(255, 255, 255, 0.35);
+      border-radius: 50%;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+    }
+
+    .menu {
+      display: grid;
+      gap: 9px;
+    }
+
+    .menu button {
+      width: 100%;
+      border: 0;
+      border-radius: 11px;
+      padding: 11px 13px;
+      color: #07345f;
+      background: #55c7df;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: left;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .menu button:hover {
+      filter: brightness(1.08);
+      transform: translateX(3px);
+    }
+
+    .menu .ativo {
+      color: #ffffff;
+      background: #1687e8;
+      box-shadow: 0 7px 16px rgba(0, 0, 0, 0.16);
+    }
+
+    .menu .sair {
+      margin-top: 8px;
+      color: #ffffff;
+      background: #d95368;
+    }
+
+    .painel-conteudo {
+      width: calc(100% - 220px);
+      min-height: 100vh;
+      margin-left: 220px;
+      padding: 28px;
+    }
+
+    .dashboard-home {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .painel-topo {
+      margin-bottom: 24px;
+      padding: 28px 30px;
+      border-radius: 22px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #082b54, #0d5d9f);
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.2);
+    }
+
+    .painel-topo h1 {
+      margin: 0;
+      color: #ffffff;
+      font-size: 38px;
+    }
+
+    .painel-topo p {
+      margin: 8px 0 0;
+      color: #d9ecfb;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+
+    .filtro-mes-dashboard {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      margin: -8px 0 14px;
+      color: #d9ecfb;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .filtro-mes-dashboard button {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 9px;
+      background: rgba(255,255,255,.12);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .filtro-mes-dashboard button:hover {
+      background: rgba(255,255,255,.2);
+    }
+
+    .filtro-mes-dashboard span {
+      min-width: 112px;
+      text-align: center;
+      letter-spacing: .2px;
+    }
+
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      min-height: 150px;
+      padding: 22px;
+      border: 1px solid #d8e4ee;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+      color: #0d4d84;
+      font-size: 20px;
+      font-weight: 700;
+      opacity: 1;
+    }
+
+    .card .rotulo {
+      display: block;
+      margin-bottom: 16px;
+      color: #60788f;
+      font-size: 15px;
+    }
+
+    .card .valor {
+      display: block;
+      color: #0d4d84;
+      font-size: 38px;
+      line-height: 1;
+    }
+
+    #conteudoPrincipal {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 950px) {
+      .sidebar {
+        position: static;
+        width: 100%;
+      }
+
+      body {
+        display: block;
+      }
+
+      .painel-conteudo {
+        width: 100%;
+        margin-left: 0;
+        padding: 16px;
+      }
+
+      .menu {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .dashboard-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .menu {
+        grid-template-columns: 1fr;
+      }
+
+      .painel-topo {
+        padding: 22px 18px;
+      }
+
+      .painel-topo h1 {
+        font-size: 30px;
+      }
+    }
+  
+    .modulo-frame {
+      display: none;
+      width: 100%;
+      height: 900px;
+      min-height: 760px;
+      overflow: hidden;
+      border: 0;
+      border-radius: 22px;
+      background: #ffffff;
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.20);
+    }
+
+    @media (max-width: 950px) {
+      .modulo-frame {
+        height: 900px;
+        min-height: 900px;
+        border-radius: 16px;
+      }
+    }
+
+
+    .barra-superior{position:static;z-index:8;max-width:1180px;margin:0 auto 20px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;border:1px solid rgba(255,255,255,.55);border-radius:16px;background:rgba(255,255,255,.94);box-shadow:0 10px 28px rgba(0,0,0,.14);backdrop-filter:blur(12px)}
+    .marca-topo{display:flex;align-items:center;gap:11px;min-width:0}.marca-topo img{width:42px;height:42px;object-fit:cover;border-radius:50%;border:2px solid #cfe5f7}.marca-topo strong{display:block;color:#0b4679;font-size:16px}.marca-topo small{display:block;margin-top:2px;color:#6c8295;font-size:12px}
+    .usuario-area{position:relative}.usuario-botao{min-width:205px;padding:7px 10px;display:flex;align-items:center;gap:10px;border:1px solid #d7e5f0;border-radius:13px;background:#f7fbff;color:#17324b;cursor:pointer}.usuario-avatar{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#1687e8,#20a7ff);color:#fff;font-size:18px;font-weight:800}.usuario-dados{min-width:0;flex:1;text-align:left}.usuario-dados strong,.usuario-dados small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.usuario-dados strong{max-width:130px;font-size:13px}.usuario-dados small{margin-top:2px;color:#2f8d55;font-size:11px;font-weight:700}.usuario-seta{font-size:11px;color:#668198;transition:.2s}.usuario-area.aberto .usuario-seta{transform:rotate(180deg)}
+    .usuario-menu{position:absolute;top:calc(100% + 9px);right:0;width:270px;display:none;overflow:hidden;border:1px solid #d9e5ef;border-radius:15px;background:#fff;box-shadow:0 18px 42px rgba(0,0,0,.19)}.usuario-area.aberto .usuario-menu{display:block}.usuario-menu-cabecalho{padding:16px;border-bottom:1px solid #e6eef5;background:#f7fbff}.usuario-menu-cabecalho strong,.usuario-menu-cabecalho span{display:block;overflow-wrap:anywhere}.usuario-menu-cabecalho strong{color:#123f66;font-size:14px}.usuario-menu-cabecalho span{margin-top:5px;color:#71879a;font-size:12px}
+    .usuario-menu-opcao{width:100%;padding:13px 16px;display:flex;align-items:center;gap:10px;border:0;border-bottom:1px solid #eef3f7;background:#fff;color:#284b68;font:inherit;font-size:13px;font-weight:700;text-align:left;cursor:pointer}.usuario-menu-opcao:hover{background:#f2f8fd}.usuario-menu-opcao.sair-menu{color:#c53d52;border-bottom:0}
+    .aviso-topo{max-width:1180px;margin:-8px auto 18px;padding:11px 14px;display:none;border-radius:12px;background:#eaf6ff;color:#17527e;font-size:13px;font-weight:700}.aviso-topo.mostrar{display:block}
+    @media(max-width:620px){.barra-superior{padding:10px 11px}.marca-topo small{display:none}.marca-topo strong{font-size:14px}.marca-topo img{width:36px;height:36px}.usuario-botao{min-width:0;padding:6px;border-radius:50%}.usuario-avatar{width:36px;height:36px}.usuario-dados,.usuario-seta{display:none}.usuario-menu{position:fixed;top:68px;right:12px;left:12px;width:auto}}
+
+
+    .modal-perfil-fundo{
+      position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;
+      padding:18px;background:rgba(3,18,37,.72);backdrop-filter:blur(4px)
+    }
+    .modal-perfil-fundo.aberto{display:flex}
+    .modal-perfil{
+      width:100%;max-width:460px;border-radius:20px;overflow:hidden;background:#fff;
+      box-shadow:0 24px 70px rgba(0,0,0,.35)
+    }
+    .modal-perfil-topo{
+      padding:20px 22px;display:flex;align-items:center;justify-content:space-between;
+      color:#fff;background:linear-gradient(135deg,#082b54,#0d5d9f)
+    }
+    .modal-perfil-topo h2{margin:0;font-size:22px}
+    .modal-fechar{
+      width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.14);
+      color:#fff;font-size:22px;cursor:pointer
+    }
+    .modal-perfil-corpo{padding:22px}
+    .perfil-campo{margin-bottom:16px}
+    .perfil-campo label{display:block;margin-bottom:7px;color:#284b68;font-size:13px;font-weight:700}
+    .perfil-campo input{
+      width:100%;height:50px;padding:0 14px;border:1px solid #ccdbe7;border-radius:12px;
+      outline:none;background:#f9fcff;color:#17324b;font-size:15px
+    }
+    .perfil-campo input:focus{border-color:#1687e8;box-shadow:0 0 0 4px rgba(22,135,232,.12)}
+    .perfil-campo input[readonly]{background:#edf3f7;color:#6b7f90}
+    .perfil-ajuda{margin:-6px 0 18px;color:#71879a;font-size:12px;line-height:1.45}
+    .perfil-acoes{display:flex;gap:10px;justify-content:flex-end}
+    .perfil-botao{
+      min-width:120px;height:46px;border:0;border-radius:12px;font:inherit;font-weight:700;cursor:pointer
+    }
+    .perfil-cancelar{background:#edf3f7;color:#38556e}
+    .perfil-salvar{background:linear-gradient(135deg,#1687e8,#20a7ff);color:#fff}
+    .perfil-salvar:disabled{opacity:.65;cursor:wait}
+    @media(max-width:520px){
+      .modal-perfil-fundo{align-items:flex-end;padding:0}
+      .modal-perfil{max-width:none;border-radius:20px 20px 0 0}
+      .perfil-acoes{flex-direction:column-reverse}
+      .perfil-botao{width:100%}
+    }
+
+
+    .busca-global-area {
+      position: relative;
+      flex: 1;
+      max-width: 560px;
+      min-width: 240px;
+    }
+
+    .busca-global-caixa {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      height: 46px;
+      padding: 0 13px;
+      border: 1px solid #d7e5f0;
+      border-radius: 13px;
+      background: #f7fbff;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,.03);
+    }
+
+    .busca-global-icone {
+      flex: 0 0 auto;
+      color: #1687e8;
+      font-size: 18px;
+    }
+
+    .busca-global-caixa input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #17324b;
+      font: inherit;
+      font-size: 14px;
+    }
+
+    .busca-global-caixa input::placeholder {
+      color: #71879a;
+      opacity: 1;
+    }
+
+    .busca-global-caixa:focus-within {
+      border-color: #1687e8;
+      box-shadow: 0 0 0 4px rgba(22,135,232,.12);
+    }
+
+    .busca-global-limpar {
+      display: none;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 auto;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #e4eef6;
+      color: #49677f;
+      font-size: 17px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .busca-global-limpar.mostrar {
+      display: block;
+    }
+
+    .busca-global-resultados {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      left: 0;
+      z-index: 40;
+      display: none;
+      max-height: 410px;
+      overflow-y: auto;
+      border: 1px solid #d9e5ef;
+      border-radius: 15px;
+      background: #ffffff;
+      box-shadow: 0 20px 48px rgba(0,0,0,.22);
+    }
+
+    .busca-global-resultados.mostrar {
+      display: block;
+    }
+
+    .busca-global-aviso {
+      padding: 18px 15px;
+      color: #60788f;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .busca-global-item {
+      width: 100%;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      border: 0;
+      border-bottom: 1px solid #edf2f6;
+      border-radius: 0;
+      background: #ffffff;
+      color: #17324b;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .busca-global-item:last-child {
+      border-bottom: 0;
+    }
+
+    .busca-global-item:hover {
+      filter: none;
+      transform: none;
+      background: #f2f8fd;
+    }
+
+    .busca-global-tipo {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 11px;
+      background: #eaf4fc;
+      color: #0d5d9f;
+      font-size: 18px;
+    }
+
+    .busca-global-texto {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .busca-global-texto strong,
+    .busca-global-texto span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .busca-global-texto strong {
+      color: #123f66;
+      font-size: 14px;
+    }
+
+    .busca-global-texto span {
+      margin-top: 4px;
+      color: #71879a;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .busca-global-seta {
+      flex: 0 0 auto;
+      color: #7b91a3;
+      font-size: 15px;
+    }
+
+    @media (max-width: 900px) {
+      .barra-superior {
+        flex-wrap: wrap;
+      }
+
+      .busca-global-area {
+        order: 3;
+        width: 100%;
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .busca-global-area {
+        min-width: 0;
+      }
+
+      .busca-global-caixa {
+        height: 44px;
+      }
+
+      .busca-global-resultados {
+        position: fixed;
+        top: 124px;
+        right: 12px;
+        left: 12px;
+        max-height: calc(100vh - 142px);
+      }
+    }
+
+
+    .resumo-diario-bloco {
+      margin: 0 0 24px;
+      padding: 20px;
+      border: 1px solid #d8e4ee;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 10px 26px rgba(0,0,0,.12);
+    }
+
+    .resumo-diario-topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 15px;
+    }
+
+    .resumo-diario-topo h2 {
+      margin: 0;
+      color: #0d4d84;
+      font-size: 22px;
+    }
+
+    .resumo-diario-topo p {
+      margin: 5px 0 0;
+      color: #71879a;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .resumo-diario-atualizar {
+      flex: 0 0 auto;
+      padding: 9px 12px;
+      border: 0;
+      border-radius: 10px;
+      color: #ffffff;
+      background: #1687e8;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .resumo-diario-atualizar:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    .resumo-diario-atualizar:disabled {
+      opacity: .6;
+      cursor: wait;
+      transform: none;
+    }
+
+    .resumo-diario-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .resumo-diario-card {
+      min-width: 0;
+      min-height: 118px;
+      padding: 15px;
+      display: block;
+      border: 1px solid #d9e5ef;
+      border-radius: 14px;
+      background: #f8fbfe;
+      color: #17324b;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .resumo-diario-card:hover {
+      border-color: #a8cce8;
+      background: #f1f8fd;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(13,77,132,.10);
+    }
+
+    .resumo-diario-card .icone {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 20px;
+    }
+
+    .resumo-diario-card .rotulo {
+      display: block;
+      min-height: 30px;
+      color: #60788f;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .resumo-diario-card .valor {
+      display: block;
+      margin-top: 5px;
+      color: #0d4d84;
+      font-size: 24px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .resumo-diario-card .detalhe {
+      display: block;
+      margin-top: 5px;
+      color: #71879a;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .resumo-diario-card.caixa-aberto {
+      border-color: #b9e3c9;
+      background: #f0fbf4;
+    }
+
+    .resumo-diario-card.caixa-aberto .valor {
+      color: #21864a;
+    }
+
+    .resumo-diario-card.caixa-fechado {
+      border-color: #f0c7cc;
+      background: #fff6f7;
+    }
+
+    .resumo-diario-card.caixa-fechado .valor {
+      color: #c53d52;
+    }
+
+    .resumo-diario-card.saldo-pendente .valor {
+      color: #a35f00;
+    }
+
+    .resumo-diario-card.prontos .valor {
+      color: #21864a;
+    }
+
+    .ultimas-vendas-resumo {
+      padding-top: 15px;
+      border-top: 1px solid #e5edf4;
+    }
+
+    .ultimas-vendas-cabecalho {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .ultimas-vendas-cabecalho h3 {
+      margin: 0;
+      color: #0d4d84;
+      font-size: 17px;
+    }
+
+    .ultimas-vendas-cabecalho button {
+      padding: 7px 10px;
+      border: 0;
+      border-radius: 9px;
+      color: #0d5d9f;
+      background: #e6f1fa;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .ultimas-vendas-lista {
+      display: grid;
+      gap: 8px;
+    }
+
+    .ultima-venda-item {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto auto;
+      gap: 12px;
+      align-items: center;
+      padding: 11px 12px;
+      border: 1px solid #e0e9f0;
+      border-radius: 11px;
+      background: #ffffff;
+    }
+
+    .ultima-venda-cliente {
+      min-width: 0;
+    }
+
+    .ultima-venda-cliente strong,
+    .ultima-venda-cliente span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ultima-venda-cliente strong {
+      color: #123f66;
+      font-size: 13px;
+    }
+
+    .ultima-venda-cliente span {
+      margin-top: 4px;
+      color: #71879a;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .ultima-venda-valor {
+      color: #0d5d9f;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .ultima-venda-abrir {
+      padding: 7px 9px;
+      border: 0;
+      border-radius: 8px;
+      color: #ffffff;
+      background: #1687e8;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .resumo-diario-vazio {
+      padding: 22px 14px;
+      border: 1px dashed #b9cbd9;
+      border-radius: 11px;
+      background: #f8fbfe;
+      color: #60788f;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .resumo-diario-cards {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .resumo-diario-bloco {
+        padding: 15px;
+      }
+
+      .resumo-diario-topo {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .resumo-diario-atualizar {
+        width: 100%;
+      }
+
+      .resumo-diario-cards {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .resumo-diario-card {
+        min-height: 108px;
+        padding: 12px;
+      }
+
+      .resumo-diario-card .valor {
+        font-size: 20px;
+      }
+
+      .ultima-venda-item {
+        grid-template-columns: minmax(0,1fr) auto;
+      }
+
+      .ultima-venda-abrir {
+        grid-column: 1 / -1;
+        width: 100%;
+      }
+    }
+
+
+    .executivo-bloco {
+      margin: 0 0 24px;
+      padding: 20px;
+      border: 1px solid #d8e4ee;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 10px 26px rgba(0,0,0,.12);
+    }
+
+    .executivo-topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .executivo-topo h2 {
+      margin: 0;
+      color: #0d4d84;
+      font-size: 23px;
+    }
+
+    .executivo-topo p {
+      margin: 5px 0 0;
+      color: #71879a;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .executivo-atualizar {
+      flex: 0 0 auto;
+      padding: 9px 12px;
+      border: 0;
+      border-radius: 10px;
+      color: #ffffff;
+      background: #0d5d9f;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .executivo-atualizar:hover {
+      filter: brightness(1.07);
+      transform: translateY(-1px);
+    }
+
+    .executivo-atualizar:disabled {
+      opacity: .6;
+      cursor: wait;
+      transform: none;
+    }
+
+    .executivo-saude {
+      display: grid;
+      grid-template-columns: auto minmax(0,1fr) auto;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 15px;
+      border: 1px solid #d9e5ef;
+      border-radius: 15px;
+      background: linear-gradient(135deg,#f7fbff,#eef7fd);
+    }
+
+    .executivo-saude-indicador {
+      width: 62px;
+      height: 62px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #ffffff;
+      background: #71879a;
+      font-size: 22px;
+      font-weight: 900;
+      box-shadow: 0 8px 20px rgba(0,0,0,.13);
+    }
+
+    .executivo-saude-indicador.bom { background: #239a55; }
+    .executivo-saude-indicador.atencao { background: #e39b12; }
+    .executivo-saude-indicador.critico { background: #d95368; }
+
+    .executivo-saude-texto strong {
+      display: block;
+      color: #123f66;
+      font-size: 18px;
+    }
+
+    .executivo-saude-texto span {
+      display: block;
+      margin-top: 5px;
+      color: #60788f;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .executivo-saude-status {
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: #31516d;
+      background: #e4edf4;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .executivo-saude-status.bom {
+      color: #176b3a;
+      background: #e4f6eb;
+    }
+
+    .executivo-saude-status.atencao {
+      color: #805800;
+      background: #fff2cc;
+    }
+
+    .executivo-saude-status.critico {
+      color: #a52434;
+      background: #fde7ea;
+    }
+
+    .executivo-cards {
+      display: grid;
+      grid-template-columns: repeat(4,minmax(0,1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .executivo-card {
+      min-width: 0;
+      padding: 15px;
+      border: 1px solid #d9e5ef;
+      border-radius: 14px;
+      background: #f8fbfe;
+      color: #17324b;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .executivo-card:hover {
+      border-color: #a8cce8;
+      background: #f1f8fd;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(13,77,132,.10);
+    }
+
+    .executivo-card .rotulo {
+      display: block;
+      min-height: 30px;
+      color: #60788f;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .executivo-card .valor {
+      display: block;
+      margin-top: 6px;
+      color: #0d4d84;
+      font-size: 23px;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .executivo-card .detalhe {
+      display: block;
+      min-height: 28px;
+      margin-top: 6px;
+      color: #71879a;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .executivo-card .variacao {
+      display: inline-block;
+      margin-top: 7px;
+      padding: 4px 7px;
+      border-radius: 999px;
+      color: #31516d;
+      background: #e4edf4;
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .executivo-card .variacao.positiva {
+      color: #176b3a;
+      background: #e4f6eb;
+    }
+
+    .executivo-card .variacao.negativa {
+      color: #a52434;
+      background: #fde7ea;
+    }
+
+    .executivo-card .variacao.neutra {
+      color: #31516d;
+      background: #e4edf4;
+    }
+
+    .executivo-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1.45fr) minmax(300px,.8fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .executivo-painel {
+      min-width: 0;
+      padding: 15px;
+      border: 1px solid #d9e5ef;
+      border-radius: 15px;
+      background: #ffffff;
+    }
+
+    .executivo-painel h3 {
+      margin: 0 0 12px;
+      color: #0d4d84;
+      font-size: 17px;
+    }
+
+    .executivo-grafico {
+      position: relative;
+      width: 100%;
+      height: 285px;
+    }
+
+    .executivo-grafico canvas {
+      width: 100% !important;
+      max-width: 100%;
+      height: 285px !important;
+    }
+
+    .executivo-alertas {
+      display: grid;
+      gap: 8px;
+    }
+
+    .executivo-alerta {
+      width: 100%;
+      padding: 11px 12px;
+      display: grid;
+      grid-template-columns: auto minmax(0,1fr) auto;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid #e0e9f0;
+      border-radius: 11px;
+      background: #f8fbfe;
+      color: #17324b;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .executivo-alerta:hover {
+      filter: none;
+      transform: translateY(-1px);
+      background: #f0f7fc;
+    }
+
+    .executivo-alerta.critico { border-left: 5px solid #d95368; }
+    .executivo-alerta.atencao { border-left: 5px solid #e39b12; }
+    .executivo-alerta.bom { border-left: 5px solid #239a55; }
+    .executivo-alerta.info { border-left: 5px solid #1687e8; }
+
+    .executivo-alerta-icone {
+      font-size: 18px;
+    }
+
+    .executivo-alerta-texto {
+      min-width: 0;
+    }
+
+    .executivo-alerta-texto strong,
+    .executivo-alerta-texto span {
+      display: block;
+    }
+
+    .executivo-alerta-texto strong {
+      color: #234760;
+      font-size: 12px;
+    }
+
+    .executivo-alerta-texto span {
+      margin-top: 3px;
+      color: #71879a;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .executivo-alerta-seta {
+      color: #7890a3;
+      font-size: 17px;
+    }
+
+    .executivo-rankings {
+      display: grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: 12px;
+    }
+
+    .executivo-ranking-lista {
+      display: grid;
+      gap: 8px;
+    }
+
+    .executivo-ranking-item {
+      padding: 9px 10px;
+      border: 1px solid #e0e9f0;
+      border-radius: 10px;
+      background: #f8fbfe;
+    }
+
+    .executivo-ranking-linha {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .executivo-ranking-linha strong {
+      min-width: 0;
+      overflow: hidden;
+      color: #234760;
+      font-size: 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .executivo-ranking-linha span {
+      flex: 0 0 auto;
+      color: #0d5d9f;
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .executivo-barra {
+      width: 100%;
+      height: 6px;
+      margin-top: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e1ebf2;
+    }
+
+    .executivo-barra span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg,#1687e8,#20a7ff);
+    }
+
+    .executivo-vazio {
+      padding: 18px 12px;
+      border: 1px dashed #b9cbd9;
+      border-radius: 10px;
+      color: #60788f;
+      background: #f8fbfe;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    @media (max-width: 1000px) {
+      .executivo-cards {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+      }
+
+      .executivo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .executivo-rankings {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .executivo-bloco {
+        padding: 15px;
+      }
+
+      .executivo-topo {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .executivo-atualizar {
+        width: 100%;
+      }
+
+      .executivo-saude {
+        grid-template-columns: auto minmax(0,1fr);
+      }
+
+      .executivo-saude-status {
+        grid-column: 1 / -1;
+        width: fit-content;
+      }
+
+      .executivo-cards {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .executivo-card {
+        padding: 12px;
+      }
+
+      .executivo-card .valor {
+        font-size: 19px;
+      }
+
+      .executivo-grafico,
+      .executivo-grafico canvas {
+        height: 245px !important;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+
+    <div class="logo-area">
+      <img src="logo.jpg" alt="Logo Óticas Ventura">
+    </div>
+
+    <div class="menu">
+      <button class="ativo" onclick="window.location.href='dashboard.html'">🏠 Início</button>
+      <button onclick="abrirModulo('clientes.html')">👥 Clientes</button>
+      <button onclick="abrirModulo('pedidos.html')">📦 Pedidos</button>
+      <button onclick="abrirModulo('financeiro.html')">💰 Financeiro</button>
+      <button onclick="abrirModulo('relatorio-vendas.html')">📈 Relatório de Vendas</button>
+      <button onclick="abrirModulo('caixa.html')">💳 Caixa</button>
+      <button onclick="abrirModulo('historico.html')">📊 Histórico</button>
+      <button id="btnPendencias" onclick="abrirModulo('pendencias.html')">🔔 Pendências</button>
+      <button onclick="abrirModulo('os.html')">📋 Ordem de Serviço</button>
+      <button onclick="abrirModulo('receituario.html')">📄 Receituário</button>
+      <button onclick="abrirModulo('pupilometro.html')">👁 Pupilômetro Digital</button>
+      <button onclick="abrirModulo('config.html')">⚙️ Configurações</button>
+      <button id="btnSairTopo" class="sair" onclick="logout()">🚪 Sair</button>
+    </div>
+
+  </aside>
+
+  <main class="painel-conteudo">
+
+    <header class="barra-superior">
+      <div class="marca-topo">
+        <img src="logo.jpg" alt="Logo Óticas Ventura">
+        <div><strong>Ventura System</strong><small>Sistema de Gestão Óticas Ventura</small></div>
+      </div>
+      <div class="busca-global-area" id="buscaGlobalArea">
+        <div class="busca-global-caixa">
+          <span class="busca-global-icone">🔎</span>
+          <input
+            id="buscaGlobal"
+            type="search"
+            autocomplete="off"
+            placeholder="Buscar cliente, telefone, CPF ou número da OS"
+            aria-label="Busca geral do sistema"
+          >
+          <button
+            type="button"
+            class="busca-global-limpar"
+            id="buscaGlobalLimpar"
+            onclick="limparBuscaGlobal()"
+            aria-label="Limpar busca"
+          >×</button>
+        </div>
+
+        <div
+          class="busca-global-resultados"
+          id="buscaGlobalResultados"
+          role="listbox"
+        ></div>
+      </div>
+      <div class="usuario-area" id="usuarioArea">
+        <button type="button" class="usuario-botao" id="usuarioBotao" onclick="alternarMenuUsuario(event)">
+          <span class="usuario-avatar" id="usuarioAvatar">U</span>
+          <span class="usuario-dados"><strong id="usuarioNomeTopo">Carregando...</strong><small>● Administrador</small></span>
+          <span class="usuario-seta">▼</span>
+        </button>
+        <div class="usuario-menu">
+          <div class="usuario-menu-cabecalho"><strong id="usuarioNomeMenu">Usuário</strong><span id="usuarioEmailMenu">Carregando...</span></div>
+          <button type="button" class="usuario-menu-opcao" onclick="mostrarPerfil()">👤 Meu perfil</button>
+          <button type="button" class="usuario-menu-opcao" onclick="alterarSenha()">🔐 Alterar senha</button>
+          <button type="button" class="usuario-menu-opcao" onclick="sobreSistema()">ℹ️ Sobre o Ventura System</button>
+          <button type="button" class="usuario-menu-opcao sair-menu" onclick="logout()">🚪 Sair</button>
+        </div>
+      </div>
+    </header>
+    <div class="aviso-topo" id="avisoTopo"></div>
+
+    <div class="dashboard-home">
+
+      <header class="painel-topo">
+        <h1>Painel Ventura</h1>
+        <p>Bem-vindo ao sistema da Óticas Ventura</p>
+      </header>
+
+      <div class="filtro-mes-dashboard" aria-label="Selecionar mês do painel">
+        <button type="button" onclick="mudarMesDashboard(-1)" aria-label="Mês anterior">‹</button>
+        <span id="mesDashboard">Carregando...</span>
+        <button type="button" onclick="mudarMesDashboard(1)" aria-label="Próximo mês">›</button>
+      </div>
+
+      <section class="dashboard-cards">
+
+        <div class="card">
+          <span class="rotulo">👥 Clientes cadastrados</span>
+          <span class="valor" id="totalClientes">0</span>
+        </div>
+
+        <div class="card">
+          <span class="rotulo">📦 Pedidos do mês</span>
+          <span class="valor" id="totalPedidos">0</span>
+        </div>
+
+        <div class="card">
+          <span class="rotulo">💰 Faturamento do mês</span>
+          <span class="valor">R$ <span id="totalFinanceiro">0</span></span>
+        </div>
+
+      </section>
+
+      <section class="resumo-diario-bloco">
+        <header class="resumo-diario-topo">
+          <div>
+            <h2>☀️ Resumo de hoje</h2>
+            <p id="resumoDiarioAtualizado">Carregando informações do dia...</p>
+          </div>
+
+          <button
+            type="button"
+            class="resumo-diario-atualizar"
+            id="botaoAtualizarResumoDiario"
+            onclick="carregarResumoDiario()"
+          >
+            🔄 Atualizar
+          </button>
+        </header>
+
+        <div class="resumo-diario-cards">
+          <button type="button" class="resumo-diario-card" onclick="abrirModulo('relatorio-vendas.html')">
+            <span class="icone">🧾</span>
+            <span class="rotulo">Vendas realizadas hoje</span>
+            <span class="valor" id="resumoVendasHoje">0</span>
+            <span class="detalhe">Ordens de Serviço de hoje</span>
+          </button>
+
+          <button type="button" class="resumo-diario-card" onclick="abrirModulo('relatorio-vendas.html')">
+            <span class="icone">📈</span>
+            <span class="rotulo">Faturamento de hoje</span>
+            <span class="valor" id="resumoFaturamentoHoje">R$ 0,00</span>
+            <span class="detalhe">Valor total vendido hoje</span>
+          </button>
+
+          <button type="button" class="resumo-diario-card" onclick="abrirModulo('caixa.html')">
+            <span class="icone">💵</span>
+            <span class="rotulo">Valor recebido hoje</span>
+            <span class="valor" id="resumoRecebidoHoje">R$ 0,00</span>
+            <span class="detalhe">Entradas registradas nas OS</span>
+          </button>
+
+          <button type="button" class="resumo-diario-card saldo-pendente" onclick="abrirModulo('pendencias.html')">
+            <span class="icone">💰</span>
+            <span class="rotulo">Saldo total pendente</span>
+            <span class="valor" id="resumoSaldoPendente">R$ 0,00</span>
+            <span class="detalhe">Valores ainda a receber</span>
+          </button>
+
+          <button type="button" class="resumo-diario-card" id="cardStatusCaixaResumo" onclick="abrirModulo('caixa.html')">
+            <span class="icone">🏦</span>
+            <span class="rotulo">Situação do caixa</span>
+            <span class="valor" id="resumoStatusCaixa">Verificando...</span>
+            <span class="detalhe" id="resumoDetalheCaixa">Consultando o sistema</span>
+          </button>
+
+          <button type="button" class="resumo-diario-card prontos" onclick="abrirModulo('pendencias.html')">
+            <span class="icone">👓</span>
+            <span class="rotulo">Prontos para retirada</span>
+            <span class="valor" id="resumoProntosRetirada">0</span>
+            <span class="detalhe">Pedidos aguardando o cliente</span>
+          </button>
+        </div>
+
+        <div class="ultimas-vendas-resumo">
+          <div class="ultimas-vendas-cabecalho">
+            <h3>🕘 Últimas vendas realizadas</h3>
+            <button type="button" onclick="abrirModulo('relatorio-vendas.html')">Ver relatório completo</button>
+          </div>
+
+          <div class="ultimas-vendas-lista" id="listaUltimasVendasResumo">
+            <div class="resumo-diario-vazio">Carregando as últimas vendas...</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="executivo-bloco">
+        <header class="executivo-topo">
+          <div>
+            <h2>🧠 Painel Executivo Inteligente</h2>
+            <p id="executivoAtualizado">Analisando o desempenho da loja...</p>
+          </div>
+
+          <button
+            type="button"
+            class="executivo-atualizar"
+            id="botaoAtualizarExecutivo"
+            onclick="carregarPainelExecutivo()"
+          >
+            🔄 Atualizar análise
+          </button>
+        </header>
+
+        <div class="executivo-saude">
+          <div class="executivo-saude-indicador" id="executivoSaudePontuacao">--</div>
+
+          <div class="executivo-saude-texto">
+            <strong id="executivoSaudeTitulo">Calculando saúde da loja...</strong>
+            <span id="executivoSaudeDetalhe">O sistema está comparando vendas, saldos e pendências.</span>
+          </div>
+
+          <span class="executivo-saude-status" id="executivoSaudeStatus">Analisando</span>
+        </div>
+
+        <div class="executivo-cards">
+          <button type="button" class="executivo-card" onclick="abrirModulo('relatorio-vendas.html')">
+            <span class="rotulo">📊 Comparação com o mês anterior</span>
+            <span class="valor" id="executivoFaturamentoAtual">R$ 0,00</span>
+            <span class="detalhe" id="executivoFaturamentoAnterior">Mês anterior: R$ 0,00</span>
+            <span class="variacao neutra" id="executivoVariacao">0%</span>
+          </button>
+
+          <button type="button" class="executivo-card" onclick="abrirModulo('relatorio-vendas.html')">
+            <span class="rotulo">🔮 Previsão de fechamento do mês</span>
+            <span class="valor" id="executivoProjecao">R$ 0,00</span>
+            <span class="detalhe" id="executivoProjecaoDetalhe">Estimativa baseada no ritmo atual</span>
+          </button>
+
+          <button type="button" class="executivo-card" onclick="abrirModulo('relatorio-vendas.html')">
+            <span class="rotulo">🎯 Ticket médio do mês</span>
+            <span class="valor" id="executivoTicket">R$ 0,00</span>
+            <span class="detalhe" id="executivoTicketDetalhe">0 vendas neste mês</span>
+          </button>
+
+          <button type="button" class="executivo-card" onclick="abrirModulo('pendencias.html')">
+            <span class="rotulo">⚠️ Valores pendentes</span>
+            <span class="valor" id="executivoSaldoPendente">R$ 0,00</span>
+            <span class="detalhe" id="executivoSaldoDetalhe">0 clientes com saldo</span>
+          </button>
+        </div>
+
+        <div class="executivo-grid">
+          <article class="executivo-painel">
+            <h3>📈 Faturamento dos últimos 30 dias</h3>
+            <div class="executivo-grafico">
+              <canvas id="graficoExecutivo30Dias"></canvas>
+            </div>
+          </article>
+
+          <article class="executivo-painel">
+            <h3>🚨 Alertas prioritários</h3>
+            <div class="executivo-alertas" id="listaAlertasExecutivo">
+              <div class="executivo-vazio">Carregando alertas...</div>
+            </div>
+          </article>
+        </div>
+
+        <div class="executivo-rankings">
+          <article class="executivo-painel">
+            <h3>🏆 Vendedores do mês</h3>
+            <div class="executivo-ranking-lista" id="rankingVendedoresExecutivo">
+              <div class="executivo-vazio">Carregando...</div>
+            </div>
+          </article>
+
+          <article class="executivo-painel">
+            <h3>👓 Lentes mais vendidas</h3>
+            <div class="executivo-ranking-lista" id="rankingLentesExecutivo">
+              <div class="executivo-vazio">Carregando...</div>
+            </div>
+          </article>
+
+          <article class="executivo-painel">
+            <h3>💳 Formas de pagamento</h3>
+            <div class="executivo-ranking-lista" id="rankingPagamentosExecutivo">
+              <div class="executivo-vazio">Carregando...</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+    </div>
+
+    <iframe id="moduloFrame" class="modulo-frame" title="Módulo do sistema"></iframe>
+
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="app.js?v=19"></script>
+  <script src="dashboard-mes.js?v=1"></script>
+
+  <script>
+    function ajustarAlturaFrame() {
+      const frame = document.getElementById("moduloFrame");
+
+      try {
+        const documento = frame.contentDocument || frame.contentWindow.document;
+
+        if (!documento) return;
+
+        const altura = Math.max(
+          documento.body ? documento.body.scrollHeight : 0,
+          documento.documentElement ? documento.documentElement.scrollHeight : 0,
+          760
+        );
+
+        frame.style.height = (altura + 30) + "px";
+      } catch (erro) {
+        frame.style.height = "900px";
+      }
+    }
+
+    function abrirModulo(pagina, aoCarregar) {
+      const home = document.querySelector(".dashboard-home");
+      const frame = document.getElementById("moduloFrame");
+
+      if (home) {
+        home.style.display = "none";
+      }
+
+      frame.style.display = "block";
+      frame.style.height = "900px";
+
+      frame.onload = function () {
+        ajustarAlturaFrame();
+
+        setTimeout(ajustarAlturaFrame, 300);
+        setTimeout(ajustarAlturaFrame, 1000);
+
+        if (typeof aoCarregar === "function") {
+          setTimeout(function () {
+            try {
+              aoCarregar(frame);
+            } catch (erro) {
+              console.error("Erro ao abrir resultado da busca:", erro);
+            }
+          }, 350);
+        }
+      };
+
+      frame.src = pagina;
+
+      document.querySelectorAll(".menu button").forEach(function(botao) {
+        botao.classList.remove("ativo");
+      });
+
+      document.querySelectorAll(".menu button").forEach(function(botao) {
+        const acao = botao.getAttribute("onclick") || "";
+
+        const paginaBase = String(pagina || "").split("?")[0];
+
+        if (acao.indexOf("'" + paginaBase + "'") !== -1) {
+          botao.classList.add("ativo");
+        }
+      });
+
+      window.scrollTo(0, 0);
+    }
+
+    window.addEventListener("resize", ajustarAlturaFrame);
+  </script>
+
+  <script>
+    function nomeAmigavelUsuario(usuario){
+      if(usuario&&usuario.displayName&&usuario.displayName.trim()) return usuario.displayName.trim();
+      const email=usuario&&usuario.email?usuario.email:"Usuário";
+      return email.split("@")[0].replace(/[._-]+/g," ").replace(/\b\w/g,function(l){return l.toUpperCase();})||"Usuário";
+    }
+    function alternarMenuUsuario(e){if(e)e.stopPropagation();document.getElementById("usuarioArea").classList.toggle("aberto");}
+    function fecharMenuUsuario(){document.getElementById("usuarioArea").classList.remove("aberto");}
+    function mostrarAvisoTopo(msg){const a=document.getElementById("avisoTopo");a.textContent=msg;a.classList.add("mostrar");setTimeout(function(){a.classList.remove("mostrar");},5000);}
+    function mostrarPerfil(){
+      fecharMenuUsuario();
+      const u=firebase.auth().currentUser;
+      if(!u){mostrarAvisoTopo("Não foi possível carregar o usuário.");return;}
+      document.getElementById("perfilNome").value=u.displayName||nomeAmigavelUsuario(u);
+      document.getElementById("perfilEmail").value=u.email||"";
+      document.getElementById("modalPerfil").classList.add("aberto");
+      setTimeout(function(){document.getElementById("perfilNome").focus();},100);
+    }
+
+    function fecharPerfil(){
+      document.getElementById("modalPerfil").classList.remove("aberto");
+    }
+
+    function atualizarNomeNoTopo(usuario){
+      const nome=nomeAmigavelUsuario(usuario);
+      document.getElementById("usuarioNomeTopo").textContent=nome;
+      document.getElementById("usuarioNomeMenu").textContent=nome;
+      document.getElementById("usuarioEmailMenu").textContent=usuario.email||"";
+      document.getElementById("usuarioAvatar").textContent=nome.charAt(0).toUpperCase();
+    }
+
+    function salvarPerfil(){
+      const u=firebase.auth().currentUser;
+      const nome=document.getElementById("perfilNome").value.trim();
+      const botao=document.getElementById("botaoSalvarPerfil");
+
+      if(!u){mostrarAvisoTopo("Usuário não encontrado.");return;}
+      if(nome.length<3){alert("Digite um nome com pelo menos 3 letras.");return;}
+
+      botao.disabled=true;
+      botao.textContent="Salvando...";
+
+      u.updateProfile({displayName:nome})
+        .then(function(){
+          return u.reload();
+        })
+        .then(function(){
+          const usuarioAtual=firebase.auth().currentUser;
+          atualizarNomeNoTopo(usuarioAtual);
+          fecharPerfil();
+          mostrarAvisoTopo("Nome atualizado com sucesso.");
+        })
+        .catch(function(erro){
+          console.error("Erro ao atualizar perfil:",erro);
+          alert("Não foi possível salvar o nome agora.");
+        })
+        .finally(function(){
+          botao.disabled=false;
+          botao.textContent="Salvar alterações";
+        });
+    }
+    function alterarSenha(){fecharMenuUsuario();const u=firebase.auth().currentUser;if(!u||!u.email)return;if(!confirm("Enviar um e-mail para redefinir a senha de "+u.email+"?"))return;firebase.auth().sendPasswordResetEmail(u.email).then(function(){mostrarAvisoTopo("E-mail de alteração de senha enviado com sucesso.");}).catch(function(){mostrarAvisoTopo("Não foi possível enviar o e-mail agora.");});}
+    function sobreSistema(){fecharMenuUsuario();alert("Ventura System\n\nSistema de gestão da Óticas Ventura.\nVersão 1.0");}
+    document.addEventListener("click",function(e){
+      const a=document.getElementById("usuarioArea");
+      if(a&&!a.contains(e.target))fecharMenuUsuario();
+
+      const modal=document.getElementById("modalPerfil");
+      if(modal&&e.target===modal)fecharPerfil();
+    });
+
+    document.addEventListener("keydown",function(e){
+      if(e.key==="Escape"){fecharMenuUsuario();fecharPerfil();}
+    });
+    firebase.auth().onAuthStateChanged(function(u){if(!u)return;atualizarNomeNoTopo(u);});
+  </script>
+
+
+  <script>
+    let indiceBuscaGlobal = null;
+    let indiceBuscaGlobalCarregadoEm = 0;
+    let resultadosBuscaGlobalAtuais = [];
+    let temporizadorBuscaGlobal = null;
+
+    function escaparBuscaGlobal(valor) {
+      return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function normalizarBuscaGlobal(valor) {
+      return String(valor || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+    }
+
+    function numerosBuscaGlobal(valor) {
+      return String(valor || "").replace(/\D/g, "");
+    }
+
+    function fecharBuscaGlobal() {
+      const resultados = document.getElementById("buscaGlobalResultados");
+      if (resultados) resultados.classList.remove("mostrar");
+    }
+
+    function mostrarAvisoBuscaGlobal(mensagem) {
+      const resultados = document.getElementById("buscaGlobalResultados");
+      if (!resultados) return;
+
+      resultados.innerHTML =
+        '<div class="busca-global-aviso">' +
+        escaparBuscaGlobal(mensagem) +
+        "</div>";
+
+      resultados.classList.add("mostrar");
+    }
+
+    function limparBuscaGlobal() {
+      const campo = document.getElementById("buscaGlobal");
+      const limpar = document.getElementById("buscaGlobalLimpar");
+
+      if (campo) {
+        campo.value = "";
+        campo.focus();
+      }
+
+      if (limpar) limpar.classList.remove("mostrar");
+
+      resultadosBuscaGlobalAtuais = [];
+      fecharBuscaGlobal();
+    }
+
+    async function carregarIndiceBuscaGlobal(forcarAtualizacao) {
+      const agora = Date.now();
+
+      if (
+        !forcarAtualizacao &&
+        indiceBuscaGlobal &&
+        agora - indiceBuscaGlobalCarregadoEm < 60000
+      ) {
+        return indiceBuscaGlobal;
+      }
+
+      const [clientesSnapshot, ordensSnapshot] = await Promise.all([
+        db.collection("clientes").get(),
+        db.collection("ordens").get()
+      ]);
+
+      const itens = [];
+
+      clientesSnapshot.forEach(function (doc) {
+        const cliente = doc.data() || {};
+
+        itens.push({
+          tipo: "cliente",
+          id: doc.id,
+          titulo: cliente.nome || "Cliente sem nome",
+          telefone: cliente.telefone || "",
+          cpf: cliente.cpf || "",
+          subtitulo: [
+            cliente.telefone || "",
+            cliente.cpf ? "CPF " + cliente.cpf : ""
+          ].filter(Boolean).join(" • "),
+          texto: [
+            cliente.nome,
+            cliente.telefone,
+            cliente.cpf
+          ].join(" ")
+        });
+      });
+
+      ordensSnapshot.forEach(function (doc) {
+        const os = doc.data() || {};
+        const numero = os.numero || os.os || os.OS || os.numeroOS || os.ordem || "";
+
+        itens.push({
+          tipo: "os",
+          id: doc.id,
+          numero: numero,
+          titulo: "OS " + (numero || "sem número"),
+          cliente: os.cliente || "",
+          telefone: os.telefone || "",
+          cpf: os.cpf || "",
+          status: os.status || "Recebido",
+          subtitulo: [
+            os.cliente || "",
+            os.telefone || "",
+            os.status || ""
+          ].filter(Boolean).join(" • "),
+          texto: [
+            numero,
+            os.cliente,
+            os.telefone,
+            os.cpf,
+            os.status
+          ].join(" ")
+        });
+      });
+
+      indiceBuscaGlobal = itens;
+      indiceBuscaGlobalCarregadoEm = agora;
+
+      return itens;
+    }
+
+    function pontuarResultadoBuscaGlobal(item, termo, digitos) {
+      const titulo = normalizarBuscaGlobal(item.titulo);
+      const texto = normalizarBuscaGlobal(item.texto);
+      const numeros = numerosBuscaGlobal(item.texto);
+
+      let pontos = 0;
+
+      if (titulo === termo) pontos += 100;
+      else if (titulo.startsWith(termo)) pontos += 70;
+      else if (titulo.includes(termo)) pontos += 50;
+
+      if (texto.includes(termo)) pontos += 20;
+
+      if (digitos) {
+        if (numeros === digitos) pontos += 90;
+        else if (numeros.includes(digitos)) pontos += 35;
+      }
+
+      if (item.tipo === "cliente") pontos += 2;
+
+      return pontos;
+    }
+
+    function renderizarResultadosBuscaGlobal(itens) {
+      const resultados = document.getElementById("buscaGlobalResultados");
+      if (!resultados) return;
+
+      resultadosBuscaGlobalAtuais = itens;
+
+      if (!itens.length) {
+        mostrarAvisoBuscaGlobal("Nenhum cliente ou OS encontrado.");
+        return;
+      }
+
+      resultados.innerHTML = itens.map(function (item, indice) {
+        const icone = item.tipo === "cliente" ? "👤" : "📋";
+        const tipo = item.tipo === "cliente" ? "Cliente" : "Ordem de Serviço";
+
+        return `
+          <button
+            type="button"
+            class="busca-global-item"
+            onclick="abrirResultadoBuscaGlobal(${indice})"
+            role="option"
+          >
+            <span class="busca-global-tipo">${icone}</span>
+
+            <span class="busca-global-texto">
+              <strong>${escaparBuscaGlobal(item.titulo)}</strong>
+              <span>${escaparBuscaGlobal(tipo + (item.subtitulo ? " • " + item.subtitulo : ""))}</span>
+            </span>
+
+            <span class="busca-global-seta">›</span>
+          </button>
+        `;
+      }).join("");
+
+      resultados.classList.add("mostrar");
+    }
+
+    async function executarBuscaGlobal() {
+      const campo = document.getElementById("buscaGlobal");
+      const limpar = document.getElementById("buscaGlobalLimpar");
+
+      if (!campo) return;
+
+      const valor = campo.value.trim();
+      const termo = normalizarBuscaGlobal(valor);
+      const digitos = numerosBuscaGlobal(valor);
+
+      if (limpar) {
+        limpar.classList.toggle("mostrar", Boolean(valor));
+      }
+
+      if (termo.length < 2 && digitos.length < 2) {
+        resultadosBuscaGlobalAtuais = [];
+        fecharBuscaGlobal();
+        return;
+      }
+
+      mostrarAvisoBuscaGlobal("Buscando no sistema...");
+
+      try {
+        const indice = await carregarIndiceBuscaGlobal(false);
+
+        const encontrados = indice
+          .map(function (item) {
+            return {
+              item: item,
+              pontos: pontuarResultadoBuscaGlobal(item, termo, digitos)
+            };
+          })
+          .filter(function (resultado) {
+            const texto = normalizarBuscaGlobal(resultado.item.texto);
+            const numeros = numerosBuscaGlobal(resultado.item.texto);
+
+            return (
+              texto.includes(termo) ||
+              (digitos && numeros.includes(digitos))
+            );
+          })
+          .sort(function (a, b) {
+            return b.pontos - a.pontos;
+          })
+          .slice(0, 10)
+          .map(function (resultado) {
+            return resultado.item;
+          });
+
+        renderizarResultadosBuscaGlobal(encontrados);
+      } catch (erro) {
+        console.error("Erro na busca geral:", erro);
+        mostrarAvisoBuscaGlobal("Não foi possível buscar agora. Tente novamente.");
+      }
+    }
+
+    function abrirResultadoBuscaGlobal(indice) {
+      const item = resultadosBuscaGlobalAtuais[indice];
+      if (!item) return;
+
+      fecharBuscaGlobal();
+
+      if (item.tipo === "cliente") {
+        abrirModulo(
+          "ficha-cliente.html?id=" + encodeURIComponent(item.id)
+        );
+        return;
+      }
+
+      const chave =
+        item.numero ||
+        item.telefone ||
+        item.cpf ||
+        item.cliente ||
+        "";
+
+      abrirModulo("os.html", function (frame) {
+        const documento = frame.contentDocument || frame.contentWindow.document;
+        const campoBusca = documento.getElementById("buscaOS");
+
+        if (campoBusca) campoBusca.value = chave;
+
+        if (typeof frame.contentWindow.buscarOS === "function") {
+          frame.contentWindow.buscarOS();
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const campo = document.getElementById("buscaGlobal");
+
+      if (campo) {
+        campo.addEventListener("input", function () {
+          clearTimeout(temporizadorBuscaGlobal);
+          temporizadorBuscaGlobal = setTimeout(executarBuscaGlobal, 250);
+        });
+
+        campo.addEventListener("focus", function () {
+          if (campo.value.trim().length >= 2) executarBuscaGlobal();
+        });
+      }
+    });
+
+    document.addEventListener("click", function (evento) {
+      const area = document.getElementById("buscaGlobalArea");
+
+      if (area && !area.contains(evento.target)) {
+        fecharBuscaGlobal();
+      }
+    });
+
+    document.addEventListener("keydown", function (evento) {
+      if (evento.key === "Escape") {
+        fecharBuscaGlobal();
+      }
+
+      if (
+        (evento.ctrlKey || evento.metaKey) &&
+        evento.key.toLowerCase() === "k"
+      ) {
+        evento.preventDefault();
+
+        const campo = document.getElementById("buscaGlobal");
+        if (campo) campo.focus();
+      }
+    });
+  </script>
+
+
+
+  <script>
+    let resumoDiarioCarregando = false;
+    let ultimasVendasResumoDiario = [];
+
+    function escaparResumoDiario(valor) {
+      return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function normalizarResumoDiario(valor) {
+      return String(valor || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+    }
+
+    function numeroResumoDiario(valor) {
+      if (typeof valor === "number") {
+        return Number.isFinite(valor) ? valor : 0;
+      }
+
+      let texto = String(valor ?? "")
+        .replace(/R\$/gi, "")
+        .replace(/\s/g, "")
+        .trim();
+
+      if (!texto) return 0;
+
+      if (texto.includes(",") && texto.includes(".")) {
+        if (texto.lastIndexOf(",") > texto.lastIndexOf(".")) {
+          texto = texto.replace(/\./g, "").replace(",", ".");
+        } else {
+          texto = texto.replace(/,/g, "");
+        }
+      } else {
+        texto = texto.replace(",", ".");
+      }
+
+      const numero = Number(texto);
+      return Number.isFinite(numero) ? numero : 0;
+    }
+
+    function dinheiroResumoDiario(valor) {
+      return numeroResumoDiario(valor).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
+    }
+
+    function hojeResumoDiario() {
+      const agora = new Date();
+
+      return [
+        agora.getFullYear(),
+        String(agora.getMonth() + 1).padStart(2, "0"),
+        String(agora.getDate()).padStart(2, "0")
+      ].join("-");
+    }
+
+    function dataISOResumoDiario(valor) {
+      if (!valor) return "";
+
+      if (valor.toDate && typeof valor.toDate === "function") {
+        const data = valor.toDate();
+
+        return [
+          data.getFullYear(),
+          String(data.getMonth() + 1).padStart(2, "0"),
+          String(data.getDate()).padStart(2, "0")
+        ].join("-");
+      }
+
+      if (valor instanceof Date) {
+        return [
+          valor.getFullYear(),
+          String(valor.getMonth() + 1).padStart(2, "0"),
+          String(valor.getDate()).padStart(2, "0")
+        ].join("-");
+      }
+
+      const texto = String(valor).trim();
+
+      const iso = texto.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (iso) return iso[1] + "-" + iso[2] + "-" + iso[3];
+
+      const br = texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      if (br) return br[3] + "-" + br[2] + "-" + br[1];
+
+      return "";
+    }
+
+    function dataBRResumoDiario(valor) {
+      const iso = dataISOResumoDiario(valor);
+      if (!iso) return "-";
+
+      const partes = iso.split("-");
+      return partes[2] + "/" + partes[1] + "/" + partes[0];
+    }
+
+    function momentoResumoDiario(registro) {
+      const criadoEm = registro.criadoEm;
+
+      if (criadoEm && criadoEm.toMillis) {
+        return criadoEm.toMillis();
+      }
+
+      const iso = dataISOResumoDiario(
+        registro.dataCompra || registro.data || criadoEm
+      );
+
+      if (!iso) return 0;
+
+      const partes = iso.split("-");
+      return new Date(
+        Number(partes[0]),
+        Number(partes[1]) - 1,
+        Number(partes[2]),
+        12
+      ).getTime();
+    }
+
+    function definirResumoDiario(id, valor) {
+      const elemento = document.getElementById(id);
+      if (elemento) elemento.textContent = valor;
+    }
+
+    function renderizarUltimasVendasResumoDiario(ordens) {
+      const lista = document.getElementById("listaUltimasVendasResumo");
+      if (!lista) return;
+
+      ultimasVendasResumoDiario = ordens;
+
+      if (!ordens.length) {
+        lista.innerHTML =
+          '<div class="resumo-diario-vazio">Nenhuma venda cadastrada ainda.</div>';
+        return;
+      }
+
+      lista.innerHTML = ordens.map(function (os, indice) {
+        const numero =
+          os.numero || os.os || os.OS || os.numeroOS || os.ordem || "-";
+
+        return `
+          <article class="ultima-venda-item">
+            <div class="ultima-venda-cliente">
+              <strong>OS ${escaparResumoDiario(numero)} • ${escaparResumoDiario(os.cliente || "Cliente sem nome")}</strong>
+              <span>${escaparResumoDiario(dataBRResumoDiario(os.dataCompra || os.criadoEm))} • ${escaparResumoDiario(os.vendedor || "Vendedor não informado")} • ${escaparResumoDiario(os.status || "Recebido")}</span>
+            </div>
+
+            <span class="ultima-venda-valor">${dinheiroResumoDiario(os.valor)}</span>
+
+            <button
+              type="button"
+              class="ultima-venda-abrir"
+              onclick="abrirUltimaVendaResumoDiario(${indice})"
+            >
+              Abrir OS
+            </button>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function abrirUltimaVendaResumoDiario(indice) {
+      const os = ultimasVendasResumoDiario[indice];
+      if (!os) return;
+
+      const chave =
+        os.numero ||
+        os.os ||
+        os.OS ||
+        os.numeroOS ||
+        os.ordem ||
+        os.telefone ||
+        os.cpf ||
+        os.cliente ||
+        "";
+
+      abrirModulo("os.html", function (frame) {
+        const documento =
+          frame.contentDocument || frame.contentWindow.document;
+
+        const campoBusca = documento.getElementById("buscaOS");
+
+        if (campoBusca) campoBusca.value = chave;
+
+        if (typeof frame.contentWindow.buscarOS === "function") {
+          frame.contentWindow.buscarOS();
+        }
+      });
+    }
+
+    async function carregarResumoDiario() {
+      if (resumoDiarioCarregando) return;
+
+      const botao = document.getElementById("botaoAtualizarResumoDiario");
+      resumoDiarioCarregando = true;
+
+      if (botao) {
+        botao.disabled = true;
+        botao.textContent = "⏳ Atualizando...";
+      }
+
+      definirResumoDiario(
+        "resumoDiarioAtualizado",
+        "Atualizando informações do dia..."
+      );
+
+      try {
+        const usuario = firebase.auth().currentUser;
+
+        if (!usuario) {
+          throw new Error("Usuário ainda não autenticado.");
+        }
+
+        const [ordensSnapshot, caixasSnapshot] = await Promise.all([
+          db.collection("ordens").get(),
+          db.collection("caixas").get()
+        ]);
+
+        const hoje = hojeResumoDiario();
+
+        const ordens = ordensSnapshot.docs.map(function (doc) {
+          return { id: doc.id, ...doc.data() };
+        });
+
+        const caixas = caixasSnapshot.docs.map(function (doc) {
+          return { id: doc.id, ...doc.data() };
+        });
+
+        const vendasHoje = ordens.filter(function (os) {
+          return dataISOResumoDiario(os.dataCompra || os.criadoEm) === hoje;
+        });
+
+        const faturamentoHoje = vendasHoje.reduce(function (total, os) {
+          return total + Math.max(numeroResumoDiario(os.valor), 0);
+        }, 0);
+
+        const recebidoHoje = caixas.reduce(function (total, movimento) {
+          const dataMovimento = dataISOResumoDiario(
+            movimento.criadoEm || movimento.data
+          );
+
+          if (
+            normalizarResumoDiario(movimento.tipo) === "entrada" &&
+            dataMovimento === hoje
+          ) {
+            return total + Math.max(numeroResumoDiario(movimento.valor), 0);
+          }
+
+          return total;
+        }, 0);
+
+        const saldoPendente = ordens.reduce(function (total, os) {
+          return total + Math.max(numeroResumoDiario(os.restante), 0);
+        }, 0);
+
+        const prontos = ordens.filter(function (os) {
+          return normalizarResumoDiario(os.status) === "pronto para retirada";
+        });
+
+        const caixaAberto = caixas.find(function (caixa) {
+          return normalizarResumoDiario(caixa.status) === "aberto";
+        });
+
+        definirResumoDiario("resumoVendasHoje", vendasHoje.length);
+        definirResumoDiario(
+          "resumoFaturamentoHoje",
+          dinheiroResumoDiario(faturamentoHoje)
+        );
+        definirResumoDiario(
+          "resumoRecebidoHoje",
+          dinheiroResumoDiario(recebidoHoje)
+        );
+        definirResumoDiario(
+          "resumoSaldoPendente",
+          dinheiroResumoDiario(saldoPendente)
+        );
+        definirResumoDiario("resumoProntosRetirada", prontos.length);
+
+        const cardCaixa = document.getElementById("cardStatusCaixaResumo");
+
+        if (cardCaixa) {
+          cardCaixa.classList.remove("caixa-aberto", "caixa-fechado");
+          cardCaixa.classList.add(
+            caixaAberto ? "caixa-aberto" : "caixa-fechado"
+          );
+        }
+
+        definirResumoDiario(
+          "resumoStatusCaixa",
+          caixaAberto ? "🟢 Aberto" : "🔴 Fechado"
+        );
+
+        definirResumoDiario(
+          "resumoDetalheCaixa",
+          caixaAberto
+            ? "Responsável: " +
+              (caixaAberto.funcionario || "não informado")
+            : "Nenhum caixa aberto"
+        );
+
+        const ultimas = [...ordens]
+          .sort(function (a, b) {
+            const diferenca =
+              momentoResumoDiario(b) - momentoResumoDiario(a);
+
+            if (diferenca !== 0) return diferenca;
+
+            const numeroA =
+              Number(String(a.numero || "").replace(/\D/g, "")) || 0;
+            const numeroB =
+              Number(String(b.numero || "").replace(/\D/g, "")) || 0;
+
+            return numeroB - numeroA;
+          })
+          .slice(0, 5);
+
+        renderizarUltimasVendasResumoDiario(ultimas);
+
+        const agora = new Date();
+
+        definirResumoDiario(
+          "resumoDiarioAtualizado",
+          "Atualizado hoje às " +
+          String(agora.getHours()).padStart(2, "0") +
+          ":" +
+          String(agora.getMinutes()).padStart(2, "0")
+        );
+      } catch (erro) {
+        console.error("Erro ao carregar o resumo diário:", erro);
+
+        definirResumoDiario(
+          "resumoDiarioAtualizado",
+          "Não foi possível carregar o resumo. Clique em Atualizar."
+        );
+
+        const lista = document.getElementById("listaUltimasVendasResumo");
+
+        if (lista) {
+          lista.innerHTML =
+            '<div class="resumo-diario-vazio">❌ Não foi possível consultar os dados agora.</div>';
+        }
+      } finally {
+        resumoDiarioCarregando = false;
+
+        if (botao) {
+          botao.disabled = false;
+          botao.textContent = "🔄 Atualizar";
+        }
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      if (!document.getElementById("resumoVendasHoje")) return;
+
+      firebase.auth().onAuthStateChanged(function (usuario) {
+        if (usuario) carregarResumoDiario();
+      });
+    });
+  </script>
+
+
+
+  <script>
+    let painelExecutivoCarregando = false;
+    let graficoExecutivo30DiasAtual = null;
+
+    function escaparExecutivo(valor) {
+      return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function normalizarExecutivo(valor) {
+      return String(valor || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+    }
+
+    function numeroExecutivo(valor) {
+      if (typeof valor === "number") {
+        return Number.isFinite(valor) ? valor : 0;
+      }
+
+      let texto = String(valor ?? "")
+        .replace(/R\$/gi, "")
+        .replace(/\s/g, "")
+        .trim();
+
+      if (!texto) return 0;
+
+      if (texto.includes(",") && texto.includes(".")) {
+        if (texto.lastIndexOf(",") > texto.lastIndexOf(".")) {
+          texto = texto.replace(/\./g, "").replace(",", ".");
+        } else {
+          texto = texto.replace(/,/g, "");
+        }
+      } else {
+        texto = texto.replace(",", ".");
+      }
+
+      const numero = Number(texto);
+      return Number.isFinite(numero) ? numero : 0;
+    }
+
+    function dinheiroExecutivo(valor) {
+      return numeroExecutivo(valor).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
+    }
+
+    function dataLocalExecutivo(data) {
+      return [
+        data.getFullYear(),
+        String(data.getMonth() + 1).padStart(2, "0"),
+        String(data.getDate()).padStart(2, "0")
+      ].join("-");
+    }
+
+    function dataISOExecutivo(valor) {
+      if (!valor) return "";
+
+      if (valor.toDate && typeof valor.toDate === "function") {
+        return dataLocalExecutivo(valor.toDate());
+      }
+
+      if (valor instanceof Date) {
+        return dataLocalExecutivo(valor);
+      }
+
+      const texto = String(valor).trim();
+
+      const iso = texto.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (iso) return iso[1] + "-" + iso[2] + "-" + iso[3];
+
+      const br = texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      if (br) return br[3] + "-" + br[2] + "-" + br[1];
+
+      return "";
+    }
+
+    function dataPorISOExecutivo(iso) {
+      const partes = String(iso || "").split("-");
+      if (partes.length !== 3) return null;
+
+      const data = new Date(
+        Number(partes[0]),
+        Number(partes[1]) - 1,
+        Number(partes[2])
+      );
+
+      return Number.isNaN(data.getTime()) ? null : data;
+    }
+
+    function somarDiasExecutivo(iso, quantidade) {
+      const data = dataPorISOExecutivo(iso);
+      if (!data) return "";
+
+      data.setDate(data.getDate() + quantidade);
+      return dataLocalExecutivo(data);
+    }
+
+    function definirExecutivo(id, valor) {
+      const elemento = document.getElementById(id);
+      if (elemento) elemento.textContent = valor;
+    }
+
+    function intervaloMesExecutivo(data) {
+      const inicio = new Date(data.getFullYear(), data.getMonth(), 1);
+      const fim = new Date(data.getFullYear(), data.getMonth() + 1, 0);
+
+      return {
+        inicio: dataLocalExecutivo(inicio),
+        fim: dataLocalExecutivo(fim),
+        dias: fim.getDate()
+      };
+    }
+
+    function normalizarPagamentoExecutivo(valor) {
+      const texto = normalizarExecutivo(valor);
+
+      if (texto.includes("dinheiro")) return "Dinheiro";
+      if (texto.includes("pix")) return "Pix";
+      if (texto.includes("debito")) return "Débito";
+      if (
+        texto.includes("credito") ||
+        texto.includes("cartao")
+      ) return "Crédito";
+
+      return String(valor || "").trim() || "Não informado";
+    }
+
+    function somarFaturamentoExecutivo(ordens) {
+      return ordens.reduce(function (total, os) {
+        return total + Math.max(numeroExecutivo(os.valor), 0);
+      }, 0);
+    }
+
+    function mapaRankingExecutivo(ordens, campo, transformador) {
+      const mapa = new Map();
+
+      ordens.forEach(function (os) {
+        let nome = os[campo];
+
+        if (typeof transformador === "function") {
+          nome = transformador(nome);
+        }
+
+        nome = String(nome || "").trim() || "Não informado";
+
+        const atual = mapa.get(nome) || {
+          quantidade: 0,
+          total: 0
+        };
+
+        atual.quantidade++;
+        atual.total += Math.max(numeroExecutivo(os.valor), 0);
+        mapa.set(nome, atual);
+      });
+
+      return Array.from(mapa.entries()).sort(function (a, b) {
+        return b[1].total - a[1].total;
+      });
+    }
+
+    function renderizarRankingExecutivo(id, itens, modo) {
+      const area = document.getElementById(id);
+      if (!area) return;
+
+      if (!itens.length) {
+        area.innerHTML =
+          '<div class="executivo-vazio">Nenhuma informação neste mês.</div>';
+        return;
+      }
+
+      const maior =
+        modo === "quantidade"
+          ? itens[0][1].quantidade || 1
+          : itens[0][1].total || 1;
+
+      area.innerHTML = itens.slice(0,5).map(function (item) {
+        const base =
+          modo === "quantidade"
+            ? item[1].quantidade
+            : item[1].total;
+
+        const percentual = Math.max((base / maior) * 100, 3);
+        const valor =
+          modo === "quantidade"
+            ? item[1].quantidade + (item[1].quantidade === 1 ? " venda" : " vendas")
+            : dinheiroExecutivo(item[1].total);
+
+        return `
+          <div class="executivo-ranking-item">
+            <div class="executivo-ranking-linha">
+              <strong title="${escaparExecutivo(item[0])}">${escaparExecutivo(item[0])}</strong>
+              <span>${escaparExecutivo(valor)}</span>
+            </div>
+
+            <div class="executivo-barra">
+              <span style="width:${percentual.toFixed(1)}%"></span>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderizarAlertasExecutivo(dados) {
+      const area = document.getElementById("listaAlertasExecutivo");
+      if (!area) return;
+
+      const alertas = [];
+
+      if (dados.atrasadas > 0) {
+        alertas.push({
+          classe: "critico",
+          icone: "🔴",
+          titulo: dados.atrasadas + (dados.atrasadas === 1 ? " OS atrasada" : " OS atrasadas"),
+          detalhe: "Há pedidos que passaram da previsão de entrega.",
+          pagina: "pendencias.html"
+        });
+      } else {
+        alertas.push({
+          classe: "bom",
+          icone: "✅",
+          titulo: "Nenhuma OS atrasada",
+          detalhe: "Os prazos registrados estão em dia.",
+          pagina: "pendencias.html"
+        });
+      }
+
+      if (dados.prontos > 0) {
+        alertas.push({
+          classe: "atencao",
+          icone: "👓",
+          titulo: dados.prontos + (dados.prontos === 1 ? " pedido pronto" : " pedidos prontos"),
+          detalhe: "Entre em contato para agilizar as retiradas.",
+          pagina: "pendencias.html"
+        });
+      }
+
+      if (dados.saldosQuantidade > 0) {
+        alertas.push({
+          classe: dados.saldoTotal > dados.faturamentoAtual * .4 ? "critico" : "atencao",
+          icone: "💰",
+          titulo: dinheiroExecutivo(dados.saldoTotal) + " a receber",
+          detalhe: dados.saldosQuantidade + (dados.saldosQuantidade === 1 ? " venda possui saldo." : " vendas possuem saldo."),
+          pagina: "pendencias.html"
+        });
+      } else {
+        alertas.push({
+          classe: "bom",
+          icone: "💵",
+          titulo: "Nenhum saldo pendente",
+          detalhe: "Todas as vendas cadastradas estão quitadas.",
+          pagina: "pendencias.html"
+        });
+      }
+
+      alertas.push({
+        classe: dados.caixaAberto ? "bom" : "info",
+        icone: dados.caixaAberto ? "🏦" : "🔒",
+        titulo: dados.caixaAberto ? "Caixa aberto" : "Caixa fechado",
+        detalhe: dados.caixaAberto
+          ? "Responsável: " + (dados.caixaAberto.funcionario || "não informado")
+          : "Nenhum caixa está aberto neste momento.",
+        pagina: "caixa.html"
+      });
+
+      if (dados.variacao < -10) {
+        alertas.push({
+          classe: "atencao",
+          icone: "📉",
+          titulo: "Faturamento abaixo do mês anterior",
+          detalhe: "A queda atual é de " + Math.abs(dados.variacao).toFixed(1).replace(".", ",") + "%.",
+          pagina: "relatorio-vendas.html"
+        });
+      } else if (dados.variacao > 10) {
+        alertas.push({
+          classe: "bom",
+          icone: "📈",
+          titulo: "Faturamento em crescimento",
+          detalhe: "Alta de " + dados.variacao.toFixed(1).replace(".", ",") + "% sobre o mês anterior.",
+          pagina: "relatorio-vendas.html"
+        });
+      }
+
+      area.innerHTML = alertas.slice(0,5).map(function (alerta) {
+        return `
+          <button
+            type="button"
+            class="executivo-alerta ${alerta.classe}"
+            onclick="abrirModulo('${alerta.pagina}')"
+          >
+            <span class="executivo-alerta-icone">${alerta.icone}</span>
+
+            <span class="executivo-alerta-texto">
+              <strong>${escaparExecutivo(alerta.titulo)}</strong>
+              <span>${escaparExecutivo(alerta.detalhe)}</span>
+            </span>
+
+            <span class="executivo-alerta-seta">›</span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function atualizarSaudeExecutivo(dados) {
+      let pontos = 100;
+      const motivos = [];
+
+      if (dados.faturamentoAtual <= 0) {
+        pontos -= 25;
+        motivos.push("sem faturamento no mês");
+      } else if (dados.variacao < -20) {
+        pontos -= 25;
+        motivos.push("queda forte no faturamento");
+      } else if (dados.variacao < 0) {
+        pontos -= 12;
+        motivos.push("faturamento abaixo do mês anterior");
+      }
+
+      if (dados.atrasadas > 0) {
+        pontos -= Math.min(dados.atrasadas * 6, 24);
+        motivos.push("OS atrasadas");
+      }
+
+      const proporcaoSaldo =
+        dados.faturamentoAtual > 0
+          ? dados.saldoTotal / dados.faturamentoAtual
+          : dados.saldoTotal > 0
+          ? 1
+          : 0;
+
+      if (proporcaoSaldo > .5) {
+        pontos -= 20;
+        motivos.push("saldo pendente elevado");
+      } else if (proporcaoSaldo > .25) {
+        pontos -= 10;
+        motivos.push("saldo pendente merece atenção");
+      }
+
+      if (dados.prontos >= 5) {
+        pontos -= 8;
+        motivos.push("muitas retiradas aguardando");
+      }
+
+      pontos = Math.max(0, Math.min(100, Math.round(pontos)));
+
+      let classe = "bom";
+      let status = "Saudável";
+      let titulo = "🟢 Loja com bom desempenho";
+
+      if (pontos < 60) {
+        classe = "critico";
+        status = "Crítico";
+        titulo = "🔴 A loja precisa de atenção";
+      } else if (pontos < 80) {
+        classe = "atencao";
+        status = "Atenção";
+        titulo = "🟡 Existem pontos para acompanhar";
+      }
+
+      const indicador = document.getElementById("executivoSaudePontuacao");
+      const etiqueta = document.getElementById("executivoSaudeStatus");
+
+      if (indicador) {
+        indicador.classList.remove("bom","atencao","critico");
+        indicador.classList.add(classe);
+        indicador.textContent = pontos;
+      }
+
+      if (etiqueta) {
+        etiqueta.classList.remove("bom","atencao","critico");
+        etiqueta.classList.add(classe);
+        etiqueta.textContent = status;
+      }
+
+      definirExecutivo("executivoSaudeTitulo", titulo);
+      definirExecutivo(
+        "executivoSaudeDetalhe",
+        motivos.length
+          ? "Pontos observados: " + motivos.join(", ") + "."
+          : "Vendas, prazos e saldos estão dentro de um cenário positivo."
+      );
+    }
+
+    function atualizarGraficoExecutivo(ordens) {
+      const hoje = dataLocalExecutivo(new Date());
+      const inicio = somarDiasExecutivo(hoje, -29);
+      const mapa = new Map();
+
+      let cursor = inicio;
+      let seguranca = 0;
+
+      while (cursor <= hoje && seguranca < 31) {
+        mapa.set(cursor, 0);
+        cursor = somarDiasExecutivo(cursor, 1);
+        seguranca++;
+      }
+
+      ordens.forEach(function (os) {
+        if (!mapa.has(os.dataISO)) return;
+
+        mapa.set(
+          os.dataISO,
+          mapa.get(os.dataISO) + Math.max(numeroExecutivo(os.valor), 0)
+        );
+      });
+
+      const chaves = Array.from(mapa.keys());
+      const canvas = document.getElementById("graficoExecutivo30Dias");
+
+      if (!canvas) return;
+
+      if (graficoExecutivo30DiasAtual) {
+        graficoExecutivo30DiasAtual.destroy();
+      }
+
+      graficoExecutivo30DiasAtual = new Chart(canvas, {
+        type: "line",
+        data: {
+          labels: chaves.map(function (iso) {
+            const partes = iso.split("-");
+            return partes[2] + "/" + partes[1];
+          }),
+          datasets: [{
+            label: "Faturamento",
+            data: chaves.map(function (iso) {
+              return mapa.get(iso);
+            }),
+            borderColor: "#1687e8",
+            backgroundColor: "rgba(22,135,232,.12)",
+            pointBackgroundColor: "#0d5d9f",
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            fill: true,
+            tension: .28
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            intersect: false,
+            mode: "index"
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function (contexto) {
+                  return dinheiroExecutivo(contexto.raw);
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function (valor) {
+                  return "R$ " + Number(valor).toLocaleString("pt-BR");
+                }
+              }
+            },
+            x: {
+              ticks: {
+                maxTicksLimit: 10
+              }
+            }
+          }
+        }
+      });
+    }
+
+    async function carregarPainelExecutivo() {
+      if (painelExecutivoCarregando) return;
+
+      const botao = document.getElementById("botaoAtualizarExecutivo");
+      painelExecutivoCarregando = true;
+
+      if (botao) {
+        botao.disabled = true;
+        botao.textContent = "⏳ Analisando...";
+      }
+
+      definirExecutivo("executivoAtualizado", "Atualizando indicadores da loja...");
+
+      try {
+        const usuario = firebase.auth().currentUser;
+
+        if (!usuario) {
+          throw new Error("Usuário ainda não autenticado.");
+        }
+
+        const [ordensSnapshot, caixasSnapshot] = await Promise.all([
+          db.collection("ordens").get(),
+          db.collection("caixas").get()
+        ]);
+
+        const agora = new Date();
+        const hoje = dataLocalExecutivo(agora);
+        const mesAtual = intervaloMesExecutivo(agora);
+        const mesAnteriorData = new Date(
+          agora.getFullYear(),
+          agora.getMonth() - 1,
+          1
+        );
+        const mesAnterior = intervaloMesExecutivo(mesAnteriorData);
+
+        let semData = 0;
+
+        const ordens = ordensSnapshot.docs.map(function (doc) {
+          const os = doc.data() || {};
+          const dataISO = dataISOExecutivo(
+            os.dataCompra || os.data || os.criadoEm
+          );
+
+          if (!dataISO) semData++;
+
+          return {
+            id: doc.id,
+            ...os,
+            dataISO: dataISO
+          };
+        });
+
+        const caixas = caixasSnapshot.docs.map(function (doc) {
+          return {
+            id: doc.id,
+            ...doc.data()
+          };
+        });
+
+        const ordensMesAtual = ordens.filter(function (os) {
+          return (
+            os.dataISO &&
+            os.dataISO >= mesAtual.inicio &&
+            os.dataISO <= mesAtual.fim
+          );
+        });
+
+        const ordensMesAnterior = ordens.filter(function (os) {
+          return (
+            os.dataISO &&
+            os.dataISO >= mesAnterior.inicio &&
+            os.dataISO <= mesAnterior.fim
+          );
+        });
+
+        const faturamentoAtual = somarFaturamentoExecutivo(ordensMesAtual);
+        const faturamentoAnterior = somarFaturamentoExecutivo(ordensMesAnterior);
+
+        let variacao = 0;
+
+        if (faturamentoAnterior > 0) {
+          variacao =
+            ((faturamentoAtual - faturamentoAnterior) /
+              faturamentoAnterior) *
+            100;
+        } else if (faturamentoAtual > 0) {
+          variacao = 100;
+        }
+
+        const ticket =
+          ordensMesAtual.length > 0
+            ? faturamentoAtual / ordensMesAtual.length
+            : 0;
+
+        const diaAtual = agora.getDate();
+        const projecao =
+          faturamentoAtual > 0
+            ? (faturamentoAtual / Math.max(diaAtual,1)) * mesAtual.dias
+            : 0;
+
+        const saldos = ordens.filter(function (os) {
+          return numeroExecutivo(os.restante) > 0;
+        });
+
+        const saldoTotal = saldos.reduce(function (total, os) {
+          return total + Math.max(numeroExecutivo(os.restante), 0);
+        }, 0);
+
+        const atrasadas = ordens.filter(function (os) {
+          const status = normalizarExecutivo(os.status);
+          const previsao = dataISOExecutivo(os.previsaoEntrega);
+
+          return (
+            status !== "entregue" &&
+            previsao &&
+            previsao < hoje
+          );
+        });
+
+        const prontos = ordens.filter(function (os) {
+          return normalizarExecutivo(os.status) === "pronto para retirada";
+        });
+
+        const caixaAberto = caixas.find(function (caixa) {
+          return normalizarExecutivo(caixa.status) === "aberto";
+        });
+
+        definirExecutivo(
+          "executivoFaturamentoAtual",
+          dinheiroExecutivo(faturamentoAtual)
+        );
+
+        definirExecutivo(
+          "executivoFaturamentoAnterior",
+          "Mês anterior: " + dinheiroExecutivo(faturamentoAnterior)
+        );
+
+        const variacaoElemento = document.getElementById("executivoVariacao");
+
+        if (variacaoElemento) {
+          variacaoElemento.classList.remove("positiva","negativa","neutra");
+
+          if (faturamentoAnterior <= 0 && faturamentoAtual > 0) {
+            variacaoElemento.textContent = "Novo faturamento";
+            variacaoElemento.classList.add("positiva");
+          } else {
+            variacaoElemento.textContent =
+              (variacao > 0 ? "+" : "") +
+              variacao.toFixed(1).replace(".", ",") +
+              "%";
+
+            variacaoElemento.classList.add(
+              variacao > 0
+                ? "positiva"
+                : variacao < 0
+                ? "negativa"
+                : "neutra"
+            );
+          }
+        }
+
+        definirExecutivo("executivoProjecao", dinheiroExecutivo(projecao));
+        definirExecutivo(
+          "executivoProjecaoDetalhe",
+          "Ritmo de " +
+          dinheiroExecutivo(faturamentoAtual / Math.max(diaAtual,1)) +
+          " por dia"
+        );
+
+        definirExecutivo("executivoTicket", dinheiroExecutivo(ticket));
+        definirExecutivo(
+          "executivoTicketDetalhe",
+          ordensMesAtual.length +
+          (ordensMesAtual.length === 1
+            ? " venda neste mês"
+            : " vendas neste mês")
+        );
+
+        definirExecutivo(
+          "executivoSaldoPendente",
+          dinheiroExecutivo(saldoTotal)
+        );
+
+        definirExecutivo(
+          "executivoSaldoDetalhe",
+          saldos.length +
+          (saldos.length === 1
+            ? " venda possui saldo"
+            : " vendas possuem saldo")
+        );
+
+        const dados = {
+          faturamentoAtual,
+          faturamentoAnterior,
+          variacao,
+          saldoTotal,
+          saldosQuantidade: saldos.length,
+          atrasadas: atrasadas.length,
+          prontos: prontos.length,
+          caixaAberto
+        };
+
+        atualizarSaudeExecutivo(dados);
+        renderizarAlertasExecutivo(dados);
+        atualizarGraficoExecutivo(ordens);
+
+        const rankingVendedores = mapaRankingExecutivo(
+          ordensMesAtual,
+          "vendedor"
+        );
+
+        const rankingLentes = mapaRankingExecutivo(
+          ordensMesAtual,
+          "lente"
+        );
+
+        const rankingPagamentos = mapaRankingExecutivo(
+          ordensMesAtual,
+          "pagamento",
+          normalizarPagamentoExecutivo
+        );
+
+        renderizarRankingExecutivo(
+          "rankingVendedoresExecutivo",
+          rankingVendedores,
+          "total"
+        );
+
+        renderizarRankingExecutivo(
+          "rankingLentesExecutivo",
+          rankingLentes,
+          "quantidade"
+        );
+
+        renderizarRankingExecutivo(
+          "rankingPagamentosExecutivo",
+          rankingPagamentos,
+          "total"
+        );
+
+        const horario =
+          String(agora.getHours()).padStart(2,"0") +
+          ":" +
+          String(agora.getMinutes()).padStart(2,"0");
+
+        definirExecutivo(
+          "executivoAtualizado",
+          "Análise atualizada hoje às " +
+          horario +
+          (semData > 0
+            ? " • " + semData + " OS sem data não entrou nos cálculos"
+            : "")
+        );
+      } catch (erro) {
+        console.error("Erro no Painel Executivo:", erro);
+
+        definirExecutivo(
+          "executivoAtualizado",
+          "Não foi possível carregar a análise. Clique em Atualizar."
+        );
+
+        const alertas = document.getElementById("listaAlertasExecutivo");
+        if (alertas) {
+          alertas.innerHTML =
+            '<div class="executivo-vazio">❌ Erro ao consultar os dados do sistema.</div>';
+        }
+      } finally {
+        painelExecutivoCarregando = false;
+
+        if (botao) {
+          botao.disabled = false;
+          botao.textContent = "🔄 Atualizar análise";
+        }
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      if (!document.getElementById("executivoSaudePontuacao")) return;
+
+      firebase.auth().onAuthStateChanged(function (usuario) {
+        if (usuario) carregarPainelExecutivo();
+      });
+    });
+  </script>
+
+
+  <div class="modal-perfil-fundo" id="modalPerfil" role="dialog" aria-modal="true" aria-labelledby="tituloModalPerfil">
+    <section class="modal-perfil">
+      <header class="modal-perfil-topo">
+        <h2 id="tituloModalPerfil">👤 Minha conta</h2>
+        <button type="button" class="modal-fechar" onclick="fecharPerfil()" aria-label="Fechar">×</button>
+      </header>
+
+      <div class="modal-perfil-corpo">
+        <div class="perfil-campo">
+          <label for="perfilNome">Nome de exibição</label>
+          <input id="perfilNome" type="text" maxlength="60" placeholder="Digite seu nome">
+        </div>
+
+        <div class="perfil-campo">
+          <label for="perfilEmail">E-mail de acesso</label>
+          <input id="perfilEmail" type="email" readonly>
+        </div>
+
+        <p class="perfil-ajuda">
+          O nome salvo aqui aparecerá no canto superior direito do Ventura System.
+        </p>
+
+        <div class="perfil-acoes">
+          <button type="button" class="perfil-botao perfil-cancelar" onclick="fecharPerfil()">Cancelar</button>
+          <button type="button" class="perfil-botao perfil-salvar" id="botaoSalvarPerfil" onclick="salvarPerfil()">Salvar alterações</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</body>
+</html>
