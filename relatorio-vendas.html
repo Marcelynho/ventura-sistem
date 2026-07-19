@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório Inteligente de Vendas - Óticas Ventura</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(52,151,235,.18), transparent 28%),
+        linear-gradient(135deg, #062449, #0b4c86);
+      color: #17324b;
+    }
+
+    body { padding: 16px; }
+
+    button, input, select { font: inherit; }
+
+    .relatorio-wrapper {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 22px;
+      background: #ffffff;
+      box-shadow: 0 18px 50px rgba(0,0,0,.22);
+    }
+
+    .relatorio-topo {
+      padding: 23px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #082b54, #0d5d9f);
+    }
+
+    .relatorio-topo h1 {
+      margin: 0;
+      color: #ffffff;
+      font-size: 30px;
+    }
+
+    .relatorio-topo p {
+      margin: 7px 0 0;
+      color: #d9ecfb;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .acoes-topo {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 13px;
+      color: #ffffff;
+      background: #1687e8;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    button:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: .55;
+      cursor: wait;
+      transform: none;
+    }
+
+    .btn-imprimir { background: #6f42c1; }
+    .btn-exportar { background: #239a55; }
+
+    .relatorio-conteudo {
+      padding: 18px 20px 24px;
+      background: #ffffff;
+    }
+
+    .filtros-periodo {
+      margin-bottom: 15px;
+      padding: 15px;
+      border: 1px solid #d9e5ef;
+      border-radius: 15px;
+      background: #f8fbfe;
+    }
+
+    .filtros-linha {
+      display: grid;
+      grid-template-columns: auto minmax(145px, 190px) auto auto auto minmax(145px,1fr) minmax(145px,1fr) auto;
+      gap: 8px;
+      align-items: end;
+    }
+
+    .campo {
+      min-width: 0;
+    }
+
+    .campo label {
+      display: block;
+      margin-bottom: 6px;
+      color: #60788f;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    input, select {
+      width: 100%;
+      min-width: 0;
+      height: 42px;
+      padding: 0 11px;
+      border: 1px solid #cfdce8;
+      border-radius: 10px;
+      outline: none;
+      background: #ffffff;
+      color: #18334d;
+    }
+
+    input:focus, select:focus {
+      border-color: #1687e8;
+      box-shadow: 0 0 0 3px rgba(22,135,232,.12);
+    }
+
+    .btn-navegar {
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      color: #0d5d9f;
+      background: #e5f1fa;
+      font-size: 21px;
+    }
+
+    .btn-periodo {
+      height: 42px;
+      padding: 0 12px;
+      color: #31516d;
+      background: #e5eef5;
+      white-space: nowrap;
+    }
+
+    .btn-aplicar {
+      height: 42px;
+      background: #0d5d9f;
+    }
+
+    .periodo-atual {
+      margin: 12px 0 0;
+      color: #31516d;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .status-relatorio {
+      min-height: 20px;
+      margin: 0 0 13px;
+      color: #60788f;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 15px 12px;
+      border: 1px solid #d7e3ee;
+      border-radius: 13px;
+      background: #ffffff;
+      box-shadow: 0 7px 18px rgba(13,77,132,.07);
+    }
+
+    .card span {
+      display: block;
+      min-height: 31px;
+      margin-bottom: 6px;
+      color: #60788f;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .card strong {
+      display: block;
+      color: #0d4d84;
+      font-size: 24px;
+      overflow-wrap: anywhere;
+    }
+
+    .card small {
+      display: block;
+      min-height: 15px;
+      margin-top: 6px;
+      color: #71879a;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .positivo { color: #21864a !important; }
+    .negativo { color: #c83d4d !important; }
+    .neutro { color: #60788f !important; }
+    .saldo { color: #a35f00 !important; }
+
+    .graficos {
+      display: grid;
+      grid-template-columns: minmax(0,1.45fr) minmax(0,1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .painel {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid #d9e5ef;
+      border-radius: 15px;
+      background: #ffffff;
+      box-shadow: 0 7px 18px rgba(13,77,132,.06);
+    }
+
+    .painel-cabecalho {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 13px;
+    }
+
+    .painel h2 {
+      margin: 0;
+      color: #0d4d84;
+      font-size: 19px;
+    }
+
+    .painel-cabecalho select {
+      width: auto;
+      min-width: 115px;
+      height: 36px;
+      padding: 0 9px;
+      font-size: 12px;
+    }
+
+    .grafico-area {
+      position: relative;
+      width: 100%;
+      min-height: 280px;
+    }
+
+    .grafico-area canvas {
+      width: 100% !important;
+      max-width: 100%;
+      max-height: 310px;
+    }
+
+    .duas-colunas {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .tabela-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid #d9e5ef;
+      border-radius: 11px;
+      background: #ffffff;
+    }
+
+    table {
+      width: 100%;
+      min-width: 570px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #e3ebf2;
+      text-align: left;
+      vertical-align: middle;
+      color: #36556e;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    th {
+      color: #ffffff;
+      background: #0d5d9f;
+      white-space: nowrap;
+    }
+
+    tr:nth-child(even) td { background: #f7fafc; }
+    tbody tr:last-child td { border-bottom: 0; }
+
+    .numero {
+      text-align: right;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .barra-ranking {
+      width: 100%;
+      min-width: 80px;
+      height: 7px;
+      margin-top: 5px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e4edf4;
+    }
+
+    .barra-ranking > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #1687e8, #20a7ff);
+    }
+
+    .busca-vendas {
+      width: min(330px, 100%);
+      height: 36px;
+      font-size: 12px;
+    }
+
+    .vazio {
+      padding: 28px 16px;
+      border: 1px dashed #b9cbd9;
+      border-radius: 12px;
+      background: #f8fbfe;
+      color: #60788f;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .aviso-dados {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #fff4d7;
+      color: #775500;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 1040px) {
+      .filtros-linha {
+        grid-template-columns: auto minmax(160px,1fr) auto repeat(2,auto);
+      }
+
+      .campo-data,
+      .btn-aplicar {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .graficos, .duas-colunas { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 650px) {
+      body { padding: 9px; }
+
+      .relatorio-topo {
+        padding: 18px 15px;
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .relatorio-topo h1 { font-size: 25px; }
+
+      .acoes-topo {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .acoes-topo button { width: 100%; }
+
+      .relatorio-conteudo { padding: 13px; }
+
+      .filtros-linha {
+        grid-template-columns: 42px minmax(0,1fr) 42px;
+      }
+
+      .btn-periodo,
+      .campo-data,
+      .btn-aplicar {
+        grid-column: 1 / -1;
+        width: 100%;
+      }
+
+      .cards { grid-template-columns: 1fr 1fr; }
+
+      .card strong { font-size: 21px; }
+
+      .painel-cabecalho {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .painel-cabecalho select,
+      .busca-vendas {
+        width: 100%;
+      }
+    }
+
+    @media print {
+      html, body { background: #ffffff; }
+      body { padding: 0; }
+
+      .relatorio-wrapper {
+        max-width: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .relatorio-topo {
+        padding: 12px 16px;
+        color: #17324b;
+        background: #ffffff;
+        border-bottom: 2px solid #0d5d9f;
+      }
+
+      .relatorio-topo h1 { color: #0d5d9f; }
+      .relatorio-topo p { color: #526c82; }
+
+      .acoes-topo,
+      .filtros-linha button,
+      .busca-vendas,
+      .painel-cabecalho select {
+        display: none !important;
+      }
+
+      .filtros-periodo,
+      .painel,
+      .card {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+
+      .relatorio-conteudo { padding: 12px 0; }
+      .graficos { grid-template-columns: 1fr 1fr; }
+      .duas-colunas { grid-template-columns: 1fr 1fr; }
+
+      table { min-width: 0; }
+      th, td { padding: 6px; font-size: 9px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="relatorio-wrapper">
+    <header class="relatorio-topo">
+      <div>
+        <h1>📈 Relatório Inteligente de Vendas</h1>
+        <p>Analise faturamento, ticket médio, recebimentos, vendedores, pagamentos e produtos.</p>
+      </div>
+
+      <div class="acoes-topo">
+        <button type="button" class="btn-exportar" onclick="exportarRelatorioCSV()">⬇ Exportar CSV</button>
+        <button type="button" class="btn-imprimir" onclick="window.print()">🖨 Imprimir</button>
+      </div>
+    </header>
+
+    <div class="relatorio-conteudo">
+      <section class="filtros-periodo">
+        <div class="filtros-linha">
+          <button type="button" class="btn-navegar" onclick="mudarMesRelatorio(-1)" aria-label="Mês anterior">‹</button>
+
+          <div class="campo">
+            <label for="mesRelatorio">Mês</label>
+            <input id="mesRelatorio" type="month" onchange="aplicarMesRelatorio()">
+          </div>
+
+          <button type="button" class="btn-navegar" onclick="mudarMesRelatorio(1)" aria-label="Próximo mês">›</button>
+
+          <button type="button" class="btn-periodo" onclick="aplicarHojeRelatorio()">Hoje</button>
+          <button type="button" class="btn-periodo" onclick="aplicarSeteDiasRelatorio()">Últimos 7 dias</button>
+
+          <div class="campo campo-data">
+            <label for="inicioRelatorio">Data inicial</label>
+            <input id="inicioRelatorio" type="date">
+          </div>
+
+          <div class="campo campo-data">
+            <label for="fimRelatorio">Data final</label>
+            <input id="fimRelatorio" type="date">
+          </div>
+
+          <button type="button" class="btn-aplicar" onclick="aplicarPeriodoPersonalizado()">Aplicar</button>
+        </div>
+
+        <p class="periodo-atual" id="periodoAtualRelatorio">Preparando período...</p>
+      </section>
+
+      <p class="status-relatorio" id="statusRelatorio">Carregando vendas...</p>
+
+      <section class="cards">
+        <div class="card">
+          <span>Vendas no período</span>
+          <strong id="cardQuantidadeVendas">0</strong>
+          <small id="cardQuantidadeDetalhe">Ordens de Serviço</small>
+        </div>
+
+        <div class="card">
+          <span>Faturamento do período</span>
+          <strong id="cardFaturamento">R$ 0,00</strong>
+          <small>Total das vendas</small>
+        </div>
+
+        <div class="card">
+          <span>Ticket médio</span>
+          <strong id="cardTicketMedio">R$ 0,00</strong>
+          <small>Valor médio por venda</small>
+        </div>
+
+        <div class="card">
+          <span>Valor recebido</span>
+          <strong class="positivo" id="cardRecebido">R$ 0,00</strong>
+          <small>Total já pago</small>
+        </div>
+
+        <div class="card">
+          <span>Saldo pendente</span>
+          <strong class="saldo" id="cardSaldo">R$ 0,00</strong>
+          <small>A receber das vendas</small>
+        </div>
+
+        <div class="card">
+          <span>Faturamento de hoje</span>
+          <strong id="cardHoje">R$ 0,00</strong>
+          <small id="cardHojeDetalhe">0 vendas hoje</small>
+        </div>
+
+        <div class="card">
+          <span>Últimos 7 dias</span>
+          <strong id="cardSeteDias">R$ 0,00</strong>
+          <small id="cardSeteDiasDetalhe">0 vendas</small>
+        </div>
+
+        <div class="card">
+          <span>Comparação com período anterior</span>
+          <strong id="cardComparacao" class="neutro">0%</strong>
+          <small id="cardComparacaoDetalhe">Sem comparação</small>
+        </div>
+      </section>
+
+      <section class="graficos">
+        <article class="painel">
+          <div class="painel-cabecalho">
+            <h2>Faturamento no período</h2>
+
+            <select id="agrupamentoRelatorio" onchange="renderizarRelatorioVendas()">
+              <option value="dia">Por dia</option>
+              <option value="semana">Por semana</option>
+              <option value="mes">Por mês</option>
+            </select>
+          </div>
+
+          <div class="grafico-area">
+            <canvas id="graficoFaturamentoRelatorio"></canvas>
+          </div>
+        </article>
+
+        <article class="painel">
+          <div class="painel-cabecalho">
+            <h2>Formas de pagamento</h2>
+          </div>
+
+          <div class="grafico-area">
+            <canvas id="graficoPagamentosRelatorio"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <section class="duas-colunas">
+        <article class="painel">
+          <div class="painel-cabecalho">
+            <h2>Vendas por vendedor</h2>
+          </div>
+
+          <div class="tabela-wrapper" id="tabelaVendedoresRelatorio"></div>
+        </article>
+
+        <article class="painel">
+          <div class="painel-cabecalho">
+            <h2>Lentes e produtos mais vendidos</h2>
+          </div>
+
+          <div class="tabela-wrapper" id="tabelaProdutosRelatorio"></div>
+        </article>
+      </section>
+
+      <section class="painel">
+        <div class="painel-cabecalho">
+          <h2>Vendas do período</h2>
+
+          <input
+            id="buscaVendasRelatorio"
+            class="busca-vendas"
+            type="search"
+            placeholder="Buscar cliente, OS ou vendedor"
+            oninput="renderizarTabelaVendasRelatorio()"
+          >
+        </div>
+
+        <div class="tabela-wrapper" id="tabelaVendasRelatorio"></div>
+        <div class="aviso-dados" id="avisoSemDataRelatorio" hidden></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="app.js?v=19"></script>
+
+  <script>
+    const estadoRelatorioVendas = {
+      ordens: [],
+      filtradas: [],
+      inicio: "",
+      fim: "",
+      graficoFaturamento: null,
+      graficoPagamentos: null,
+      semData: 0
+    };
+
+    function escaparRelatorio(valor) {
+      return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function normalizarTextoRelatorio(valor) {
+      return String(valor || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+    }
+
+    function numeroRelatorio(valor) {
+      if (typeof valor === "number") {
+        return Number.isFinite(valor) ? valor : 0;
+      }
+
+      let texto = String(valor ?? "")
+        .replace(/R\$/gi, "")
+        .replace(/\s/g, "")
+        .trim();
+
+      if (!texto) return 0;
+
+      if (texto.includes(",") && texto.includes(".")) {
+        if (texto.lastIndexOf(",") > texto.lastIndexOf(".")) {
+          texto = texto.replace(/\./g, "").replace(",", ".");
+        } else {
+          texto = texto.replace(/,/g, "");
+        }
+      } else {
+        texto = texto.replace(",", ".");
+      }
+
+      const numero = Number(texto);
+      return Number.isFinite(numero) ? numero : 0;
+    }
+
+    function dinheiroRelatorio(valor) {
+      return numeroRelatorio(valor).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
+    }
+
+    function dataLocalISO(data) {
+      return [
+        data.getFullYear(),
+        String(data.getMonth() + 1).padStart(2, "0"),
+        String(data.getDate()).padStart(2, "0")
+      ].join("-");
+    }
+
+    function dataPorISO(valor) {
+      const partes = String(valor || "").split("-");
+
+      if (partes.length !== 3) return null;
+
+      const data = new Date(
+        Number(partes[0]),
+        Number(partes[1]) - 1,
+        Number(partes[2])
+      );
+
+      return Number.isNaN(data.getTime()) ? null : data;
+    }
+
+    function dataISORelatorio(valor) {
+      if (!valor) return "";
+
+      if (valor.toDate && typeof valor.toDate === "function") {
+        return dataLocalISO(valor.toDate());
+      }
+
+      if (valor instanceof Date) return dataLocalISO(valor);
+
+      const texto = String(valor).trim();
+
+      const iso = texto.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (iso) return iso[1] + "-" + iso[2] + "-" + iso[3];
+
+      const br = texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      if (br) return br[3] + "-" + br[2] + "-" + br[1];
+
+      return "";
+    }
+
+    function dataBRRelatorio(valor) {
+      const iso = dataISORelatorio(valor);
+      if (!iso) return "-";
+
+      const partes = iso.split("-");
+      return partes[2] + "/" + partes[1] + "/" + partes[0];
+    }
+
+    function somarDiasRelatorio(iso, quantidade) {
+      const data = dataPorISO(iso);
+      if (!data) return "";
+
+      data.setDate(data.getDate() + quantidade);
+      return dataLocalISO(data);
+    }
+
+    function diasEntreRelatorio(inicio, fim) {
+      const dataInicio = dataPorISO(inicio);
+      const dataFim = dataPorISO(fim);
+
+      if (!dataInicio || !dataFim) return 0;
+
+      return Math.floor((dataFim - dataInicio) / 86400000) + 1;
+    }
+
+    function primeiroDiaMesRelatorio(valorMes) {
+      return valorMes + "-01";
+    }
+
+    function ultimoDiaMesRelatorio(valorMes) {
+      const partes = valorMes.split("-");
+      const data = new Date(Number(partes[0]), Number(partes[1]), 0);
+      return dataLocalISO(data);
+    }
+
+    function nomePeriodoRelatorio(inicio, fim) {
+      if (inicio === fim) return dataBRRelatorio(inicio);
+      return dataBRRelatorio(inicio) + " até " + dataBRRelatorio(fim);
+    }
+
+    function valorVendaRelatorio(os) {
+      return Math.max(numeroRelatorio(os.valor), 0);
+    }
+
+    function saldoVendaRelatorio(os) {
+      return Math.max(numeroRelatorio(os.restante), 0);
+    }
+
+    function recebidoVendaRelatorio(os) {
+      return Math.max(valorVendaRelatorio(os) - saldoVendaRelatorio(os), 0);
+    }
+
+    function definirTextoRelatorio(id, valor) {
+      const elemento = document.getElementById(id);
+      if (elemento) elemento.textContent = valor;
+    }
+
+    function ajustarAlturaRelatorio() {
+      setTimeout(function () {
+        try {
+          if (
+            window.parent &&
+            typeof window.parent.ajustarAlturaFrame === "function"
+          ) {
+            window.parent.ajustarAlturaFrame();
+          }
+        } catch (erro) {}
+      }, 100);
+    }
+
+    function definirPeriodoRelatorio(inicio, fim) {
+      if (!inicio || !fim || inicio > fim) {
+        alert("Confira as datas do relatório.");
+        return;
+      }
+
+      estadoRelatorioVendas.inicio = inicio;
+      estadoRelatorioVendas.fim = fim;
+
+      const inicioCampo = document.getElementById("inicioRelatorio");
+      const fimCampo = document.getElementById("fimRelatorio");
+
+      if (inicioCampo) inicioCampo.value = inicio;
+      if (fimCampo) fimCampo.value = fim;
+
+      definirTextoRelatorio(
+        "periodoAtualRelatorio",
+        "Período analisado: " + nomePeriodoRelatorio(inicio, fim)
+      );
+
+      renderizarRelatorioVendas();
+    }
+
+    function aplicarMesRelatorio() {
+      const campo = document.getElementById("mesRelatorio");
+      if (!campo || !campo.value) return;
+
+      definirPeriodoRelatorio(
+        primeiroDiaMesRelatorio(campo.value),
+        ultimoDiaMesRelatorio(campo.value)
+      );
+    }
+
+    function mudarMesRelatorio(direcao) {
+      const campo = document.getElementById("mesRelatorio");
+      if (!campo) return;
+
+      const valor = campo.value || dataLocalISO(new Date()).slice(0,7);
+      const partes = valor.split("-");
+      const data = new Date(Number(partes[0]), Number(partes[1]) - 1 + direcao, 1);
+
+      campo.value = [
+        data.getFullYear(),
+        String(data.getMonth() + 1).padStart(2, "0")
+      ].join("-");
+
+      aplicarMesRelatorio();
+    }
+
+    function aplicarHojeRelatorio() {
+      const hoje = dataLocalISO(new Date());
+      definirPeriodoRelatorio(hoje, hoje);
+    }
+
+    function aplicarSeteDiasRelatorio() {
+      const hoje = dataLocalISO(new Date());
+      definirPeriodoRelatorio(somarDiasRelatorio(hoje, -6), hoje);
+    }
+
+    function aplicarPeriodoPersonalizado() {
+      const inicio = document.getElementById("inicioRelatorio").value;
+      const fim = document.getElementById("fimRelatorio").value;
+
+      definirPeriodoRelatorio(inicio, fim);
+    }
+
+    function filtrarPeriodoRelatorio(inicio, fim) {
+      return estadoRelatorioVendas.ordens.filter(function (os) {
+        return os.dataISO && os.dataISO >= inicio && os.dataISO <= fim;
+      });
+    }
+
+    function somarFaturamentoRelatorio(ordens) {
+      return ordens.reduce(function (total, os) {
+        return total + valorVendaRelatorio(os);
+      }, 0);
+    }
+
+    function atualizarCardsRelatorio() {
+      const ordens = estadoRelatorioVendas.filtradas;
+      const faturamento = somarFaturamentoRelatorio(ordens);
+      const saldo = ordens.reduce(function (total, os) {
+        return total + saldoVendaRelatorio(os);
+      }, 0);
+      const recebido = ordens.reduce(function (total, os) {
+        return total + recebidoVendaRelatorio(os);
+      }, 0);
+      const ticket = ordens.length ? faturamento / ordens.length : 0;
+
+      definirTextoRelatorio("cardQuantidadeVendas", ordens.length);
+      definirTextoRelatorio(
+        "cardQuantidadeDetalhe",
+        ordens.length === 1 ? "1 Ordem de Serviço" : ordens.length + " Ordens de Serviço"
+      );
+      definirTextoRelatorio("cardFaturamento", dinheiroRelatorio(faturamento));
+      definirTextoRelatorio("cardTicketMedio", dinheiroRelatorio(ticket));
+      definirTextoRelatorio("cardRecebido", dinheiroRelatorio(recebido));
+      definirTextoRelatorio("cardSaldo", dinheiroRelatorio(saldo));
+
+      const hoje = dataLocalISO(new Date());
+      const vendasHoje = filtrarPeriodoRelatorio(hoje, hoje);
+      definirTextoRelatorio(
+        "cardHoje",
+        dinheiroRelatorio(somarFaturamentoRelatorio(vendasHoje))
+      );
+      definirTextoRelatorio(
+        "cardHojeDetalhe",
+        vendasHoje.length + (vendasHoje.length === 1 ? " venda hoje" : " vendas hoje")
+      );
+
+      const inicioSeteDias = somarDiasRelatorio(hoje, -6);
+      const vendasSeteDias = filtrarPeriodoRelatorio(inicioSeteDias, hoje);
+      definirTextoRelatorio(
+        "cardSeteDias",
+        dinheiroRelatorio(somarFaturamentoRelatorio(vendasSeteDias))
+      );
+      definirTextoRelatorio(
+        "cardSeteDiasDetalhe",
+        vendasSeteDias.length + (vendasSeteDias.length === 1 ? " venda" : " vendas")
+      );
+
+      const quantidadeDias = diasEntreRelatorio(
+        estadoRelatorioVendas.inicio,
+        estadoRelatorioVendas.fim
+      );
+
+      const fimAnterior = somarDiasRelatorio(estadoRelatorioVendas.inicio, -1);
+      const inicioAnterior = somarDiasRelatorio(
+        fimAnterior,
+        -(Math.max(quantidadeDias, 1) - 1)
+      );
+
+      const ordensAnteriores = filtrarPeriodoRelatorio(inicioAnterior, fimAnterior);
+      const faturamentoAnterior = somarFaturamentoRelatorio(ordensAnteriores);
+      const comparacao = document.getElementById("cardComparacao");
+
+      if (comparacao) {
+        comparacao.classList.remove("positivo", "negativo", "neutro");
+
+        if (faturamentoAnterior <= 0 && faturamento > 0) {
+          comparacao.textContent = "Novo";
+          comparacao.classList.add("positivo");
+        } else if (faturamentoAnterior <= 0) {
+          comparacao.textContent = "0%";
+          comparacao.classList.add("neutro");
+        } else {
+          const percentual =
+            ((faturamento - faturamentoAnterior) / faturamentoAnterior) * 100;
+
+          comparacao.textContent =
+            (percentual > 0 ? "+" : "") +
+            percentual.toFixed(1).replace(".", ",") +
+            "%";
+
+          comparacao.classList.add(
+            percentual > 0 ? "positivo" :
+            percentual < 0 ? "negativo" :
+            "neutro"
+          );
+        }
+      }
+
+      definirTextoRelatorio(
+        "cardComparacaoDetalhe",
+        "Anterior: " + dinheiroRelatorio(faturamentoAnterior)
+      );
+    }
+
+    function inicioSemanaRelatorio(iso) {
+      const data = dataPorISO(iso);
+      if (!data) return "";
+
+      const diaSemana = data.getDay();
+      const deslocamento = diaSemana === 0 ? -6 : 1 - diaSemana;
+
+      data.setDate(data.getDate() + deslocamento);
+      return dataLocalISO(data);
+    }
+
+    function chaveAgrupamentoRelatorio(os, agrupamento) {
+      if (agrupamento === "mes") return os.dataISO.slice(0,7);
+      if (agrupamento === "semana") return inicioSemanaRelatorio(os.dataISO);
+      return os.dataISO;
+    }
+
+    function rotuloAgrupamentoRelatorio(chave, agrupamento) {
+      if (agrupamento === "mes") {
+        const partes = chave.split("-");
+        return partes[1] + "/" + partes[0];
+      }
+
+      if (agrupamento === "semana") {
+        return "Sem. " + dataBRRelatorio(chave).slice(0,5);
+      }
+
+      return dataBRRelatorio(chave).slice(0,5);
+    }
+
+    function dadosGraficoFaturamentoRelatorio() {
+      const agrupamento =
+        document.getElementById("agrupamentoRelatorio")?.value || "dia";
+
+      const mapa = new Map();
+
+      estadoRelatorioVendas.filtradas.forEach(function (os) {
+        const chave = chaveAgrupamentoRelatorio(os, agrupamento);
+        mapa.set(chave, (mapa.get(chave) || 0) + valorVendaRelatorio(os));
+      });
+
+      if (agrupamento === "dia") {
+        let cursor = estadoRelatorioVendas.inicio;
+        let seguranca = 0;
+
+        while (cursor <= estadoRelatorioVendas.fim && seguranca < 370) {
+          if (!mapa.has(cursor)) mapa.set(cursor, 0);
+          cursor = somarDiasRelatorio(cursor, 1);
+          seguranca++;
+        }
+      }
+
+      const chaves = Array.from(mapa.keys()).sort();
+
+      return {
+        labels: chaves.map(function (chave) {
+          return rotuloAgrupamentoRelatorio(chave, agrupamento);
+        }),
+        valores: chaves.map(function (chave) {
+          return mapa.get(chave);
+        })
+      };
+    }
+
+    function normalizarPagamentoRelatorio(valor) {
+      const texto = normalizarTextoRelatorio(valor);
+
+      if (texto.includes("dinheiro")) return "Dinheiro";
+      if (texto.includes("pix")) return "Pix";
+      if (texto.includes("debito")) return "Débito";
+      if (
+        texto.includes("credito") ||
+        texto.includes("cartao") ||
+        texto.includes("cartão")
+      ) return "Crédito";
+
+      return String(valor || "").trim() || "Não informado";
+    }
+
+    function mapaPagamentoRelatorio() {
+      const mapa = new Map();
+
+      estadoRelatorioVendas.filtradas.forEach(function (os) {
+        const forma = normalizarPagamentoRelatorio(os.pagamento);
+        const atual = mapa.get(forma) || { quantidade: 0, total: 0 };
+
+        atual.quantidade++;
+        atual.total += valorVendaRelatorio(os);
+        mapa.set(forma, atual);
+      });
+
+      return mapa;
+    }
+
+    function atualizarGraficosRelatorio() {
+      const dadosFaturamento = dadosGraficoFaturamentoRelatorio();
+      const contextoFaturamento =
+        document.getElementById("graficoFaturamentoRelatorio");
+
+      if (estadoRelatorioVendas.graficoFaturamento) {
+        estadoRelatorioVendas.graficoFaturamento.destroy();
+      }
+
+      estadoRelatorioVendas.graficoFaturamento = new Chart(contextoFaturamento, {
+        type: "bar",
+        data: {
+          labels: dadosFaturamento.labels,
+          datasets: [{
+            label: "Faturamento",
+            data: dadosFaturamento.valores,
+            borderRadius: 7,
+            backgroundColor: "rgba(22, 135, 232, .78)"
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function (contexto) {
+                  return dinheiroRelatorio(contexto.raw);
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function (valor) {
+                  return "R$ " + Number(valor).toLocaleString("pt-BR");
+                }
+              }
+            }
+          }
+        }
+      });
+
+      const pagamentos = Array.from(mapaPagamentoRelatorio().entries())
+        .sort(function (a, b) {
+          return b[1].total - a[1].total;
+        });
+
+      const contextoPagamentos =
+        document.getElementById("graficoPagamentosRelatorio");
+
+      if (estadoRelatorioVendas.graficoPagamentos) {
+        estadoRelatorioVendas.graficoPagamentos.destroy();
+      }
+
+      estadoRelatorioVendas.graficoPagamentos = new Chart(contextoPagamentos, {
+        type: "doughnut",
+        data: {
+          labels: pagamentos.map(function (item) { return item[0]; }),
+          datasets: [{
+            data: pagamentos.map(function (item) { return item[1].total; }),
+            backgroundColor: [
+              "#1687e8",
+              "#239a55",
+              "#6f42c1",
+              "#e39b12",
+              "#0e97a7",
+              "#d95368",
+              "#71879a"
+            ],
+            borderWidth: 2,
+            borderColor: "#ffffff"
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: "bottom",
+              labels: {
+                boxWidth: 12,
+                font: { size: 11 }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function (contexto) {
+                  return contexto.label + ": " + dinheiroRelatorio(contexto.raw);
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function criarMapaRankingRelatorio(campo) {
+      const mapa = new Map();
+
+      estadoRelatorioVendas.filtradas.forEach(function (os) {
+        const nome = String(os[campo] || "").trim() || "Não informado";
+        const atual = mapa.get(nome) || {
+          quantidade: 0,
+          total: 0,
+          recebido: 0,
+          saldo: 0
+        };
+
+        atual.quantidade++;
+        atual.total += valorVendaRelatorio(os);
+        atual.recebido += recebidoVendaRelatorio(os);
+        atual.saldo += saldoVendaRelatorio(os);
+
+        mapa.set(nome, atual);
+      });
+
+      return Array.from(mapa.entries())
+        .sort(function (a, b) {
+          return b[1].total - a[1].total;
+        });
+    }
+
+    function atualizarTabelaVendedoresRelatorio() {
+      const area = document.getElementById("tabelaVendedoresRelatorio");
+      const itens = criarMapaRankingRelatorio("vendedor");
+
+      if (!itens.length) {
+        area.innerHTML = '<div class="vazio">Nenhuma venda no período.</div>';
+        return;
+      }
+
+      const maior = itens[0][1].total || 1;
+
+      area.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Vendedor</th>
+              <th class="numero">Vendas</th>
+              <th class="numero">Faturamento</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itens.map(function (item) {
+              const percentual = Math.max((item[1].total / maior) * 100, 2);
+
+              return `
+                <tr>
+                  <td>
+                    <strong>${escaparRelatorio(item[0])}</strong>
+                    <div class="barra-ranking">
+                      <span style="width:${percentual.toFixed(1)}%"></span>
+                    </div>
+                  </td>
+                  <td class="numero">${item[1].quantidade}</td>
+                  <td class="numero">${dinheiroRelatorio(item[1].total)}</td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function atualizarTabelaProdutosRelatorio() {
+      const area = document.getElementById("tabelaProdutosRelatorio");
+      const itens = criarMapaRankingRelatorio("lente");
+
+      if (!itens.length) {
+        area.innerHTML = '<div class="vazio">Nenhum produto no período.</div>';
+        return;
+      }
+
+      const maior = itens[0][1].quantidade || 1;
+
+      area.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Lente / Produto</th>
+              <th class="numero">Qtd.</th>
+              <th class="numero">Faturamento</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itens.slice(0,12).map(function (item) {
+              const percentual = Math.max((item[1].quantidade / maior) * 100, 2);
+
+              return `
+                <tr>
+                  <td>
+                    <strong>${escaparRelatorio(item[0])}</strong>
+                    <div class="barra-ranking">
+                      <span style="width:${percentual.toFixed(1)}%"></span>
+                    </div>
+                  </td>
+                  <td class="numero">${item[1].quantidade}</td>
+                  <td class="numero">${dinheiroRelatorio(item[1].total)}</td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderizarTabelaVendasRelatorio() {
+      const area = document.getElementById("tabelaVendasRelatorio");
+      const busca = normalizarTextoRelatorio(
+        document.getElementById("buscaVendasRelatorio")?.value
+      );
+
+      const itens = estadoRelatorioVendas.filtradas.filter(function (os) {
+        if (!busca) return true;
+
+        return normalizarTextoRelatorio([
+          os.numero,
+          os.cliente,
+          os.telefone,
+          os.cpf,
+          os.vendedor,
+          os.pagamento,
+          os.lente,
+          os.status
+        ].join(" ")).includes(busca);
+      });
+
+      if (!itens.length) {
+        area.innerHTML = '<div class="vazio">Nenhuma venda encontrada.</div>';
+        ajustarAlturaRelatorio();
+        return;
+      }
+
+      area.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>OS</th>
+              <th>Cliente</th>
+              <th>Vendedor</th>
+              <th>Pagamento</th>
+              <th>Status</th>
+              <th class="numero">Total</th>
+              <th class="numero">Pago</th>
+              <th class="numero">Saldo</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itens.map(function (os) {
+              const saldo = saldoVendaRelatorio(os);
+
+              return `
+                <tr>
+                  <td>${escaparRelatorio(dataBRRelatorio(os.dataISO))}</td>
+                  <td>${escaparRelatorio(os.numero || "-")}</td>
+                  <td>${escaparRelatorio(os.cliente || "-")}</td>
+                  <td>${escaparRelatorio(os.vendedor || "-")}</td>
+                  <td>${escaparRelatorio(os.pagamento || "-")}</td>
+                  <td>${escaparRelatorio(os.status || "Recebido")}</td>
+                  <td class="numero">${dinheiroRelatorio(valorVendaRelatorio(os))}</td>
+                  <td class="numero">${dinheiroRelatorio(recebidoVendaRelatorio(os))}</td>
+                  <td class="numero ${saldo > 0 ? "saldo" : "positivo"}">${dinheiroRelatorio(saldo)}</td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      `;
+
+      ajustarAlturaRelatorio();
+    }
+
+    function renderizarRelatorioVendas() {
+      if (!estadoRelatorioVendas.inicio || !estadoRelatorioVendas.fim) return;
+
+      estadoRelatorioVendas.filtradas = filtrarPeriodoRelatorio(
+        estadoRelatorioVendas.inicio,
+        estadoRelatorioVendas.fim
+      ).sort(function (a, b) {
+        if (a.dataISO !== b.dataISO) return b.dataISO.localeCompare(a.dataISO);
+        return String(b.numero || "").localeCompare(String(a.numero || ""));
+      });
+
+      definirTextoRelatorio(
+        "statusRelatorio",
+        estadoRelatorioVendas.filtradas.length +
+        (estadoRelatorioVendas.filtradas.length === 1
+          ? " venda encontrada no período."
+          : " vendas encontradas no período.")
+      );
+
+      atualizarCardsRelatorio();
+      atualizarGraficosRelatorio();
+      atualizarTabelaVendedoresRelatorio();
+      atualizarTabelaProdutosRelatorio();
+      renderizarTabelaVendasRelatorio();
+
+      const aviso = document.getElementById("avisoSemDataRelatorio");
+
+      if (aviso) {
+        aviso.hidden = estadoRelatorioVendas.semData === 0;
+        aviso.textContent =
+          estadoRelatorioVendas.semData +
+          (estadoRelatorioVendas.semData === 1
+            ? " OS antiga não entrou no relatório porque não possui data da compra."
+            : " OS antigas não entraram no relatório porque não possuem data da compra.");
+      }
+
+      ajustarAlturaRelatorio();
+    }
+
+    function protegerCelulaCSV(valor) {
+      let texto = String(valor ?? "").replace(/"/g, '""');
+
+      if (/^[=+\-@]/.test(texto)) texto = "'" + texto;
+
+      return '"' + texto + '"';
+    }
+
+    function exportarRelatorioCSV() {
+      const ordens = estadoRelatorioVendas.filtradas;
+
+      if (!ordens.length) {
+        alert("Não existem vendas para exportar neste período.");
+        return;
+      }
+
+      const linhas = [
+        [
+          "Data",
+          "OS",
+          "Cliente",
+          "Telefone",
+          "CPF",
+          "Vendedor",
+          "Lente/Produto",
+          "Armação",
+          "Forma de pagamento",
+          "Status",
+          "Valor total",
+          "Valor pago",
+          "Saldo"
+        ]
+      ];
+
+      ordens.forEach(function (os) {
+        linhas.push([
+          dataBRRelatorio(os.dataISO),
+          os.numero || "",
+          os.cliente || "",
+          os.telefone || "",
+          os.cpf || "",
+          os.vendedor || "",
+          os.lente || "",
+          os.armacao || "",
+          os.pagamento || "",
+          os.status || "",
+          valorVendaRelatorio(os).toFixed(2).replace(".", ","),
+          recebidoVendaRelatorio(os).toFixed(2).replace(".", ","),
+          saldoVendaRelatorio(os).toFixed(2).replace(".", ",")
+        ]);
+      });
+
+      const csv = linhas.map(function (linha) {
+        return linha.map(protegerCelulaCSV).join(";");
+      }).join("\r\n");
+
+      const arquivo = new Blob(["\ufeff" + csv], {
+        type: "text/csv;charset=utf-8;"
+      });
+
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(arquivo);
+      link.download =
+        "relatorio-vendas-" +
+        estadoRelatorioVendas.inicio +
+        "-a-" +
+        estadoRelatorioVendas.fim +
+        ".csv";
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(function () {
+        URL.revokeObjectURL(link.href);
+      }, 1000);
+    }
+
+    async function carregarRelatorioVendas() {
+      const status = document.getElementById("statusRelatorio");
+      const botoes = document.querySelectorAll(".acoes-topo button");
+
+      botoes.forEach(function (botao) { botao.disabled = true; });
+
+      try {
+        const snapshot = await db.collection("ordens").get();
+        const ordens = [];
+        let semData = 0;
+
+        snapshot.forEach(function (doc) {
+          const os = doc.data() || {};
+          const dataISO = dataISORelatorio(
+            os.dataCompra || os.data || os.criadoEm
+          );
+
+          if (!dataISO) semData++;
+
+          ordens.push({
+            id: doc.id,
+            ...os,
+            numero: os.numero || os.os || os.OS || os.numeroOS || os.ordem || "",
+            dataISO: dataISO
+          });
+        });
+
+        estadoRelatorioVendas.ordens = ordens;
+        estadoRelatorioVendas.semData = semData;
+
+        aplicarMesRelatorio();
+      } catch (erro) {
+        console.error("Erro ao carregar relatório de vendas:", erro);
+
+        if (status) {
+          status.textContent =
+            "❌ Não foi possível carregar as vendas. Verifique a internet e tente novamente.";
+        }
+      } finally {
+        botoes.forEach(function (botao) { botao.disabled = false; });
+        ajustarAlturaRelatorio();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const hoje = new Date();
+      const mesAtual = [
+        hoje.getFullYear(),
+        String(hoje.getMonth() + 1).padStart(2, "0")
+      ].join("-");
+
+      document.getElementById("mesRelatorio").value = mesAtual;
+      document.getElementById("inicioRelatorio").value =
+        primeiroDiaMesRelatorio(mesAtual);
+      document.getElementById("fimRelatorio").value =
+        ultimoDiaMesRelatorio(mesAtual);
+
+      carregarRelatorioVendas();
+    });
+  </script>
+</body>
+</html>
