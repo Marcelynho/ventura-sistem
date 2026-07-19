@@ -149,6 +149,24 @@ function prepararCepCliente() {
 document.addEventListener("DOMContentLoaded", prepararCepCliente);
 
 // CLIENTES
+function escaparHTMLCliente(valor) {
+  return String(valor ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function abrirFichaCliente(id) {
+  if (!id) {
+    alert("Cliente não encontrado.");
+    return;
+  }
+
+  window.location.href = "ficha-cliente.html?id=" + encodeURIComponent(id);
+}
+
 async function salvarCliente() {
   if (!(await garantirCaixaAberto())) return;
     const nome = document.getElementById("nomeCliente").value;
@@ -304,15 +322,25 @@ async function mostrarClientes() {
 
     linhas += `
       <tr>
-        <td>${cliente.nome || ""}</td>
-        <td>${cliente.telefone || ""}</td>
-        <td>${cliente.endereco || ""}</td>
-        <td>${cliente.bairro || ""}</td>
-        <td>${cliente.cidade || ""}</td>
-        <td>${cliente.retorno || "-"}</td>
-        <td>${status}</td>
+        <td>
+          <button
+            type="button"
+            class="cliente-link-ficha"
+            onclick="abrirFichaCliente('${doc.id}')"
+            title="Abrir ficha completa"
+          >
+            ${escaparHTMLCliente(cliente.nome || "")}
+          </button>
+        </td>
+        <td>${escaparHTMLCliente(cliente.telefone || "")}</td>
+        <td>${escaparHTMLCliente(cliente.endereco || "")}</td>
+        <td>${escaparHTMLCliente(cliente.bairro || "")}</td>
+        <td>${escaparHTMLCliente(cliente.cidade || "")}</td>
+        <td>${escaparHTMLCliente(cliente.retorno || "-")}</td>
+        <td>${escaparHTMLCliente(status)}</td>
         <td>
           <button onclick="abrirWhatsApp('${cliente.telefone || ""}')">WhatsApp</button>
+          <button class="btn-ficha-cliente" onclick="abrirFichaCliente('${doc.id}')">📄 Ficha completa</button>
           <button onclick="editarCliente('${doc.id}')">Editar</button>
           <button onclick="excluirCliente('${doc.id}')">Excluir</button>
         </td>
@@ -2694,6 +2722,578 @@ async function listarOS() {
 document.addEventListener("DOMContentLoaded", function() {
   if (document.getElementById("listaOS")) {
     listarOS();
+  }
+});
+
+// ================================================================
+// FICHA COMPLETA DO CLIENTE
+// ================================================================
+window.fichaClienteAtual = null;
+
+function normalizarTextoFicha(valor) {
+  return String(valor || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+function somenteNumerosFicha(valor) {
+  return String(valor || "").replace(/\D/g, "");
+}
+
+function numeroFicha(valor) {
+  const numero = Number(String(valor ?? 0).replace(",", "."));
+  return Number.isFinite(numero) ? numero : 0;
+}
+
+function dinheiroFicha(valor) {
+  return numeroFicha(valor).toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+function dataMillisFicha(valor) {
+  if (!valor) return 0;
+
+  if (valor.toMillis && typeof valor.toMillis === "function") {
+    return valor.toMillis();
+  }
+
+  if (valor.toDate && typeof valor.toDate === "function") {
+    return valor.toDate().getTime();
+  }
+
+  if (valor instanceof Date) return valor.getTime();
+
+  const texto = String(valor).trim();
+
+  const iso = texto.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) {
+    return new Date(
+      Number(iso[1]),
+      Number(iso[2]) - 1,
+      Number(iso[3])
+    ).getTime();
+  }
+
+  const br = texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (br) {
+    return new Date(
+      Number(br[3]),
+      Number(br[2]) - 1,
+      Number(br[1])
+    ).getTime();
+  }
+
+  const data = new Date(texto);
+  return Number.isNaN(data.getTime()) ? 0 : data.getTime();
+}
+
+function dataBRFicha(valor) {
+  if (!valor) return "-";
+
+  if (valor.toDate && typeof valor.toDate === "function") {
+    return valor.toDate().toLocaleDateString("pt-BR");
+  }
+
+  const texto = String(valor).trim();
+
+  const iso = texto.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) return iso[3] + "/" + iso[2] + "/" + iso[1];
+
+  const millis = dataMillisFicha(valor);
+  return millis ? new Date(millis).toLocaleDateString("pt-BR") : texto;
+}
+
+function pertenceAoClienteFicha(registro, clienteId, cliente) {
+  if (!registro) return false;
+
+  if (String(registro.clienteId || "") === String(clienteId || "")) {
+    return true;
+  }
+
+  const cpfCliente = somenteNumerosFicha(cliente.cpf);
+  const cpfRegistro = somenteNumerosFicha(registro.cpf);
+
+  if (cpfCliente && cpfRegistro && cpfCliente === cpfRegistro) {
+    return true;
+  }
+
+  const telefoneCliente = somenteNumerosFicha(cliente.telefone);
+  const telefoneRegistro = somenteNumerosFicha(registro.telefone);
+
+  if (
+    telefoneCliente &&
+    telefoneRegistro &&
+    telefoneCliente === telefoneRegistro
+  ) {
+    return true;
+  }
+
+  const nomeCliente = normalizarTextoFicha(cliente.nome);
+  const nomeRegistro = normalizarTextoFicha(
+    registro.cliente || registro.nome
+  );
+
+  return Boolean(nomeCliente && nomeRegistro && nomeCliente === nomeRegistro);
+}
+
+function possuiReceitaFicha(registro) {
+  if (!registro) return false;
+
+  return [
+    registro.odLongeEsferico,
+    registro.odLongeCilindrico,
+    registro.odLongeEixo,
+    registro.oeLongeEsferico,
+    registro.oeLongeCilindrico,
+    registro.oeLongeEixo,
+    registro.odEsferico,
+    registro.odCilindrico,
+    registro.odEixo,
+    registro.oeEsferico,
+    registro.oeCilindrico,
+    registro.oeEixo,
+    registro.dnp,
+    registro.altura,
+    registro.adicao,
+    registro.add
+  ].some(valor => String(valor || "").trim() !== "");
+}
+
+function padronizarReceitaFicha(registro, origem, data, identificacao) {
+  return {
+    origem: origem || "Receita",
+    data: data || "",
+    identificacao: identificacao || "",
+    odEsferico: registro.odLongeEsferico || registro.odEsferico || "",
+    odCilindrico: registro.odLongeCilindrico || registro.odCilindrico || "",
+    odEixo: registro.odLongeEixo || registro.odEixo || "",
+    oeEsferico: registro.oeLongeEsferico || registro.oeEsferico || "",
+    oeCilindrico: registro.oeLongeCilindrico || registro.oeCilindrico || "",
+    oeEixo: registro.oeLongeEixo || registro.oeEixo || "",
+    dnp: registro.dnp || "",
+    altura: registro.altura || "",
+    adicao: registro.adicao || registro.add || "",
+    observacoes: registro.observacoes || ""
+  };
+}
+
+function montarHistoricoReceitasFicha(cliente, receitas, ordens) {
+  const historico = [];
+
+  receitas.forEach(receita => {
+    if (!possuiReceitaFicha(receita)) return;
+
+    historico.push({
+      ...padronizarReceitaFicha(
+        receita,
+        "Receituário",
+        receita.criadoEm || receita.data || "",
+        ""
+      ),
+      ordem: dataMillisFicha(receita.criadoEm || receita.data)
+    });
+  });
+
+  ordens.forEach(os => {
+    if (!possuiReceitaFicha(os)) return;
+
+    historico.push({
+      ...padronizarReceitaFicha(
+        os,
+        "Ordem de Serviço",
+        os.dataCompra || os.criadoEm || "",
+        os.numero ? "OS " + os.numero : ""
+      ),
+      ordem: dataMillisFicha(os.dataCompra || os.criadoEm)
+    });
+  });
+
+  if (!historico.length && possuiReceitaFicha(cliente)) {
+    historico.push({
+      ...padronizarReceitaFicha(
+        cliente,
+        "Cadastro do cliente",
+        cliente.atualizadoEm || cliente.criadoEm || "",
+        ""
+      ),
+      ordem: dataMillisFicha(cliente.atualizadoEm || cliente.criadoEm)
+    });
+  }
+
+  return historico.sort((a, b) => b.ordem - a.ordem);
+}
+
+function ajustarAlturaFichaCliente() {
+  setTimeout(function () {
+    try {
+      if (
+        window.parent &&
+        typeof window.parent.ajustarAlturaFrame === "function"
+      ) {
+        window.parent.ajustarAlturaFrame();
+      }
+    } catch (erro) {}
+  }, 100);
+}
+
+function mostrarErroFichaCliente(mensagem) {
+  const carregando = document.getElementById("fichaCarregando");
+  const conteudo = document.getElementById("fichaClienteConteudo");
+
+  if (carregando) {
+    carregando.innerHTML =
+      '<div class="ficha-erro">❌ ' +
+      escaparHTMLCliente(mensagem) +
+      "</div>";
+  }
+
+  if (conteudo) conteudo.hidden = true;
+  ajustarAlturaFichaCliente();
+}
+
+function statusOSFicha(status) {
+  const texto = normalizarTextoFicha(status);
+
+  if (texto === "entregue") return "entregue";
+  if (texto === "pronto para retirada") return "pronto";
+  if (texto === "em producao" || texto === "enviado ao laboratorio") {
+    return "producao";
+  }
+
+  return "recebido";
+}
+
+function telefoneWhatsAppFicha(telefone) {
+  let numero = somenteNumerosFicha(telefone);
+
+  if (!numero) return "";
+
+  if ((numero.length === 10 || numero.length === 11) && !numero.startsWith("55")) {
+    numero = "55" + numero;
+  }
+
+  return numero;
+}
+
+function abrirWhatsAppFichaCliente() {
+  const dados = window.fichaClienteAtual;
+  if (!dados || !dados.cliente) return;
+
+  const numero = telefoneWhatsAppFicha(dados.cliente.telefone);
+
+  if (!numero) {
+    alert("Este cliente não possui telefone cadastrado.");
+    return;
+  }
+
+  const mensagem =
+    "Olá, " +
+    (dados.cliente.nome || "cliente") +
+    "! Aqui é da Óticas Ventura 👓";
+
+  window.open(
+    "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensagem),
+    "_blank"
+  );
+}
+
+function imprimirFichaCliente() {
+  window.print();
+}
+
+function voltarParaClientes() {
+  window.location.href = "clientes.html";
+}
+
+function receitaTabelaFicha(receita) {
+  if (!receita) {
+    return '<div class="ficha-vazio">Nenhuma receita encontrada para este cliente.</div>';
+  }
+
+  const cabecalho = [
+    receita.origem,
+    receita.identificacao,
+    receita.data ? dataBRFicha(receita.data) : ""
+  ].filter(Boolean).join(" • ");
+
+  return `
+    <div class="receita-bloco">
+      <div class="receita-cabecalho">${escaparHTMLCliente(cabecalho || "Receita")}</div>
+
+      <div class="receita-tabela-wrapper">
+        <table class="receita-tabela">
+          <thead>
+            <tr>
+              <th>Olho</th>
+              <th>Esférico</th>
+              <th>Cilíndrico</th>
+              <th>Eixo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>OD</td>
+              <td>${escaparHTMLCliente(receita.odEsferico || "-")}</td>
+              <td>${escaparHTMLCliente(receita.odCilindrico || "-")}</td>
+              <td>${escaparHTMLCliente(receita.odEixo || "-")}</td>
+            </tr>
+            <tr>
+              <td>OE</td>
+              <td>${escaparHTMLCliente(receita.oeEsferico || "-")}</td>
+              <td>${escaparHTMLCliente(receita.oeCilindrico || "-")}</td>
+              <td>${escaparHTMLCliente(receita.oeEixo || "-")}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="receita-medidas">
+        <span><strong>DNP:</strong> ${escaparHTMLCliente(receita.dnp || "-")}</span>
+        <span><strong>Altura:</strong> ${escaparHTMLCliente(receita.altura || "-")}</span>
+        <span><strong>Adição:</strong> ${escaparHTMLCliente(receita.adicao || "-")}</span>
+      </div>
+
+      ${
+        receita.observacoes
+          ? `<p class="receita-observacao"><strong>Observações:</strong> ${escaparHTMLCliente(receita.observacoes)}</p>`
+          : ""
+      }
+    </div>
+  `;
+}
+
+function preencherFichaCliente(dados) {
+  const { cliente, ordens, pedidos, historicoReceitas } = dados;
+
+  const totalComprado = ordens.reduce(
+    (total, os) => total + numeroFicha(os.valor),
+    0
+  );
+
+  const totalSaldo = ordens.reduce(
+    (total, os) => total + Math.max(numeroFicha(os.restante), 0),
+    0
+  );
+
+  const totalPago = Math.max(totalComprado - totalSaldo, 0);
+
+  const definirTexto = (id, valor) => {
+    const elemento = document.getElementById(id);
+    if (elemento) elemento.textContent = valor;
+  };
+
+  definirTexto("fichaNomeTopo", cliente.nome || "Cliente");
+  definirTexto("fichaNome", cliente.nome || "-");
+  definirTexto("fichaTelefone", cliente.telefone || "-");
+  definirTexto("fichaCpf", cliente.cpf || "-");
+  definirTexto("fichaNascimento", dataBRFicha(cliente.nascimento));
+  definirTexto("fichaCep", cliente.cep || "-");
+  definirTexto("fichaEndereco", cliente.endereco || "-");
+  definirTexto("fichaBairro", cliente.bairro || "-");
+  definirTexto("fichaCidade", cliente.cidade || "-");
+  definirTexto("fichaRetorno", dataBRFicha(cliente.retorno));
+  definirTexto("fichaObservacoes", cliente.observacoes || "Nenhuma observação.");
+  definirTexto("fichaTotalComprado", "R$ " + dinheiroFicha(totalComprado));
+  definirTexto("fichaTotalPago", "R$ " + dinheiroFicha(totalPago));
+  definirTexto("fichaSaldo", "R$ " + dinheiroFicha(totalSaldo));
+  definirTexto("fichaQuantidadeOS", ordens.length);
+  definirTexto("fichaQuantidadeReceitas", historicoReceitas.length);
+
+  const botaoWhatsApp = document.getElementById("botaoWhatsAppFicha");
+  if (botaoWhatsApp && !telefoneWhatsAppFicha(cliente.telefone)) {
+    botaoWhatsApp.disabled = true;
+    botaoWhatsApp.textContent = "💬 Sem telefone";
+  }
+
+  const receitaAtual = document.getElementById("fichaReceitaAtual");
+  if (receitaAtual) {
+    receitaAtual.innerHTML = receitaTabelaFicha(historicoReceitas[0] || null);
+  }
+
+  const listaOS = document.getElementById("fichaListaOS");
+  if (listaOS) {
+    if (!ordens.length) {
+      listaOS.innerHTML =
+        '<div class="ficha-vazio">Nenhuma Ordem de Serviço encontrada.</div>';
+    } else {
+      listaOS.innerHTML = ordens.map(os => {
+        const valor = numeroFicha(os.valor);
+        const saldo = Math.max(numeroFicha(os.restante), 0);
+        const pago = Math.max(valor - saldo, 0);
+        const classeStatus = statusOSFicha(os.status);
+
+        return `
+          <article class="historico-card">
+            <div class="historico-topo">
+              <div>
+                <strong>OS ${escaparHTMLCliente(os.numero || "-")}</strong>
+                <span>${escaparHTMLCliente(dataBRFicha(os.dataCompra))}</span>
+              </div>
+              <span class="status-os ${classeStatus}">
+                ${escaparHTMLCliente(os.status || "Recebido")}
+              </span>
+            </div>
+
+            <div class="historico-grade">
+              <span><strong>Lente:</strong> ${escaparHTMLCliente(os.lente || "-")}</span>
+              <span><strong>Armação:</strong> ${escaparHTMLCliente(os.armacao || "-")}</span>
+              <span><strong>Previsão:</strong> ${escaparHTMLCliente(dataBRFicha(os.previsaoEntrega))}</span>
+              <span><strong>Pagamento:</strong> ${escaparHTMLCliente(os.pagamento || "-")}</span>
+              <span><strong>Total:</strong> R$ ${dinheiroFicha(valor)}</span>
+              <span><strong>Pago:</strong> R$ ${dinheiroFicha(pago)}</span>
+              <span class="${saldo > 0 ? "saldo-aberto" : "saldo-quitado"}">
+                <strong>Saldo:</strong> R$ ${dinheiroFicha(saldo)}
+              </span>
+            </div>
+
+            ${
+              os.observacoes
+                ? `<p class="historico-observacao"><strong>Observações:</strong> ${escaparHTMLCliente(os.observacoes)}</p>`
+                : ""
+            }
+          </article>
+        `;
+      }).join("");
+    }
+  }
+
+  const listaReceitas = document.getElementById("fichaListaReceitas");
+  if (listaReceitas) {
+    if (!historicoReceitas.length) {
+      listaReceitas.innerHTML =
+        '<div class="ficha-vazio">Nenhuma receita encontrada.</div>';
+    } else {
+      listaReceitas.innerHTML =
+        historicoReceitas.map(receitaTabelaFicha).join("");
+    }
+  }
+
+  const listaPedidos = document.getElementById("fichaListaPedidos");
+  if (listaPedidos) {
+    if (!pedidos.length) {
+      listaPedidos.innerHTML =
+        '<div class="ficha-vazio">Nenhum pedido separado encontrado.</div>';
+    } else {
+      listaPedidos.innerHTML = pedidos.map(pedido => `
+        <article class="historico-card">
+          <div class="historico-topo">
+            <div>
+              <strong>Pedido</strong>
+              <span>${escaparHTMLCliente(dataBRFicha(pedido.criadoEm || pedido.data))}</span>
+            </div>
+            <strong class="pedido-valor">R$ ${dinheiroFicha(pedido.valor)}</strong>
+          </div>
+
+          <div class="historico-grade">
+            <span><strong>Lente:</strong> ${escaparHTMLCliente(pedido.lente || pedido.produto || "-")}</span>
+            <span><strong>Armação:</strong> ${escaparHTMLCliente(pedido.armacao || "-")}</span>
+          </div>
+        </article>
+      `).join("");
+    }
+  }
+
+  const carregando = document.getElementById("fichaCarregando");
+  const conteudo = document.getElementById("fichaClienteConteudo");
+
+  if (carregando) carregando.hidden = true;
+  if (conteudo) conteudo.hidden = false;
+
+  ajustarAlturaFichaCliente();
+}
+
+async function carregarFichaCliente() {
+  const area = document.getElementById("fichaClienteConteudo");
+  if (!area) return;
+
+  const parametros = new URLSearchParams(window.location.search);
+  const clienteId = parametros.get("id");
+
+  if (!clienteId) {
+    mostrarErroFichaCliente("O cliente não foi informado.");
+    return;
+  }
+
+  try {
+    const [
+      clienteDoc,
+      receitasSnapshot,
+      ordensSnapshot,
+      pedidosSnapshot
+    ] = await Promise.all([
+      db.collection("clientes").doc(clienteId).get(),
+      db.collection("receituarios").get(),
+      db.collection("ordens").get(),
+      db.collection("pedidos").get()
+    ]);
+
+    if (!clienteDoc.exists) {
+      mostrarErroFichaCliente("Cliente não encontrado no sistema.");
+      return;
+    }
+
+    const cliente = {
+      id: clienteDoc.id,
+      ...clienteDoc.data()
+    };
+
+    const receitas = receitasSnapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(item => pertenceAoClienteFicha(item, clienteId, cliente))
+      .sort(
+        (a, b) =>
+          dataMillisFicha(b.criadoEm || b.data) -
+          dataMillisFicha(a.criadoEm || a.data)
+      );
+
+    const ordens = ordensSnapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(item => pertenceAoClienteFicha(item, clienteId, cliente))
+      .sort(
+        (a, b) =>
+          dataMillisFicha(b.dataCompra || b.criadoEm) -
+          dataMillisFicha(a.dataCompra || a.criadoEm)
+      );
+
+    const pedidos = pedidosSnapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(item => pertenceAoClienteFicha(item, clienteId, cliente))
+      .sort(
+        (a, b) =>
+          dataMillisFicha(b.criadoEm || b.data) -
+          dataMillisFicha(a.criadoEm || a.data)
+      );
+
+    const historicoReceitas = montarHistoricoReceitasFicha(
+      cliente,
+      receitas,
+      ordens
+    );
+
+    window.fichaClienteAtual = {
+      cliente,
+      receitas,
+      ordens,
+      pedidos,
+      historicoReceitas
+    };
+
+    preencherFichaCliente(window.fichaClienteAtual);
+  } catch (erro) {
+    console.error("Erro ao carregar ficha completa do cliente:", erro);
+    mostrarErroFichaCliente(
+      "Não foi possível carregar a ficha. Verifique a internet e tente novamente."
+    );
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  if (document.getElementById("fichaClienteConteudo")) {
+    carregarFichaCliente();
   }
 });
 
