@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Central de Pendências - Óticas Ventura</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(52,151,235,.18), transparent 28%),
+        linear-gradient(135deg, #062449, #0b4c86);
+      color: #17324b;
+    }
+
+    body { padding: 18px; }
+
+    button, input { font: inherit; }
+
+    .wrapper {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 18px 50px rgba(0,0,0,.22);
+    }
+
+    .topo {
+      padding: 24px 28px;
+      color: #fff;
+      background: linear-gradient(135deg, #082b54, #0d5d9f);
+    }
+
+    .topo h1 {
+      margin: 0;
+      font-size: 31px;
+      color: #fff;
+    }
+
+    .topo p {
+      margin: 7px 0 0;
+      color: #d9ecfb;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .conteudo { padding: 20px; }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0,1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 14px 10px;
+      border: 1px solid #d8e4ee;
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 7px 18px rgba(13,77,132,.08);
+      text-align: center;
+    }
+
+    .card span {
+      display: block;
+      min-height: 32px;
+      margin-bottom: 4px;
+      color: #60788f;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .card strong {
+      display: block;
+      color: #0d4d84;
+      font-size: 25px;
+    }
+
+    .ferramentas {
+      margin-bottom: 16px;
+      padding: 15px;
+      border: 1px solid #d9e5ef;
+      border-radius: 15px;
+      background: #f8fbfe;
+    }
+
+    .busca-linha {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto;
+      gap: 10px;
+    }
+
+    .busca-linha input {
+      width: 100%;
+      min-width: 0;
+      padding: 12px 13px;
+      border: 1px solid #cfdce8;
+      border-radius: 10px;
+      outline: none;
+      color: #18334d;
+      background: #fff;
+    }
+
+    .busca-linha input:focus {
+      border-color: #1687e8;
+      box-shadow: 0 0 0 3px rgba(22,135,232,.12);
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 14px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    button:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .btn-atualizar {
+      color: #fff;
+      background: #1687e8;
+    }
+
+    .filtros {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .filtro {
+      color: #31516d;
+      background: #eaf2f8;
+    }
+
+    .filtro.ativo {
+      color: #fff;
+      background: #0d5d9f;
+    }
+
+    .status {
+      min-height: 21px;
+      margin: 0 0 12px;
+      color: #526c82;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .lista {
+      display: grid;
+      gap: 12px;
+    }
+
+    .pendencia {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto;
+      gap: 16px;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid #d9e5ef;
+      border-left: 6px solid #1687e8;
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 7px 18px rgba(13,77,132,.07);
+    }
+
+    .pendencia.pronto { border-left-color: #239a55; }
+    .pendencia.atrasada { border-left-color: #c62828; }
+    .pendencia.hoje { border-left-color: #e39b12; }
+    .pendencia.saldo { border-left-color: #6f42c1; }
+    .pendencia.retorno { border-left-color: #0e97a7; }
+
+    .pendencia h3 {
+      margin: 0 0 7px;
+      color: #123f66;
+      font-size: 18px;
+    }
+
+    .detalhes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px 16px;
+      color: #526c82;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .detalhes strong { color: #284b68; }
+
+    .etiquetas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .etiqueta {
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: #31516d;
+      background: #eaf2f8;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .etiqueta.pronto { color: #176b3a; background: #e4f6eb; }
+    .etiqueta.atrasada { color: #a52424; background: #fdeaea; }
+    .etiqueta.hoje { color: #815800; background: #fff4d7; }
+    .etiqueta.saldo { color: #5c2da0; background: #f0e8fc; }
+    .etiqueta.retorno { color: #08717d; background: #e1f5f7; }
+
+    .acoes-item {
+      display: grid;
+      gap: 8px;
+      min-width: 155px;
+    }
+
+    .btn-whatsapp {
+      color: #fff;
+      background: #239a55;
+    }
+
+    .btn-whatsapp:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .vazio {
+      padding: 34px 18px;
+      border: 1px dashed #b9cbd9;
+      border-radius: 14px;
+      background: #f8fbfe;
+      color: #60788f;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    @media (max-width: 980px) {
+      .cards { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      body { padding: 10px; }
+      .topo { padding: 20px 17px; }
+      .topo h1 { font-size: 25px; }
+      .conteudo { padding: 14px; }
+      .cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .busca-linha { grid-template-columns: 1fr; }
+      .pendencia { grid-template-columns: 1fr; }
+      .acoes-item { min-width: 0; }
+      .acoes-item button { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrapper">
+    <header class="topo">
+      <h1>🔔 Central de Pendências e Pós-venda</h1>
+      <p>Acompanhe prazos, retiradas, saldos e retornos. As mensagens do WhatsApp só são abertas quando você clicar.</p>
+    </header>
+
+    <div class="conteudo">
+      <section class="cards">
+        <div class="card"><span>Total de pendências</span><strong id="contadorTodos">0</strong></div>
+        <div class="card"><span>OS atrasadas</span><strong id="contadorAtrasadas">0</strong></div>
+        <div class="card"><span>Entrega hoje</span><strong id="contadorHoje">0</strong></div>
+        <div class="card"><span>Prontos para retirada</span><strong id="contadorProntos">0</strong></div>
+        <div class="card"><span>Saldos a receber</span><strong id="contadorSaldos">0</strong></div>
+        <div class="card"><span>Retornos vencidos</span><strong id="contadorRetornos">0</strong></div>
+      </section>
+
+      <section class="ferramentas">
+        <div class="busca-linha">
+          <input id="buscaPendencias" type="search" placeholder="Buscar por cliente, telefone ou número da OS">
+          <button type="button" class="btn-atualizar" onclick="carregarPendencias()">🔄 Atualizar</button>
+        </div>
+
+        <div class="filtros">
+          <button type="button" class="filtro ativo" data-filtro="todos" onclick="selecionarFiltroPendencias('todos',this)">Todos</button>
+          <button type="button" class="filtro" data-filtro="atrasada" onclick="selecionarFiltroPendencias('atrasada',this)">🔴 Atrasadas</button>
+          <button type="button" class="filtro" data-filtro="hoje" onclick="selecionarFiltroPendencias('hoje',this)">🟡 Hoje</button>
+          <button type="button" class="filtro" data-filtro="pronto" onclick="selecionarFiltroPendencias('pronto',this)">🟢 Prontos</button>
+          <button type="button" class="filtro" data-filtro="saldo" onclick="selecionarFiltroPendencias('saldo',this)">💰 Saldos</button>
+          <button type="button" class="filtro" data-filtro="retorno" onclick="selecionarFiltroPendencias('retorno',this)">👁 Retornos</button>
+        </div>
+      </section>
+
+      <p class="status" id="statusPendencias">Carregando informações...</p>
+      <section class="lista" id="listaPendencias"></section>
+    </div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="app.js?v=16"></script>
+
+  <script>
+    const centralPendencias = {
+      itens: [],
+      filtro: "todos"
+    };
+
+    function escaparPendencia(valor) {
+      return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function semAcentosPendencia(valor) {
+      return String(valor || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+    }
+
+    function hojeISO() {
+      const agora = new Date();
+      const ano = agora.getFullYear();
+      const mes = String(agora.getMonth() + 1).padStart(2, "0");
+      const dia = String(agora.getDate()).padStart(2, "0");
+      return ano + "-" + mes + "-" + dia;
+    }
+
+    function normalizarDataPendencia(valor) {
+      if (!valor) return "";
+
+      if (valor.toDate && typeof valor.toDate === "function") {
+        const data = valor.toDate();
+        return [
+          data.getFullYear(),
+          String(data.getMonth() + 1).padStart(2, "0"),
+          String(data.getDate()).padStart(2, "0")
+        ].join("-");
+      }
+
+      const texto = String(valor).trim();
+
+      if (/^\d{4}-\d{2}-\d{2}/.test(texto)) {
+        return texto.slice(0, 10);
+      }
+
+      const br = texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      if (br) return br[3] + "-" + br[2] + "-" + br[1];
+
+      return "";
+    }
+
+    function dataBRPendencia(valor) {
+      const data = normalizarDataPendencia(valor);
+      if (!data) return "-";
+      const partes = data.split("-");
+      return partes[2] + "/" + partes[1] + "/" + partes[0];
+    }
+
+    function numeroPendencia(valor) {
+      const numero = Number(String(valor ?? 0).replace(",", "."));
+      return Number.isFinite(numero) ? numero : 0;
+    }
+
+    function dinheiroPendencia(valor) {
+      return numeroPendencia(valor).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function telefoneWhatsAppPendencia(telefone) {
+      let numero = String(telefone || "").replace(/\D/g, "");
+      if (!numero) return "";
+
+      if ((numero.length === 10 || numero.length === 11) && !numero.startsWith("55")) {
+        numero = "55" + numero;
+      }
+
+      return numero;
+    }
+
+    function mensagemWhatsAppPendencia(item) {
+      const nome = item.cliente || "cliente";
+
+      if (item.tipo === "retorno") {
+        return "Olá, " + nome + "! Já está na época de fazer uma nova avaliação visual. A Óticas Ventura está à disposição para agendar seu atendimento 👓";
+      }
+
+      const numeroOS = item.numero ? " nº " + item.numero : "";
+
+      if (item.categorias.includes("pronto")) {
+        let mensagem = "Olá, " + nome + "! Seus óculos estão prontos para retirada na Óticas Ventura 👓";
+
+        if (item.restante > 0) {
+          mensagem += "\n\nNo sistema consta um saldo de R$ " + dinheiroPendencia(item.restante) + " para o momento da retirada.";
+        }
+
+        return mensagem + "\n\nEstamos à disposição!";
+      }
+
+      if (item.categorias.includes("atrasada")) {
+        return "Olá, " + nome + "! Aqui é da Óticas Ventura. Estamos entrando em contato para atualizar você sobre o andamento do seu pedido" + numeroOS + " 👓";
+      }
+
+      if (item.categorias.includes("hoje")) {
+        return "Olá, " + nome + "! A previsão do seu pedido" + numeroOS + " é para hoje. Estamos acompanhando o andamento e qualquer atualização avisaremos por aqui 👓";
+      }
+
+      return "Olá, " + nome + "! Aqui é da Óticas Ventura. Consta um saldo de R$ " + dinheiroPendencia(item.restante) + " referente à sua compra" + numeroOS + ". Estamos à disposição para ajudar.";
+    }
+
+    function abrirWhatsAppPendencia(indice) {
+      const item = centralPendencias.itens[indice];
+      if (!item) return;
+
+      const telefone = telefoneWhatsAppPendencia(item.telefone);
+
+      if (!telefone) {
+        alert("Este cadastro não possui telefone para WhatsApp.");
+        return;
+      }
+
+      const mensagem = mensagemWhatsAppPendencia(item);
+      window.open("https://wa.me/" + telefone + "?text=" + encodeURIComponent(mensagem), "_blank");
+    }
+
+    function prioridadePendencia(item) {
+      if (item.categorias.includes("pronto")) return 1;
+      if (item.categorias.includes("atrasada")) return 2;
+      if (item.categorias.includes("hoje")) return 3;
+      if (item.categorias.includes("saldo")) return 4;
+      return 5;
+    }
+
+    function etiquetaPendencia(categoria) {
+      const dados = {
+        pronto: ["🟢 Pronto para retirada", "pronto"],
+        atrasada: ["🔴 OS atrasada", "atrasada"],
+        hoje: ["🟡 Entrega hoje", "hoje"],
+        saldo: ["💰 Saldo a receber", "saldo"],
+        retorno: ["👁 Retorno vencido", "retorno"]
+      };
+
+      const item = dados[categoria];
+      return item
+        ? '<span class="etiqueta ' + item[1] + '">' + item[0] + "</span>"
+        : "";
+    }
+
+    function classePrincipalPendencia(item) {
+      if (item.categorias.includes("pronto")) return "pronto";
+      if (item.categorias.includes("atrasada")) return "atrasada";
+      if (item.categorias.includes("hoje")) return "hoje";
+      if (item.categorias.includes("saldo")) return "saldo";
+      return "retorno";
+    }
+
+    function atualizarContadoresPendencias() {
+      const contar = categoria =>
+        centralPendencias.itens.filter(item => item.categorias.includes(categoria)).length;
+
+      document.getElementById("contadorTodos").textContent = centralPendencias.itens.length;
+      document.getElementById("contadorAtrasadas").textContent = contar("atrasada");
+      document.getElementById("contadorHoje").textContent = contar("hoje");
+      document.getElementById("contadorProntos").textContent = contar("pronto");
+      document.getElementById("contadorSaldos").textContent = contar("saldo");
+      document.getElementById("contadorRetornos").textContent = contar("retorno");
+
+      try {
+        const botao = window.parent.document.getElementById("btnPendencias");
+        if (botao) botao.textContent = "🔔 Pendências (" + centralPendencias.itens.length + ")";
+      } catch (erro) {}
+    }
+
+    function renderizarPendencias() {
+      const lista = document.getElementById("listaPendencias");
+      const status = document.getElementById("statusPendencias");
+      const busca = semAcentosPendencia(document.getElementById("buscaPendencias").value);
+
+      const itens = centralPendencias.itens.filter(item => {
+        if (
+          centralPendencias.filtro !== "todos" &&
+          !item.categorias.includes(centralPendencias.filtro)
+        ) return false;
+
+        if (!busca) return true;
+
+        const texto = semAcentosPendencia([
+          item.cliente,
+          item.telefone,
+          item.numero,
+          item.status
+        ].join(" "));
+
+        return texto.includes(busca);
+      });
+
+      status.textContent =
+        itens.length + (itens.length === 1 ? " pendência exibida." : " pendências exibidas.");
+
+      if (!itens.length) {
+        lista.innerHTML = '<div class="vazio">✅ Nenhuma pendência encontrada neste filtro.</div>';
+        ajustarAlturaPendencias();
+        return;
+      }
+
+      lista.innerHTML = itens.map(item => {
+        const indiceReal = centralPendencias.itens.indexOf(item);
+        const etiquetas = item.categorias.map(etiquetaPendencia).join("");
+        const semTelefone = !telefoneWhatsAppPendencia(item.telefone);
+
+        let detalhes = "";
+
+        if (item.tipo === "os") {
+          detalhes = `
+            <span><strong>OS:</strong> ${escaparPendencia(item.numero || "-")}</span>
+            <span><strong>Telefone:</strong> ${escaparPendencia(item.telefone || "-")}</span>
+            <span><strong>Previsão:</strong> ${escaparPendencia(dataBRPendencia(item.previsaoEntrega))}</span>
+            <span><strong>Status:</strong> ${escaparPendencia(item.status || "Recebido")}</span>
+            ${item.restante > 0 ? `<span><strong>Saldo:</strong> R$ ${dinheiroPendencia(item.restante)}</span>` : ""}
+          `;
+        } else {
+          detalhes = `
+            <span><strong>Telefone:</strong> ${escaparPendencia(item.telefone || "-")}</span>
+            <span><strong>Data do retorno:</strong> ${escaparPendencia(dataBRPendencia(item.retorno))}</span>
+          `;
+        }
+
+        return `
+          <article class="pendencia ${classePrincipalPendencia(item)}">
+            <div>
+              <h3>${escaparPendencia(item.cliente || "Cliente sem nome")}</h3>
+              <div class="detalhes">${detalhes}</div>
+              <div class="etiquetas">${etiquetas}</div>
+            </div>
+
+            <div class="acoes-item">
+              <button
+                type="button"
+                class="btn-whatsapp"
+                onclick="abrirWhatsAppPendencia(${indiceReal})"
+                ${semTelefone ? "disabled" : ""}
+              >
+                💬 ${semTelefone ? "Sem telefone" : "Chamar no WhatsApp"}
+              </button>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      ajustarAlturaPendencias();
+    }
+
+    function selecionarFiltroPendencias(filtro, botao) {
+      centralPendencias.filtro = filtro;
+
+      document.querySelectorAll(".filtro").forEach(item => item.classList.remove("ativo"));
+      if (botao) botao.classList.add("ativo");
+
+      renderizarPendencias();
+    }
+
+    function ajustarAlturaPendencias() {
+      setTimeout(function () {
+        try {
+          if (window.parent && typeof window.parent.ajustarAlturaFrame === "function") {
+            window.parent.ajustarAlturaFrame();
+          }
+        } catch (erro) {}
+      }, 80);
+    }
+
+    async function carregarPendencias() {
+      const lista = document.getElementById("listaPendencias");
+      const status = document.getElementById("statusPendencias");
+
+      status.textContent = "⏳ Atualizando pendências...";
+      lista.innerHTML = '<div class="vazio">Carregando dados do sistema...</div>';
+
+      try {
+        const [ordensSnap, clientesSnap] = await Promise.all([
+          db.collection("ordens").get(),
+          db.collection("clientes").get()
+        ]);
+
+        const hoje = hojeISO();
+        const itens = [];
+
+        ordensSnap.forEach(doc => {
+          const os = doc.data() || {};
+          const statusNormalizado = semAcentosPendencia(os.status || "Recebido");
+          const entregue = statusNormalizado === "entregue";
+          const pronto = statusNormalizado === "pronto para retirada";
+          const previsao = normalizarDataPendencia(os.previsaoEntrega);
+          const restante = numeroPendencia(os.restante);
+          const categorias = [];
+
+          if (!entregue && previsao && previsao < hoje) categorias.push("atrasada");
+          if (!entregue && previsao && previsao === hoje) categorias.push("hoje");
+          if (!entregue && pronto) categorias.push("pronto");
+          if (restante > 0) categorias.push("saldo");
+
+          if (!categorias.length) return;
+
+          itens.push({
+            id: doc.id,
+            tipo: "os",
+            numero: os.numero || os.os || "",
+            cliente: os.cliente || "",
+            telefone: os.telefone || "",
+            previsaoEntrega: previsao,
+            status: os.status || "Recebido",
+            restante,
+            categorias
+          });
+        });
+
+        clientesSnap.forEach(doc => {
+          const cliente = doc.data() || {};
+          const retorno = normalizarDataPendencia(cliente.retorno);
+
+          if (!retorno || retorno > hoje) return;
+
+          itens.push({
+            id: doc.id,
+            tipo: "retorno",
+            cliente: cliente.nome || "",
+            telefone: cliente.telefone || "",
+            retorno,
+            categorias: ["retorno"]
+          });
+        });
+
+        itens.sort((a, b) => {
+          const prioridade = prioridadePendencia(a) - prioridadePendencia(b);
+          if (prioridade !== 0) return prioridade;
+
+          const dataA = a.previsaoEntrega || a.retorno || "9999-12-31";
+          const dataB = b.previsaoEntrega || b.retorno || "9999-12-31";
+          return dataA.localeCompare(dataB);
+        });
+
+        centralPendencias.itens = itens;
+        atualizarContadoresPendencias();
+        renderizarPendencias();
+      } catch (erro) {
+        console.error("Erro ao carregar pendências:", erro);
+        status.textContent = "❌ Não foi possível carregar as pendências.";
+        lista.innerHTML = '<div class="vazio">Verifique a internet e tente novamente.</div>';
+        ajustarAlturaPendencias();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const busca = document.getElementById("buscaPendencias");
+      if (busca) busca.addEventListener("input", renderizarPendencias);
+      carregarPendencias();
+    });
+  </script>
+</body>
+</html>
