@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Óticas Ventura Protegida</title>
+  <!-- Óticas Ventura Protegida - gestão interna v2 -->
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --azul-escuro: #082b54;
+      --azul: #0d5d9f;
+      --azul-claro: #1687e8;
+      --fundo: #edf4f9;
+      --borda: #d6e3ed;
+      --texto: #17324b;
+      --texto-suave: #637b91;
+      --verde: #16885f;
+      --vermelho: #c54242;
+      --amarelo: #a96b00;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--texto);
+      background:
+        radial-gradient(circle at top left, rgba(52,151,235,.16), transparent 28%),
+        linear-gradient(135deg, #062449, #0b4c86);
+    }
+
+    body { padding: 14px; }
+
+    button, input, select, textarea { font: inherit; }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 15px;
+      color: #fff;
+      background: var(--azul-claro);
+      font-weight: 700;
+      cursor: pointer;
+      transition: .18s;
+    }
+
+    button:hover { filter: brightness(1.04); }
+
+    button:disabled {
+      opacity: .62;
+      cursor: wait;
+    }
+
+    .pagina {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: 0 18px 50px rgba(0,0,0,.23);
+    }
+
+    .topo {
+      padding: 17px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--azul-escuro), var(--azul));
+    }
+
+    .topo-titulo {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .topo-icone {
+      width: 49px;
+      height: 49px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      border: 2px solid rgba(255,255,255,.72);
+      border-radius: 15px;
+      color: #fff;
+      background: linear-gradient(145deg, #ffbf19, #ff7a00);
+      box-shadow:
+        0 0 0 4px rgba(255,191,25,.17),
+        0 8px 22px rgba(255,122,0,.34);
+      font-size: 27px;
+      text-shadow: 0 2px 5px rgba(0,0,0,.24);
+    }
+
+    .topo h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .topo p {
+      margin: 4px 0 0;
+      color: #d6eafb;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .btn-voltar {
+      padding: 9px 12px;
+      flex: 0 0 auto;
+      border: 1px solid rgba(255,255,255,.20);
+      background: rgba(255,255,255,.10);
+      font-size: 13px;
+    }
+
+    .conteudo {
+      padding: 17px;
+      background: var(--fundo);
+    }
+
+    .barra-mes {
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .barra-mes strong { color: var(--azul-escuro); }
+
+    .seletor-mes {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .seletor-mes button {
+      width: 31px;
+      height: 31px;
+      padding: 0;
+      border-radius: 9px;
+      background: #eaf3fb;
+      color: var(--azul);
+    }
+
+    .seletor-mes span {
+      min-width: 118px;
+      text-align: center;
+      color: var(--azul-escuro);
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: capitalize;
+    }
+
+    .cards {
+      margin-bottom: 14px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+    .card {
+      min-height: 96px;
+      padding: 14px;
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 7px 18px rgba(13,77,132,.07);
+    }
+
+    .card span {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--texto-suave);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .card strong {
+      display: block;
+      color: var(--azul-escuro);
+      font-size: 23px;
+      line-height: 1.15;
+    }
+
+    .card.resultado.positivo strong { color: var(--verde); }
+    .card.resultado.negativo strong { color: var(--vermelho); }
+
+    .grade-principal {
+      display: grid;
+      grid-template-columns: minmax(320px, .78fr) minmax(0, 1.22fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .painel {
+      padding: 15px;
+      border: 1px solid var(--borda);
+      border-radius: 15px;
+      background: #fff;
+    }
+
+    .painel h2 {
+      margin: 0 0 13px;
+      color: var(--azul-escuro);
+      font-size: 18px;
+    }
+
+    .painel-subtitulo {
+      margin: -7px 0 13px;
+      color: var(--texto-suave);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+    }
+
+    .campo { min-width: 0; }
+
+    .campo.largo { grid-column: 1 / -1; }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #3e5d76;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      min-height: 41px;
+      padding: 9px 10px;
+      border: 1px solid #cbdbe7;
+      border-radius: 10px;
+      outline: none;
+      color: var(--texto);
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 74px;
+      resize: vertical;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--azul-claro);
+      box-shadow: 0 0 0 3px rgba(22,135,232,.10);
+    }
+
+    .valores-bloco {
+      grid-column: 1 / -1;
+      padding: 13px;
+      border: 1px solid #cbdde9;
+      border-radius: 13px;
+      background: linear-gradient(180deg, #f8fcff, #eef6fb);
+    }
+
+    .valores-bloco-titulo {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .valores-bloco-titulo strong {
+      display: block;
+      color: var(--azul-escuro);
+      font-size: 14px;
+    }
+
+    .valores-bloco-titulo span {
+      display: block;
+      margin-top: 3px;
+      color: var(--texto-suave);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .valores-despesas {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .valor-categoria-card {
+      padding: 10px;
+      border: 1px solid #d6e4ee;
+      border-radius: 11px;
+      background: #fff;
+      transition: .18s;
+    }
+
+    .valor-categoria-card:focus-within {
+      border-color: var(--azul-claro);
+      box-shadow: 0 0 0 3px rgba(22,135,232,.10);
+    }
+
+    .valor-categoria-card.em-edicao {
+      border-color: #f0a400;
+      background: #fff9e8;
+      box-shadow: 0 0 0 3px rgba(240,164,0,.13);
+    }
+
+    .valor-categoria-card.desabilitado {
+      opacity: .47;
+      background: #eef3f6;
+    }
+
+    .valor-categoria-card label {
+      margin-bottom: 7px;
+      color: var(--azul-escuro);
+      font-size: 12px;
+    }
+
+    .campo-moeda {
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid #cbdbe7;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .campo-moeda:focus-within {
+      border-color: var(--azul-claro);
+      box-shadow: 0 0 0 3px rgba(22,135,232,.10);
+    }
+
+    .campo-moeda span {
+      padding: 0 9px;
+      color: #547087;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .campo-moeda input {
+      min-height: 39px;
+      border: 0;
+      border-left: 1px solid #e0e8ef;
+      border-radius: 0;
+      box-shadow: none !important;
+    }
+
+    .campo-moeda input:disabled {
+      color: #8093a3;
+      background: #f3f6f8;
+      cursor: not-allowed;
+    }
+
+    .os-referencia {
+      min-height: 24px;
+      margin-top: 5px;
+      color: var(--texto-suave);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .os-referencia.encontrada {
+      color: var(--verde);
+      font-weight: 800;
+    }
+
+    .os-referencia.nao-encontrada {
+      color: var(--amarelo);
+      font-weight: 800;
+    }
+
+    .form-acoes {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn-secundario {
+      color: #426079;
+      background: #e8f0f6;
+    }
+
+    .btn-perigo { background: var(--vermelho); }
+
+    .resumo-categorias {
+      margin-top: 14px;
+      padding-top: 13px;
+      border-top: 1px solid #e2ebf2;
+    }
+
+    .resumo-categorias h3 {
+      margin: 0 0 9px;
+      color: var(--azul-escuro);
+      font-size: 14px;
+    }
+
+    .categorias-lista {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 7px;
+    }
+
+    .categoria-item {
+      padding: 9px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 9px;
+      border: 1px solid #e0e9f0;
+      border-radius: 10px;
+      background: #f8fbfd;
+      font-size: 12px;
+    }
+
+    .categoria-item span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .categoria-item strong {
+      color: var(--azul-escuro);
+      white-space: nowrap;
+    }
+
+    .filtros {
+      margin-bottom: 11px;
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 8px;
+    }
+
+    .tabela-wrap {
+      max-height: 560px;
+      overflow: auto;
+      border: 1px solid #dbe6ee;
+      border-radius: 12px;
+    }
+
+    table {
+      width: 100%;
+      min-width: 830px;
+      border-collapse: collapse;
+      background: #fff;
+      font-size: 12px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #e5edf3;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      color: #fff;
+      background: var(--azul);
+      white-space: nowrap;
+    }
+
+    tr:nth-child(even) td { background: #f8fbfd; }
+
+    .valor-tabela {
+      color: var(--vermelho);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .acoes-tabela {
+      display: flex;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .acoes-tabela button {
+      padding: 7px 9px;
+      font-size: 11px;
+    }
+
+    .btn-editar { background: #5b73a7; }
+    .btn-excluir { background: var(--vermelho); }
+
+    .vazio {
+      padding: 24px 14px;
+      color: var(--texto-suave);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .aviso-privacidade {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border: 1px solid #dbe7f0;
+      border-radius: 11px;
+      color: #536e84;
+      background: #f7fafc;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .bloqueio {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(5,24,45,.94);
+      backdrop-filter: blur(6px);
+    }
+
+    .bloqueio-card {
+      width: min(100%, 390px);
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 19px;
+      color: #fff;
+      background: linear-gradient(145deg, #0a315e, #092544);
+      box-shadow: 0 24px 65px rgba(0,0,0,.38);
+      text-align: center;
+    }
+
+    .bloqueio-icone {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid rgba(255,255,255,.78);
+      border-radius: 22px;
+      color: #fff;
+      background: linear-gradient(145deg, #ffd32a, #ff7600);
+      box-shadow:
+        0 0 0 7px rgba(255,187,22,.12),
+        0 0 34px rgba(255,157,0,.48),
+        0 16px 32px rgba(0,0,0,.30);
+      font-size: 34px;
+      text-shadow: 0 3px 7px rgba(0,0,0,.28);
+      animation: pulsoCadeado 2.2s ease-in-out infinite;
+    }
+
+    @keyframes pulsoCadeado {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.045); }
+    }
+
+    .bloqueio-card h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .bloqueio-card p {
+      margin: 8px 0 16px;
+      color: #d4e6f5;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .bloqueio-card input {
+      margin-bottom: 9px;
+      border-color: rgba(255,255,255,.28);
+    }
+
+    .bloqueio-card button { width: 100%; }
+
+    .bloqueio-erro {
+      min-height: 18px;
+      margin-top: 9px;
+      color: #ffb9b9;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 980px) {
+      .cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .grade-principal { grid-template-columns: 1fr; }
+      .tabela-wrap { max-height: 480px; }
+    }
+
+    @media (max-width: 620px) {
+      body { padding: 0; background: #fff; }
+      .pagina { border-radius: 0; box-shadow: none; }
+      .topo { padding: 14px; }
+      .topo h1 { font-size: 20px; }
+      .topo p { display: none; }
+      .conteudo { padding: 11px; }
+      .barra-mes {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .seletor-mes { width: 100%; justify-content: space-between; }
+      .cards { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .card { min-height: 86px; padding: 12px; }
+      .card strong { font-size: 19px; }
+      .form-grid, .filtros { grid-template-columns: 1fr; }
+      .valores-despesas { grid-template-columns: 1fr; }
+      .categorias-lista { grid-template-columns: 1fr; }
+      .btn-voltar { padding: 8px 10px; font-size: 12px; }
+    }
+
+    @media (max-width: 400px) {
+      .cards { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .pagina { max-width: none; box-shadow: none; border-radius: 0; }
+      .topo, .barra-mes, .form-acoes, .filtros, .acoes-tabela,
+      .aviso-privacidade, .bloqueio { display: none !important; }
+      .conteudo { padding: 0; background: #fff; }
+      .grade-principal { display: block; }
+      .painel { margin-bottom: 15px; border: 0; }
+      .tabela-wrap { max-height: none; overflow: visible; }
+    }
+  </style>
+</head>
+<body>
+  <div id="bloqueioGestao" class="bloqueio">
+    <div class="bloqueio-card">
+      <div class="bloqueio-icone" aria-hidden="true">🔒</div>
+      <h2>Óticas Ventura Protegida</h2>
+      <p>Confirme a senha usada no login para acessar a gestão interna de custos e despesas.</p>
+      <input
+        type="password"
+        id="senhaGestao"
+        placeholder="Digite sua senha"
+        autocomplete="current-password"
+        onkeydown="if(event.key === 'Enter') desbloquearGestao()"
+      >
+      <button type="button" id="btnDesbloquearGestao" onclick="desbloquearGestao()">
+        Desbloquear
+      </button>
+      <div id="erroGestao" class="bloqueio-erro"></div>
+    </div>
+  </div>
+
+  <main class="pagina">
+    <header class="topo">
+      <div class="topo-titulo">
+        <span class="topo-icone" aria-hidden="true">🔒</span>
+        <div>
+          <h1>Óticas Ventura Protegida</h1>
+          <p>Gestão interna de custos e despesas — acesso confidencial</p>
+        </div>
+      </div>
+      <button type="button" class="btn-voltar" onclick="voltarFinanceiro()">← Financeiro</button>
+    </header>
+
+    <div id="conteudoGestao" class="conteudo" hidden>
+      <section class="barra-mes">
+        <strong>Controle interno do período</strong>
+        <div class="seletor-mes">
+          <button type="button" onclick="mudarMesGestao(-1)" aria-label="Mês anterior">‹</button>
+          <span id="mesGestao">Carregando...</span>
+          <button type="button" onclick="mudarMesGestao(1)" aria-label="Próximo mês">›</button>
+        </div>
+      </section>
+
+      <section class="cards">
+        <article class="card">
+          <span>Vendas do mês</span>
+          <strong id="vendasMes">R$ 0,00</strong>
+        </article>
+        <article class="card">
+          <span>Custos e despesas</span>
+          <strong id="custosMes">R$ 0,00</strong>
+        </article>
+        <article id="cardResultado" class="card resultado positivo">
+          <span>Resultado estimado</span>
+          <strong id="resultadoMes">R$ 0,00</strong>
+        </article>
+        <article class="card">
+          <span>Margem estimada</span>
+          <strong id="margemMes">0,0%</strong>
+        </article>
+      </section>
+
+      <section class="grade-principal">
+        <div class="painel">
+          <h2 id="tituloFormulario">Novo lançamento interno</h2>
+          <p class="painel-subtitulo">
+            Estes valores ficam separados da OS e não aparecem em documentos do cliente.
+          </p>
+
+          <div class="form-grid">
+            <div class="campo">
+              <label for="dataDespesa">Data</label>
+              <input type="date" id="dataDespesa">
+            </div>
+
+            <div class="campo">
+              <label for="pagamentoDespesa">Forma de pagamento</label>
+              <select id="pagamentoDespesa">
+                <option value="">Não informado</option>
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Pix">Pix</option>
+                <option value="Débito">Débito</option>
+                <option value="Crédito">Crédito</option>
+                <option value="Boleto">Boleto</option>
+                <option value="Transferência">Transferência</option>
+                <option value="Outros">Outros</option>
+              </select>
+            </div>
+
+            <div class="valores-bloco">
+              <div class="valores-bloco-titulo">
+                <div>
+                  <strong>Valores separados por despesa</strong>
+                  <span>Preencha somente os campos utilizados. Cada valor será salvo como um lançamento independente.</span>
+                </div>
+              </div>
+
+              <div id="valoresCategorias" class="valores-despesas">
+                <div class="valor-categoria-card">
+                  <label for="valorLente">Lente</label>
+                  <div class="campo-moeda">
+                    <span>R$</span>
+                    <input class="valor-categoria" type="text" inputmode="decimal" id="valorLente"
+                      data-categoria="Lente" data-tipo="Custo da venda" placeholder="0,00">
+                  </div>
+                </div>
+
+                <div class="valor-categoria-card">
+                  <label for="valorArmacao">Armação</label>
+                  <div class="campo-moeda">
+                    <span>R$</span>
+                    <input class="valor-categoria" type="text" inputmode="decimal" id="valorArmacao"
+                      data-categoria="Armação" data-tipo="Custo da venda" placeholder="0,00">
+                  </div>
+                </div>
+
+                <div class="valor-categoria-card">
+                  <label for="valorMontagem">Montagem / Laboratório</label>
+                  <div class="campo-moeda">
+                    <span>R$</span>
+                    <input class="valor-categoria" type="text" inputmode="decimal" id="valorMontagem"
+                      data-categoria="Montagem / Laboratório" data-tipo="Custo da venda" placeholder="0,00">
+                  </div>
+                </div>
+
+                <div class="valor-categoria-card">
+                  <label for="valorFrete">Frete</label>
+                  <div class="campo-moeda">
+                    <span>R$</span>
+                    <input class="valor-categoria" type="text" inputmode="decimal" id="valorFrete"
+                      data-categoria="Frete" data-tipo="Custo da venda" placeholder="0,00">
+                  </div>
+                </div>
+
+                <div class="valor-categoria-card">
+                  <label for="valorAluguel">Aluguel</label>
+                  <div class="campo-moeda">
+                    <span>R$</span>
+                    <input class="valor-categoria" type="text" inputmode="decimal" id="valorAluguel"
+                      data-categoria="Aluguel" data-tipo="Despesa da loja" placeholder="0,00">
+                  </div>
+                </div>
+
+                <div class="valor-categoria-card">
+                  <label for="valorEnergia">Energia</label>
+                  <div class="campo-moeda">
+                    <span>R$</span>
+                    <input class="valor-categoria" type="text" inputmode="decimal" id="valorEnergia"
+                      data-categoria="Energia" data-tipo="Despesa da loja" placeholder="0,00">
+                  </div>
+                </div>
+
+                <div class="valor-categoria-card">
+                  <label for="valorInternet">Internet</label>
+                  <div class="campo-moeda">
+                    <span>R$</span>
+                    <input class="valor-categoria" type="text" inputmode="decimal" id="valorInternet"
+                      data-categoria="Internet" data-tipo="Despesa da loja" placeholder="0,00">
+                  </div>
+                </div>
+
+                <div class="valor-categoria-card">
+                  <label for="valorMarketing">Marketing</label>
+                  <div class="campo-moeda">
+                    <span>R$</span>
+                    <input class="valor-categoria" type="text" inputmode="decimal" id="valorMarketing"
+                      data-categoria="Marketing" data-tipo="Despesa da loja" placeholder="0,00">
+                  </div>
+                </div>
+
+                <div class="valor-categoria-card">
+                  <label for="valorFuncionarios">Funcionários</label>
+                  <div class="campo-moeda">
+                    <span>R$</span>
+                    <input class="valor-categoria" type="text" inputmode="decimal" id="valorFuncionarios"
+                      data-categoria="Funcionários" data-tipo="Despesa da loja" placeholder="0,00">
+                  </div>
+                </div>
+
+                <div class="valor-categoria-card">
+                  <label for="valorImpostos">Impostos</label>
+                  <div class="campo-moeda">
+                    <span>R$</span>
+                    <input class="valor-categoria" type="text" inputmode="decimal" id="valorImpostos"
+                      data-categoria="Impostos" data-tipo="Despesa da loja" placeholder="0,00">
+                  </div>
+                </div>
+
+                <div class="valor-categoria-card">
+                  <label for="valorOutros">Outros</label>
+                  <div class="campo-moeda">
+                    <span>R$</span>
+                    <input class="valor-categoria" type="text" inputmode="decimal" id="valorOutros"
+                      data-categoria="Outros" data-tipo="Despesa da loja" placeholder="0,00">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="campo largo">
+              <label for="descricaoDespesa">Descrição geral — opcional</label>
+              <input type="text" id="descricaoDespesa" placeholder="Ex.: compras do laboratório ou despesas do mês">
+            </div>
+
+            <div class="campo">
+              <label for="fornecedorDespesa">Fornecedor — opcional</label>
+              <input type="text" id="fornecedorDespesa" placeholder="Opcional">
+            </div>
+
+            <div class="campo">
+              <label for="osDespesa">OS relacionada — opcional</label>
+              <input
+                type="text"
+                inputmode="numeric"
+                id="osDespesa"
+                placeholder="Digite somente o número da OS"
+                oninput="verificarOSRelacionada()"
+              >
+              <div id="referenciaOS" class="os-referencia">
+                O vínculo é apenas interno e não altera a Ordem de Serviço.
+              </div>
+            </div>
+
+            <div class="campo largo">
+              <label for="observacoesDespesa">Observações internas</label>
+              <textarea id="observacoesDespesa" placeholder="Opcional"></textarea>
+            </div>
+          </div>
+
+          <div class="form-acoes">
+            <button type="button" id="btnSalvarDespesa" onclick="salvarLancamentoInterno()">
+              Salvar despesas
+            </button>
+            <button type="button" id="btnCancelarEdicao" class="btn-secundario" onclick="limparFormulario()" hidden>
+              Cancelar edição
+            </button>
+          </div>
+
+          <div class="resumo-categorias">
+            <h3>Resumo por categoria</h3>
+            <div id="resumoCategorias" class="categorias-lista"></div>
+          </div>
+
+          <div class="aviso-privacidade">
+            🔒 Óticas Ventura Protegida: nenhum custo é gravado na OS, impresso para o cliente ou mostrado na ficha do cliente.
+          </div>
+        </div>
+
+        <div class="painel">
+          <h2>Histórico interno</h2>
+          <p class="painel-subtitulo">Somente lançamentos do mês selecionado.</p>
+
+          <div class="filtros">
+            <input
+              type="search"
+              id="buscaDespesa"
+              placeholder="Buscar descrição, fornecedor ou OS"
+              oninput="renderizarLancamentos()"
+            >
+            <select id="filtroCategoria" onchange="renderizarLancamentos()">
+              <option value="">Todas as categorias</option>
+              <option value="Lente">Lente</option>
+              <option value="Armação">Armação</option>
+              <option value="Montagem / Laboratório">Montagem / Laboratório</option>
+              <option value="Frete">Frete</option>
+              <option value="Aluguel">Aluguel</option>
+              <option value="Energia">Energia</option>
+              <option value="Internet">Internet</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Funcionários">Funcionários</option>
+              <option value="Impostos">Impostos</option>
+              <option value="Outros">Outros</option>
+            </select>
+          </div>
+
+          <div class="tabela-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Categoria</th>
+                  <th>Descrição</th>
+                  <th>OS</th>
+                  <th>Fornecedor</th>
+                  <th>Pagamento</th>
+                  <th>Valor</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaLancamentos"></tbody>
+            </table>
+            <div id="mensagemVazia" class="vazio" hidden>
+              Nenhum lançamento interno encontrado neste mês.
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="app.js?v=20"></script>
+
+  <script>
+    let mesGestaoAtual = new Date();
+    mesGestaoAtual.setDate(1);
+
+    let lancamentosGestao = [];
+    let ordensGestao = [];
+    let edicaoGestaoId = null;
+    let osRelacionadaAtual = null;
+    let acessoLiberado = false;
+
+    const categoriasOrdem = [
+      "Lente",
+      "Armação",
+      "Montagem / Laboratório",
+      "Frete",
+      "Aluguel",
+      "Energia",
+      "Internet",
+      "Marketing",
+      "Funcionários",
+      "Impostos",
+      "Outros"
+    ];
+
+    function escaparHTML(valor) {
+      return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function numeroSeguro(valor) {
+      if (typeof valor === "number") return Number.isFinite(valor) ? valor : 0;
+      let texto = String(valor ?? "").trim();
+      if (!texto) return 0;
+
+      if (texto.includes(",") && texto.includes(".")) {
+        texto = texto.replace(/\./g, "").replace(",", ".");
+      } else {
+        texto = texto.replace(",", ".");
+      }
+
+      texto = texto.replace(/[^\d.-]/g, "");
+      const numero = Number(texto);
+      return Number.isFinite(numero) ? numero : 0;
+    }
+
+    function moeda(valor) {
+      return Number(valor || 0).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
+    }
+
+    function normalizarTexto(valor) {
+      return String(valor ?? "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+    }
+
+    function dataParaJS(valor) {
+      if (!valor) return null;
+
+      if (valor.toDate && typeof valor.toDate === "function") {
+        return valor.toDate();
+      }
+
+      if (valor.seconds) {
+        return new Date(valor.seconds * 1000);
+      }
+
+      const texto = String(valor).trim();
+
+      if (/^\d{4}-\d{2}-\d{2}/.test(texto)) {
+        const [ano, mes, dia] = texto.slice(0, 10).split("-").map(Number);
+        return new Date(ano, mes - 1, dia);
+      }
+
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(texto)) {
+        const [dia, mes, ano] = texto.split("/").map(Number);
+        return new Date(ano, mes - 1, dia);
+      }
+
+      const data = new Date(texto);
+      return Number.isNaN(data.getTime()) ? null : data;
+    }
+
+    function dataBR(valor) {
+      const data = dataParaJS(valor);
+      return data ? data.toLocaleDateString("pt-BR") : "-";
+    }
+
+    function pertenceAoMes(valor, referencia = mesGestaoAtual) {
+      const data = dataParaJS(valor);
+      return Boolean(
+        data &&
+        data.getMonth() === referencia.getMonth() &&
+        data.getFullYear() === referencia.getFullYear()
+      );
+    }
+
+    function atualizarTituloMes() {
+      const elemento = document.getElementById("mesGestao");
+      if (!elemento) return;
+
+      elemento.textContent = mesGestaoAtual.toLocaleDateString("pt-BR", {
+        month: "long",
+        year: "numeric"
+      });
+    }
+
+    async function desbloquearGestao() {
+      const senha = document.getElementById("senhaGestao");
+      const erro = document.getElementById("erroGestao");
+      const botao = document.getElementById("btnDesbloquearGestao");
+      const usuario = firebase.auth().currentUser;
+
+      erro.textContent = "";
+
+      if (!usuario) {
+        erro.textContent = "Sua sessão não está ativa. Entre novamente no sistema.";
+        return;
+      }
+
+      if (!senha.value) {
+        erro.textContent = "Digite sua senha.";
+        senha.focus();
+        return;
+      }
+
+      botao.disabled = true;
+      botao.textContent = "Verificando...";
+
+      try {
+        const credencial = firebase.auth.EmailAuthProvider.credential(
+          usuario.email,
+          senha.value
+        );
+
+        await usuario.reauthenticateWithCredential(credencial);
+
+        acessoLiberado = true;
+        document.getElementById("bloqueioGestao").hidden = true;
+        document.getElementById("conteudoGestao").hidden = false;
+        senha.value = "";
+
+        await carregarGestaoInterna();
+      } catch (e) {
+        console.error("Falha ao confirmar senha:", e);
+        erro.textContent = "Senha incorreta. Tente novamente.";
+        senha.select();
+      } finally {
+        botao.disabled = false;
+        botao.textContent = "Desbloquear";
+      }
+    }
+
+    function voltarFinanceiro() {
+      window.location.href = "financeiro.html";
+    }
+
+    async function carregarGestaoInterna() {
+      if (!acessoLiberado) return;
+
+      atualizarTituloMes();
+
+      try {
+        const [lancamentosSnapshot, ordensSnapshot] = await Promise.all([
+          db.collection("gestaoInterna").get(),
+          db.collection("ordens").get()
+        ]);
+
+        lancamentosGestao = lancamentosSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        ordensGestao = ordensSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        atualizarPainelGestao();
+      } catch (erro) {
+        console.error("Erro ao carregar gestão interna:", erro);
+        alert("Não foi possível carregar a área interna.");
+      }
+    }
+
+    function mudarMesGestao(direcao) {
+      mesGestaoAtual.setMonth(mesGestaoAtual.getMonth() + direcao);
+      atualizarTituloMes();
+      limparFormulario();
+      atualizarPainelGestao();
+    }
+
+    function lancamentosDoMes() {
+      return lancamentosGestao
+        .filter(item => pertenceAoMes(item.data || item.criadoEm))
+        .sort((a, b) => {
+          const dataA = dataParaJS(a.data || a.criadoEm)?.getTime() || 0;
+          const dataB = dataParaJS(b.data || b.criadoEm)?.getTime() || 0;
+          return dataB - dataA;
+        });
+    }
+
+    function vendasDoMes() {
+      return ordensGestao.filter(os =>
+        pertenceAoMes(os.dataCompra || os.criadoEm || os.data)
+      );
+    }
+
+    function atualizarPainelGestao() {
+      if (!acessoLiberado) return;
+
+      const lancamentos = lancamentosDoMes();
+      const vendas = vendasDoMes();
+
+      const totalCustos = lancamentos.reduce(
+        (soma, item) => soma + numeroSeguro(item.valor),
+        0
+      );
+
+      const totalVendas = vendas.reduce(
+        (soma, os) => soma + numeroSeguro(os.valor),
+        0
+      );
+
+      const resultado = totalVendas - totalCustos;
+      const margem = totalVendas > 0 ? (resultado / totalVendas) * 100 : 0;
+
+      document.getElementById("vendasMes").textContent = moeda(totalVendas);
+      document.getElementById("custosMes").textContent = moeda(totalCustos);
+      document.getElementById("resultadoMes").textContent = moeda(resultado);
+      document.getElementById("margemMes").textContent =
+        margem.toLocaleString("pt-BR", {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1
+        }) + "%";
+
+      const cardResultado = document.getElementById("cardResultado");
+      cardResultado.classList.toggle("positivo", resultado >= 0);
+      cardResultado.classList.toggle("negativo", resultado < 0);
+
+      renderizarResumoCategorias(lancamentos);
+      renderizarLancamentos();
+      verificarOSRelacionada();
+    }
+
+    function renderizarResumoCategorias(lancamentos) {
+      const area = document.getElementById("resumoCategorias");
+      const totais = {};
+
+      categoriasOrdem.forEach(categoria => {
+        totais[categoria] = 0;
+      });
+
+      lancamentos.forEach(item => {
+        const categoria = item.categoria || "Outros";
+        totais[categoria] = (totais[categoria] || 0) + numeroSeguro(item.valor);
+      });
+
+      const itensComValor = categoriasOrdem.filter(categoria => totais[categoria] > 0);
+
+      if (!itensComValor.length) {
+        area.innerHTML = '<div class="vazio" style="grid-column:1/-1;padding:12px;">Sem custos neste mês.</div>';
+        return;
+      }
+
+      area.innerHTML = itensComValor.map(categoria => `
+        <div class="categoria-item">
+          <span>${escaparHTML(categoria)}</span>
+          <strong>${moeda(totais[categoria])}</strong>
+        </div>
+      `).join("");
+    }
+
+    function verificarOSRelacionada() {
+      const campo = document.getElementById("osDespesa");
+      const area = document.getElementById("referenciaOS");
+      if (!campo || !area) return;
+
+      const numero = String(campo.value || "").trim();
+      osRelacionadaAtual = null;
+      area.className = "os-referencia";
+
+      if (!numero) {
+        area.textContent = "O vínculo é apenas interno e não altera a Ordem de Serviço.";
+        return;
+      }
+
+      const os = ordensGestao.find(item =>
+        String(item.numero || "").trim() === numero
+      );
+
+      if (!os) {
+        area.classList.add("nao-encontrada");
+        area.textContent = "OS não localizada. O lançamento pode ser salvo sem vínculo.";
+        return;
+      }
+
+      osRelacionadaAtual = os;
+      area.classList.add("encontrada");
+      area.textContent =
+        `OS ${numero} localizada — ${os.cliente || "cliente não informado"} — venda ${moeda(numeroSeguro(os.valor))}`;
+    }
+
+    function camposDeValores() {
+      return Array.from(document.querySelectorAll(".valor-categoria"));
+    }
+
+    function itensPreenchidos() {
+      return camposDeValores()
+        .map(input => ({
+          input,
+          categoria: input.dataset.categoria,
+          tipo: input.dataset.tipo,
+          valor: numeroSeguro(input.value)
+        }))
+        .filter(item => item.valor > 0);
+    }
+
+    function configurarCamposParaEdicao(categoriaAtiva = "") {
+      camposDeValores().forEach(input => {
+        const card = input.closest(".valor-categoria-card");
+        const ativo = !categoriaAtiva || input.dataset.categoria === categoriaAtiva;
+
+        input.disabled = Boolean(categoriaAtiva) && !ativo;
+        card?.classList.toggle("em-edicao", Boolean(categoriaAtiva) && ativo);
+        card?.classList.toggle("desabilitado", Boolean(categoriaAtiva) && !ativo);
+      });
+    }
+
+    async function salvarLancamentoInterno() {
+      if (!acessoLiberado) return;
+
+      const data = document.getElementById("dataDespesa").value;
+      const descricaoBase = document.getElementById("descricaoDespesa").value.trim();
+      const fornecedor = document.getElementById("fornecedorDespesa").value.trim();
+      const pagamento = document.getElementById("pagamentoDespesa").value;
+      const osNumero = document.getElementById("osDespesa").value.trim();
+      const observacoes = document.getElementById("observacoesDespesa").value.trim();
+      const botao = document.getElementById("btnSalvarDespesa");
+      const itens = itensPreenchidos();
+
+      if (!data) {
+        alert("Informe a data.");
+        return;
+      }
+
+      if (!itens.length) {
+        alert("Informe pelo menos um valor maior que zero.");
+        camposDeValores().find(input => !input.disabled)?.focus();
+        return;
+      }
+
+      if (edicaoGestaoId && itens.length !== 1) {
+        alert("Na edição, altere somente o valor da categoria selecionada.");
+        return;
+      }
+
+      verificarOSRelacionada();
+
+      const dadosComuns = {
+        data,
+        fornecedor,
+        pagamento,
+        observacoes,
+        osNumero: osNumero || "",
+        osId: osRelacionadaAtual?.id || "",
+        clienteNome: osRelacionadaAtual?.cliente || "",
+        atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      botao.disabled = true;
+      botao.textContent = edicaoGestaoId ? "Atualizando..." : "Salvando despesas...";
+
+      try {
+        if (edicaoGestaoId) {
+          const item = itens[0];
+          await db.collection("gestaoInterna").doc(edicaoGestaoId).update({
+            ...dadosComuns,
+            tipo: item.tipo,
+            categoria: item.categoria,
+            descricao: descricaoBase || item.categoria,
+            valor: item.valor
+          });
+        } else {
+          const lote = db.batch();
+
+          itens.forEach(item => {
+            const referencia = db.collection("gestaoInterna").doc();
+            lote.set(referencia, {
+              ...dadosComuns,
+              tipo: item.tipo,
+              categoria: item.categoria,
+              descricao: descricaoBase || item.categoria,
+              valor: item.valor,
+              criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          });
+
+          await lote.commit();
+        }
+
+        await carregarGestaoInterna();
+        limparFormulario();
+      } catch (erro) {
+        console.error("Erro ao salvar despesas internas:", erro);
+        alert("Não foi possível salvar as despesas.");
+      } finally {
+        botao.disabled = false;
+        botao.textContent = edicaoGestaoId ? "Atualizar lançamento" : "Salvar despesas";
+      }
+    }
+
+    function editarLancamentoInterno(id) {
+      const item = lancamentosGestao.find(lancamento => lancamento.id === id);
+      if (!item) return;
+
+      edicaoGestaoId = id;
+
+      camposDeValores().forEach(input => {
+        input.value = "";
+      });
+
+      const campoCategoria = camposDeValores().find(
+        input => input.dataset.categoria === (item.categoria || "Outros")
+      );
+
+      if (campoCategoria) {
+        campoCategoria.value = numeroSeguro(item.valor).toFixed(2).replace(".", ",");
+      }
+
+      configurarCamposParaEdicao(item.categoria || "Outros");
+
+      document.getElementById("tituloFormulario").textContent =
+        `Editar lançamento — ${item.categoria || "Outros"}`;
+      document.getElementById("dataDespesa").value = item.data || "";
+      document.getElementById("descricaoDespesa").value = item.descricao || "";
+      document.getElementById("fornecedorDespesa").value = item.fornecedor || "";
+      document.getElementById("pagamentoDespesa").value = item.pagamento || "";
+      document.getElementById("osDespesa").value = item.osNumero || "";
+      document.getElementById("observacoesDespesa").value = item.observacoes || "";
+      document.getElementById("btnSalvarDespesa").textContent = "Atualizar lançamento";
+      document.getElementById("btnCancelarEdicao").hidden = false;
+
+      verificarOSRelacionada();
+      campoCategoria?.focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function excluirLancamentoInterno(id) {
+      const item = lancamentosGestao.find(lancamento => lancamento.id === id);
+      if (!item) return;
+
+      if (!confirm(`Excluir o lançamento "${item.descricao || "sem descrição"}"?`)) {
+        return;
+      }
+
+      try {
+        await db.collection("gestaoInterna").doc(id).delete();
+        if (edicaoGestaoId === id) limparFormulario();
+        await carregarGestaoInterna();
+      } catch (erro) {
+        console.error("Erro ao excluir lançamento interno:", erro);
+        alert("Não foi possível excluir o lançamento.");
+      }
+    }
+
+    function limparFormulario() {
+      edicaoGestaoId = null;
+      osRelacionadaAtual = null;
+
+      const hoje = new Date();
+      const ano = hoje.getFullYear();
+      const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+      const dia = String(hoje.getDate()).padStart(2, "0");
+
+      document.getElementById("tituloFormulario").textContent = "Novo lançamento interno";
+      document.getElementById("dataDespesa").value = `${ano}-${mes}-${dia}`;
+      document.getElementById("descricaoDespesa").value = "";
+      document.getElementById("fornecedorDespesa").value = "";
+      document.getElementById("pagamentoDespesa").value = "";
+      document.getElementById("osDespesa").value = "";
+      document.getElementById("observacoesDespesa").value = "";
+
+      camposDeValores().forEach(input => {
+        input.value = "";
+      });
+
+      configurarCamposParaEdicao();
+
+      document.getElementById("btnSalvarDespesa").textContent = "Salvar despesas";
+      document.getElementById("btnCancelarEdicao").hidden = true;
+
+      verificarOSRelacionada();
+    }
+
+    function renderizarLancamentos() {
+      if (!acessoLiberado) return;
+
+      const busca = normalizarTexto(document.getElementById("buscaDespesa")?.value);
+      const categoria = document.getElementById("filtroCategoria")?.value || "";
+      const corpo = document.getElementById("tabelaLancamentos");
+      const vazio = document.getElementById("mensagemVazia");
+
+      const filtrados = lancamentosDoMes().filter(item => {
+        if (categoria && item.categoria !== categoria) return false;
+
+        if (busca) {
+          const texto = normalizarTexto([
+            item.descricao,
+            item.fornecedor,
+            item.osNumero,
+            item.categoria,
+            item.tipo,
+            item.clienteNome
+          ].join(" "));
+
+          if (!texto.includes(busca)) return false;
+        }
+
+        return true;
+      });
+
+      if (!filtrados.length) {
+        corpo.innerHTML = "";
+        vazio.hidden = false;
+        return;
+      }
+
+      vazio.hidden = true;
+      corpo.innerHTML = filtrados.map(item => `
+        <tr>
+          <td>${escaparHTML(dataBR(item.data || item.criadoEm))}</td>
+          <td>
+            <strong>${escaparHTML(item.categoria || "Outros")}</strong><br>
+            <span style="color:#6b8092;font-size:10px;">${escaparHTML(item.tipo || "")}</span>
+          </td>
+          <td>${escaparHTML(item.descricao || "-")}</td>
+          <td>${item.osNumero ? "#" + escaparHTML(item.osNumero) : "-"}</td>
+          <td>${escaparHTML(item.fornecedor || "-")}</td>
+          <td>${escaparHTML(item.pagamento || "-")}</td>
+          <td class="valor-tabela">${moeda(numeroSeguro(item.valor))}</td>
+          <td>
+            <div class="acoes-tabela">
+              <button type="button" class="btn-editar" onclick="editarLancamentoInterno('${item.id}')">Editar</button>
+              <button type="button" class="btn-excluir" onclick="excluirLancamentoInterno('${item.id}')">Excluir</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    firebase.auth().onAuthStateChanged(usuario => {
+      if (!usuario) return;
+      document.getElementById("senhaGestao").focus();
+      limparFormulario();
+      atualizarTituloMes();
+    });
+  </script>
+</body>
+</html>
