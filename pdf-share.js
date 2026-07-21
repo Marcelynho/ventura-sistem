@@ -129,22 +129,62 @@
     quadro.style.opacity = "0";
     quadro.style.pointerEvents = "none";
     quadro.style.border = "0";
-    document.body.appendChild(quadro);
 
     try {
-      await new Promise((resolve, reject) => {
+      const carregado = new Promise((resolve, reject) => {
         const temporizador = setTimeout(() => reject(new Error("Tempo excedido ao montar o PDF.")), 10000);
         quadro.onload = () => {
           clearTimeout(temporizador);
           resolve();
         };
-        quadro.srcdoc = html;
       });
 
+      quadro.srcdoc = html;
+      document.body.appendChild(quadro);
+      await carregado;
+
       const documento = quadro.contentDocument;
+      const janela = quadro.contentWindow;
       const elemento = documento && (documento.querySelector(".folha-pdf") || documento.body);
-      if (!elemento) throw new Error("Conteúdo do PDF não encontrado.");
-      return await gerarPdfDeElemento(elemento, nomeArquivo);
+      if (!documento || !janela || !elemento) throw new Error("Conteúdo do PDF não encontrado.");
+
+      // A biblioteca precisa rodar dentro do iframe para respeitar integralmente
+      // o CSS do documento. Quando o elemento do iframe era renderizado pela
+      // janela principal, a logo perdia o tamanho de 66px e ocupava páginas inteiras.
+      if (!janela.html2pdf) {
+        await new Promise((resolve, reject) => {
+          const script = documento.createElement("script");
+          script.src = HTML2PDF_URL;
+          script.async = true;
+          script.onload = () => janela.html2pdf
+            ? resolve()
+            : reject(new Error("Biblioteca de PDF não carregada no documento."));
+          script.onerror = () => reject(new Error("Não foi possível carregar o gerador de PDF."));
+          documento.head.appendChild(script);
+        });
+      }
+
+      await aguardarImagens(elemento);
+
+      const opcoes = {
+        margin: [7, 7, 7, 7],
+        filename: nomeArquivo,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          allowTaint: false,
+          backgroundColor: "#ffffff",
+          logging: false
+        },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        pagebreak: { mode: ["css", "legacy"] }
+      };
+
+      return await janela.html2pdf()
+        .set(opcoes)
+        .from(elemento)
+        .outputPdf("blob");
     } finally {
       quadro.remove();
     }
