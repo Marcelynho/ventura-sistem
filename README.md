@@ -35,6 +35,7 @@ O projeto tem como foco um sistema profissional, simples de usar e com visual pr
 ✅ Caixa  
 ✅ Histórico  
 ✅ Recibo de Atendimento  
+✅ Compartilhamento gratuito de PDFs da OS, recibo e receita  
 ✅ Configurações  
 
 ---
