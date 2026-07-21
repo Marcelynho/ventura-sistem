@@ -174,3 +174,26 @@ Todas as alterações devem manter a identidade visual e a organização do sist
 ## Preparação fiscal — Etapa 2 (21/07/2026)
 
 A Ordem de Serviço passou a aceitar detalhamento fiscal separado de lente, armação, serviço e desconto. O total principal da OS continua no campo `valor`, preservando compatibilidade com financeiro, caixa, relatórios e registros antigos. A prévia fiscal só é aberta quando a soma dos itens, menos o desconto, coincide com o total da venda.
+
+---
+
+# Compartilhamento gratuito de PDF
+
+O Ventura System possui compartilhamento de documentos pelo recurso nativo do navegador, sem integração paga com a API do WhatsApp.
+
+Documentos disponíveis:
+
+- Ordem de Serviço em PDF.
+- Recibo de Atendimento em PDF, identificado como documento sem valor fiscal.
+- Receituário em PDF.
+- Prévia fiscal em PDF, identificada como documento sem valor fiscal.
+
+Fluxo:
+
+1. O sistema gera o PDF no navegador.
+2. O usuário toca em “Compartilhar agora”.
+3. O aparelho abre a folha de compartilhamento.
+4. O usuário escolhe o WhatsApp e confirma o contato.
+
+O sistema nunca envia documentos automaticamente. Em navegadores sem suporte ao compartilhamento de arquivos, é oferecido o download do PDF.
+
