@@ -2907,6 +2907,8 @@ async function listarOS() {
             ` : ""}
 
             <button type="button" class="btn-os-imprimir" onclick="imprimirOSPorId('${os.id}', 'cliente')">🖨 Imprimir</button>
+            <button type="button" class="btn-os-imprimir" onclick="compartilharOSPorId('${os.id}')">📤 PDF da OS</button>
+            <button type="button" class="btn-os-imprimir" onclick="compartilharReciboPorId('${os.id}')">📲 Recibo</button>
 
             <select id="status-lista-${os.id}" aria-label="Status da OS ${escaparHTMLOS(os.numero)}">
               ${opcoes}
