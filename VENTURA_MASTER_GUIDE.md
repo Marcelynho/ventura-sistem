@@ -158,3 +158,14 @@ Se este projeto for aberto em uma nova conversa com uma IA:
 ## Observação
 
 Todas as alterações devem manter a identidade visual e a organização do sistema.
+
+
+---
+
+## Preparação fiscal — Etapa 1 (2026-07-21)
+
+- Dados fiscais da empresa adicionados em Configurações.
+- Cadastro de cliente preparado para CPF/CNPJ, e-mail e endereço completo.
+- Ordem de Serviço preparada para copiar e salvar esses dados.
+- `notafiscal.html` agora é uma prévia fiscal sem valor fiscal.
+- A emissão oficial permanece desativada até integração com emissor/SEFAZ e validação do contador.
