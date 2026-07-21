@@ -169,3 +169,8 @@ Todas as alterações devem manter a identidade visual e a organização do sist
 - Ordem de Serviço preparada para copiar e salvar esses dados.
 - `notafiscal.html` agora é uma prévia fiscal sem valor fiscal.
 - A emissão oficial permanece desativada até integração com emissor/SEFAZ e validação do contador.
+
+
+## Preparação fiscal — Etapa 2 (21/07/2026)
+
+A Ordem de Serviço passou a aceitar detalhamento fiscal separado de lente, armação, serviço e desconto. O total principal da OS continua no campo `valor`, preservando compatibilidade com financeiro, caixa, relatórios e registros antigos. A prévia fiscal só é aberta quando a soma dos itens, menos o desconto, coincide com o total da venda.
