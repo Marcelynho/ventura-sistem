@@ -22,3 +22,18 @@ Esta etapa prepara o Ventura System para uma futura integração de NF-e/NFC-e, 
 ## Próxima etapa sugerida
 
 Criar o cadastro fiscal de produtos/serviços e separar os valores de armação, lentes e serviços por item, com quantidade, valor unitário, desconto e total.
+
+
+## Etapa 2 — Detalhamento dos itens da venda
+
+Adicionado à Ordem de Serviço:
+
+- quantidade e valor unitário da lente;
+- quantidade e valor unitário da armação;
+- serviço adicional opcional, com quantidade e valor;
+- desconto total;
+- conferência automática entre os itens e o valor total da venda;
+- bloqueio da prévia fiscal quando os valores não fecharem;
+- prévia fiscal com cada item em sua própria linha.
+
+Compatibilidade: o campo `valor` continua sendo o total oficial usado pelo sistema. Os novos campos são complementares e não removem dados antigos.
