@@ -471,6 +471,14 @@
           >
             🖨 Imprimir Receita
           </button>
+
+          <button
+            type="button"
+            class="btn-verde"
+            onclick="compartilharReceitaPDF()"
+          >
+            📲 Compartilhar receita em PDF
+          </button>
         </div>
 
         <div id="listaReceitasCliente"></div>
@@ -483,7 +491,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=23"></script>
+  <script src="pdf-share.js?v=1"></script>
 
 </body>
 </html>
