@@ -143,7 +143,7 @@
     suporte.style.position = "fixed";
     suporte.style.left = "-12000px";
     suporte.style.top = "0";
-    suporte.style.width = "790px";
+    suporte.style.width = "740px";
     suporte.style.minHeight = "1px";
     suporte.style.background = "#ffffff";
     suporte.style.opacity = "1";
@@ -346,15 +346,16 @@
   function estilosDocumentoPDF() {
     return `
       .folha-pdf,.folha-pdf *{box-sizing:border-box}
-      .folha-pdf{width:790px;max-width:790px;margin:0 auto;padding:18px;background:#fff;color:#17324b;font-family:Arial,Helvetica,sans-serif}
-      .folha-pdf .topo-pdf{display:flex;gap:13px;align-items:center;padding-bottom:11px;border-bottom:2px solid #0d5d9f}
-      .folha-pdf .topo-pdf img{width:66px!important;height:66px!important;max-width:66px!important;max-height:66px!important;object-fit:cover;border-radius:50%;flex:0 0 66px}
-      .folha-pdf .empresa-pdf{min-width:0;flex:1}
+      .folha-pdf{width:740px;max-width:740px;margin:0 auto;padding:18px;background:#fff;color:#17324b;font-family:Arial,Helvetica,sans-serif}
+      .folha-pdf .topo-pdf{display:grid;grid-template-columns:66px minmax(0,1fr) 165px;column-gap:13px;align-items:center;padding-bottom:11px;border-bottom:2px solid #0d5d9f}
+      .folha-pdf .topo-pdf img{width:66px!important;height:66px!important;max-width:66px!important;max-height:66px!important;object-fit:cover;border-radius:50%}
+      .folha-pdf .empresa-pdf{min-width:0}
       .folha-pdf .empresa-pdf h1{margin:0;color:#0d5d9f;font-size:23px}
-      .folha-pdf .empresa-pdf p{margin:3px 0;color:#38556e;font-size:10px}
-      .folha-pdf .tipo-pdf{text-align:right;color:#0d5d9f;font-size:12px;font-weight:800}
-      .folha-pdf .tipo-pdf strong,.folha-pdf .tipo-pdf span{display:block}
-      .folha-pdf .tipo-pdf span{margin-top:4px;color:#60788f;font-size:10px}
+      .folha-pdf .empresa-pdf p{margin:3px 0;color:#38556e;font-size:10px;line-height:1.25;overflow-wrap:anywhere}
+      .folha-pdf .tipo-pdf{width:165px;max-width:165px;min-width:165px;justify-self:end;text-align:right;color:#0d5d9f;font-weight:800;line-height:1.18}
+      .folha-pdf .tipo-pdf strong,.folha-pdf .tipo-pdf span{display:block;max-width:100%}
+      .folha-pdf .tipo-pdf strong{font-size:11px;white-space:nowrap}
+      .folha-pdf .tipo-pdf span{margin-top:4px;color:#60788f;font-size:9.5px;white-space:nowrap}
       .folha-pdf .grade-pdf{display:grid;grid-template-columns:1fr 1fr;gap:10px}
       .folha-pdf .box-pdf{margin-top:10px;padding:10px;border:1px solid #cfdce8;border-radius:9px;break-inside:avoid;page-break-inside:avoid}
       .folha-pdf .box-pdf h2{margin:0 0 7px;color:#0d5d9f;font-size:14px}
