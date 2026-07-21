@@ -119,74 +119,52 @@
   }
 
   async function gerarPdfDeHtml(html, nomeArquivo) {
-    const quadro = document.createElement("iframe");
-    quadro.setAttribute("aria-hidden", "true");
-    quadro.style.position = "fixed";
-    quadro.style.left = "-12000px";
-    quadro.style.top = "0";
-    quadro.style.width = "820px";
-    quadro.style.height = "1120px";
-    quadro.style.opacity = "0";
-    quadro.style.pointerEvents = "none";
-    quadro.style.border = "0";
+    await carregarHtml2Pdf();
+
+    const parser = new DOMParser();
+    const documentoTemporario = parser.parseFromString(html, "text/html");
+    const elementoOrigem = documentoTemporario.querySelector(".folha-pdf") || documentoTemporario.body;
+    if (!elementoOrigem) throw new Error("Conteúdo do PDF não encontrado.");
+
+    const estilos = Array.from(documentoTemporario.querySelectorAll("style"))
+      .map(estilo => estilo.textContent || "")
+      .join("\n");
+
+    const idEstilo = "venturaPdfEstiloTemporario";
+    const estiloAnterior = document.getElementById(idEstilo);
+    if (estiloAnterior) estiloAnterior.remove();
+
+    const folhaEstilo = document.createElement("style");
+    folhaEstilo.id = idEstilo;
+    folhaEstilo.textContent = estilos;
+
+    const suporte = document.createElement("div");
+    suporte.setAttribute("aria-hidden", "true");
+    suporte.style.position = "fixed";
+    suporte.style.left = "-12000px";
+    suporte.style.top = "0";
+    suporte.style.width = "790px";
+    suporte.style.minHeight = "1px";
+    suporte.style.background = "#ffffff";
+    suporte.style.opacity = "1";
+    suporte.style.pointerEvents = "none";
+    suporte.style.zIndex = "-1";
+
+    const elemento = elementoOrigem.cloneNode(true);
+    suporte.appendChild(elemento);
+    document.head.appendChild(folhaEstilo);
+    document.body.appendChild(suporte);
 
     try {
-      const carregado = new Promise((resolve, reject) => {
-        const temporizador = setTimeout(() => reject(new Error("Tempo excedido ao montar o PDF.")), 10000);
-        quadro.onload = () => {
-          clearTimeout(temporizador);
-          resolve();
-        };
-      });
-
-      quadro.srcdoc = html;
-      document.body.appendChild(quadro);
-      await carregado;
-
-      const documento = quadro.contentDocument;
-      const janela = quadro.contentWindow;
-      const elemento = documento && (documento.querySelector(".folha-pdf") || documento.body);
-      if (!documento || !janela || !elemento) throw new Error("Conteúdo do PDF não encontrado.");
-
-      // A biblioteca precisa rodar dentro do iframe para respeitar integralmente
-      // o CSS do documento. Quando o elemento do iframe era renderizado pela
-      // janela principal, a logo perdia o tamanho de 66px e ocupava páginas inteiras.
-      if (!janela.html2pdf) {
-        await new Promise((resolve, reject) => {
-          const script = documento.createElement("script");
-          script.src = HTML2PDF_URL;
-          script.async = true;
-          script.onload = () => janela.html2pdf
-            ? resolve()
-            : reject(new Error("Biblioteca de PDF não carregada no documento."));
-          script.onerror = () => reject(new Error("Não foi possível carregar o gerador de PDF."));
-          documento.head.appendChild(script);
-        });
-      }
-
       await aguardarImagens(elemento);
-
-      const opcoes = {
-        margin: [7, 7, 7, 7],
-        filename: nomeArquivo,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: {
-          scale: 2,
-          useCORS: true,
-          allowTaint: false,
-          backgroundColor: "#ffffff",
-          logging: false
-        },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-        pagebreak: { mode: ["css", "legacy"] }
-      };
-
-      return await janela.html2pdf()
-        .set(opcoes)
-        .from(elemento)
-        .outputPdf("blob");
+      if (document.fonts && document.fonts.ready) {
+        try { await document.fonts.ready; } catch (erro) {}
+      }
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      return await gerarPdfDeElemento(elemento, nomeArquivo);
     } finally {
-      quadro.remove();
+      suporte.remove();
+      folhaEstilo.remove();
     }
   }
 
@@ -367,28 +345,27 @@
 
   function estilosDocumentoPDF() {
     return `
-      *{box-sizing:border-box}
-      body{margin:0;padding:0;background:#fff;color:#17324b;font-family:Arial,Helvetica,sans-serif}
-      .folha-pdf{width:100%;max-width:790px;margin:0 auto;padding:18px;background:#fff}
-      .topo-pdf{display:flex;gap:13px;align-items:center;padding-bottom:11px;border-bottom:2px solid #0d5d9f}
-      .topo-pdf img{width:66px;height:66px;object-fit:cover;border-radius:50%}
-      .empresa-pdf{min-width:0;flex:1}
-      .empresa-pdf h1{margin:0;color:#0d5d9f;font-size:23px}
-      .empresa-pdf p{margin:3px 0;color:#38556e;font-size:10px}
-      .tipo-pdf{text-align:right;color:#0d5d9f;font-size:12px;font-weight:800}
-      .tipo-pdf strong,.tipo-pdf span{display:block}
-      .tipo-pdf span{margin-top:4px;color:#60788f;font-size:10px}
-      .grade-pdf{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-      .box-pdf{margin-top:10px;padding:10px;border:1px solid #cfdce8;border-radius:9px;break-inside:avoid}
-      .box-pdf h2{margin:0 0 7px;color:#0d5d9f;font-size:14px}
-      .box-pdf p{margin:4px 0;font-size:11px;line-height:1.35}
-      table{width:100%;border-collapse:collapse}
-      th,td{padding:6px;border:1px solid #9fb4c5;text-align:center;font-size:10px}
-      th{background:#eaf4fc;color:#0d4d84}
-      .total-pdf{font-size:18px!important;color:#0d4d84;font-weight:900}
-      .aviso-pdf{margin-top:10px;padding:8px;border:1px solid #efc46a;border-radius:8px;background:#fff8e7;color:#73500b;font-size:9px;font-weight:800;text-align:center}
-      .assinaturas-pdf{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:38px}
-      .assinatura-pdf{padding-top:5px;border-top:1px solid #000;text-align:center;font-size:10px}
+      .folha-pdf,.folha-pdf *{box-sizing:border-box}
+      .folha-pdf{width:790px;max-width:790px;margin:0 auto;padding:18px;background:#fff;color:#17324b;font-family:Arial,Helvetica,sans-serif}
+      .folha-pdf .topo-pdf{display:flex;gap:13px;align-items:center;padding-bottom:11px;border-bottom:2px solid #0d5d9f}
+      .folha-pdf .topo-pdf img{width:66px!important;height:66px!important;max-width:66px!important;max-height:66px!important;object-fit:cover;border-radius:50%;flex:0 0 66px}
+      .folha-pdf .empresa-pdf{min-width:0;flex:1}
+      .folha-pdf .empresa-pdf h1{margin:0;color:#0d5d9f;font-size:23px}
+      .folha-pdf .empresa-pdf p{margin:3px 0;color:#38556e;font-size:10px}
+      .folha-pdf .tipo-pdf{text-align:right;color:#0d5d9f;font-size:12px;font-weight:800}
+      .folha-pdf .tipo-pdf strong,.folha-pdf .tipo-pdf span{display:block}
+      .folha-pdf .tipo-pdf span{margin-top:4px;color:#60788f;font-size:10px}
+      .folha-pdf .grade-pdf{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+      .folha-pdf .box-pdf{margin-top:10px;padding:10px;border:1px solid #cfdce8;border-radius:9px;break-inside:avoid;page-break-inside:avoid}
+      .folha-pdf .box-pdf h2{margin:0 0 7px;color:#0d5d9f;font-size:14px}
+      .folha-pdf .box-pdf p{margin:4px 0;font-size:11px;line-height:1.35}
+      .folha-pdf table{width:100%;border-collapse:collapse}
+      .folha-pdf th,.folha-pdf td{padding:6px;border:1px solid #9fb4c5;text-align:center;font-size:10px}
+      .folha-pdf th{background:#eaf4fc;color:#0d4d84}
+      .folha-pdf .total-pdf{font-size:18px!important;color:#0d4d84;font-weight:900}
+      .folha-pdf .aviso-pdf{margin-top:10px;padding:8px;border:1px solid #efc46a;border-radius:8px;background:#fff8e7;color:#73500b;font-size:9px;font-weight:800;text-align:center}
+      .folha-pdf .assinaturas-pdf{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:38px;break-inside:avoid;page-break-inside:avoid}
+      .folha-pdf .assinatura-pdf{padding-top:5px;border-top:1px solid #000;text-align:center;font-size:10px}
     `;
   }
 
