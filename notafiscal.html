@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prévia fiscal da venda</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #062449, #0b4c86);
+      color: #17324b;
+    }
+    .documento {
+      max-width: 860px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 18px 48px rgba(0,0,0,.24);
+    }
+    .topo {
+      padding: 24px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #082b54, #0d5d9f);
+    }
+    .topo h1 { margin: 0; font-size: 26px; }
+    .topo p { margin: 7px 0 0; color: #d9ecfb; font-weight: 700; }
+    .aviso {
+      margin: 18px 22px 0;
+      padding: 14px;
+      border: 1px solid #efc46a;
+      border-radius: 12px;
+      background: #fff8e7;
+      color: #73500b;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+    .conteudo { padding: 22px; }
+    .grade { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .box {
+      padding: 16px;
+      border: 1px solid #d9e5ef;
+      border-radius: 14px;
+      background: #f8fbfe;
+    }
+    .box.largo { grid-column: 1 / -1; }
+    .box h2 { margin: 0 0 11px; color: #0d4d84; font-size: 17px; }
+    .linha { margin: 6px 0; font-size: 13px; line-height: 1.4; }
+    .linha b { color: #284b68; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px; border: 1px solid #d9e5ef; text-align: left; font-size: 13px; }
+    th { background: #eaf4fc; color: #0d4d84; }
+    .total { margin-top: 12px; text-align: right; color: #0d4d84; font-size: 19px; font-weight: 900; }
+    .acoes { display: flex; flex-wrap: wrap; gap: 10px; padding: 0 22px 22px; }
+    button {
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 10px;
+      color: #ffffff;
+      background: #1687e8;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .voltar { background: #5c6f82; }
+    @media (max-width: 700px) {
+      body { padding: 12px; }
+      .grade { grid-template-columns: 1fr; }
+      .box.largo { grid-column: auto; }
+      .acoes button { width: 100%; }
+    }
+    @media print {
+      body { padding: 0; background: #ffffff; }
+      .documento { max-width: none; border-radius: 0; box-shadow: none; }
+      .acoes { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="documento">
+    <header class="topo">
+      <h1>🧾 Prévia fiscal da venda</h1>
+      <p>Dados organizados para a futura emissão de NF-e/NFC-e</p>
+    </header>
+
+    <div class="aviso">
+      DOCUMENTO SEM VALOR FISCAL. Esta tela apenas reúne os dados da venda.
+      A emissão oficial dependerá da integração com um emissor fiscal e da autorização da SEFAZ.
+    </div>
+
+    <div class="conteudo">
+      <div class="grade">
+        <section class="box">
+          <h2>Empresa</h2>
+          <div class="linha"><b>Razão social:</b> <span id="empresaRazao">-</span></div>
+          <div class="linha"><b>Nome fantasia:</b> <span id="empresaFantasia">-</span></div>
+          <div class="linha"><b>CNPJ:</b> <span id="empresaCnpj">-</span></div>
+          <div class="linha"><b>Inscrição estadual:</b> <span id="empresaIe">-</span></div>
+          <div class="linha"><b>Regime / CRT:</b> <span id="empresaRegime">-</span></div>
+          <div class="linha"><b>Endereço:</b> <span id="empresaEndereco">-</span></div>
+        </section>
+
+        <section class="box">
+          <h2>Cliente</h2>
+          <div class="linha"><b>Nome:</b> <span id="clienteNome">-</span></div>
+          <div class="linha"><b>CPF/CNPJ:</b> <span id="clienteDocumento">-</span></div>
+          <div class="linha"><b>Telefone:</b> <span id="clienteTelefone">-</span></div>
+          <div class="linha"><b>E-mail:</b> <span id="clienteEmail">-</span></div>
+          <div class="linha"><b>Endereço:</b> <span id="clienteEndereco">-</span></div>
+        </section>
+
+        <section class="box largo">
+          <h2>Itens da venda</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Quantidade</th>
+                <th>Valor unitário</th>
+                <th>Total do item</th>
+                <th>Cadastro fiscal</th>
+              </tr>
+            </thead>
+            <tbody id="itensVendaFiscal"></tbody>
+          </table>
+          <div class="linha" style="margin-top:12px;"><b>Subtotal:</b> <span id="valorSubtotal">R$ 0,00</span></div>
+          <div class="linha"><b>Desconto:</b> <span id="valorDesconto">R$ 0,00</span></div>
+          <div class="total">Total da venda: <span id="valorTotal">R$ 0,00</span></div>
+        </section>
+
+        <section class="box">
+          <h2>Venda</h2>
+          <div class="linha"><b>OS:</b> <span id="osNumero">-</span></div>
+          <div class="linha"><b>Data:</b> <span id="osData">-</span></div>
+          <div class="linha"><b>Vendedor:</b> <span id="osVendedor">-</span></div>
+        </section>
+
+        <section class="box">
+          <h2>Pagamento</h2>
+          <div class="linha"><b>Forma:</b> <span id="pagamentoForma">-</span></div>
+          <div class="linha"><b>Parcelamento:</b> <span id="pagamentoParcelas">-</span></div>
+          <div class="linha"><b>Entrada:</b> <span id="pagamentoEntrada">R$ 0,00</span></div>
+          <div class="linha"><b>Saldo:</b> <span id="pagamentoSaldo">R$ 0,00</span></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="acoes">
+      <button type="button" class="voltar" onclick="history.back()">← Voltar para a OS</button>
+      <button type="button" onclick="window.print()">🖨 Imprimir prévia</button>
+    </div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDkKbihoymG4pYzlZWSknXtn6xqhZumbNk",
+      authDomain: "ventura-system.firebaseapp.com",
+      projectId: "ventura-system",
+      storageBucket: "ventura-system.firebasestorage.app",
+      messagingSenderId: "302438886661",
+      appId: "1:302438886661:web:8c5ce0f51c9a71e4e35b6c"
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const dbFiscal = firebase.firestore();
+
+    function texto(id, valor) {
+      const campo = document.getElementById(id);
+      if (campo) campo.textContent = valor || "-";
+    }
+
+    function numero(valor) {
+      return Number(String(valor ?? 0).replace(",", ".")) || 0;
+    }
+
+    function moeda(valor) {
+      return numero(valor).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    }
+
+    function dataBr(valor) {
+      if (!valor) return "-";
+      const partes = String(valor).split("-");
+      return partes.length === 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : valor;
+    }
+
+    function enderecoCompleto(dados) {
+      return [dados.endereco, dados.numeroEndereco, dados.complemento, dados.bairro, dados.cidade, dados.uf]
+        .filter(Boolean)
+        .join(" - ") || "-";
+    }
+
+    function enderecoEmpresa(dados) {
+      return [dados.enderecoLoja, dados.numeroLoja, dados.complementoLoja, dados.bairroLoja, dados.cidadeLoja, dados.ufLoja]
+        .filter(Boolean)
+        .join(" - ") || "-";
+    }
+
+    async function carregarPrevia() {
+      const venda = JSON.parse(localStorage.getItem("dadosNotaFiscal") || "{}");
+      let empresa = JSON.parse(localStorage.getItem("configLoja") || "{}");
+
+      try {
+        const snap = await dbFiscal.collection("configuracoes").doc("empresa").get();
+        if (snap.exists) empresa = { ...empresa, ...snap.data() };
+      } catch (erro) {
+        console.warn("Dados da empresa carregados apenas do dispositivo.", erro);
+      }
+
+      texto("empresaRazao", empresa.razaoSocialLoja || empresa.nomeLoja);
+      texto("empresaFantasia", empresa.nomeFantasiaLoja || empresa.nomeLoja);
+      texto("empresaCnpj", empresa.cnpjLoja);
+      texto("empresaIe", empresa.inscricaoEstadualLoja);
+      texto("empresaRegime", [empresa.regimeTributarioLoja, empresa.crtLoja ? "CRT " + empresa.crtLoja : ""].filter(Boolean).join(" / "));
+      texto("empresaEndereco", enderecoEmpresa(empresa));
+
+      texto("clienteNome", venda.cliente);
+      texto("clienteDocumento", venda.cpf);
+      texto("clienteTelefone", venda.telefone);
+      texto("clienteEmail", venda.email);
+      texto("clienteEndereco", enderecoCompleto(venda));
+
+      const itens = [];
+      const quantidadeLente = numero(venda.quantidadeLente);
+      const valorLente = numero(venda.valorLente);
+      const quantidadeArmacao = numero(venda.quantidadeArmacao);
+      const valorArmacao = numero(venda.valorArmacao);
+      const quantidadeServico = numero(venda.quantidadeServico);
+      const valorServico = numero(venda.valorServico);
+
+      if (venda.lente && quantidadeLente > 0 && valorLente > 0) {
+        itens.push({
+          descricao: venda.lente,
+          quantidade: quantidadeLente,
+          unitario: valorLente,
+          total: quantidadeLente * valorLente
+        });
+      }
+
+      if (venda.armacao && quantidadeArmacao > 0 && valorArmacao > 0) {
+        itens.push({
+          descricao: venda.armacao,
+          quantidade: quantidadeArmacao,
+          unitario: valorArmacao,
+          total: quantidadeArmacao * valorArmacao
+        });
+      }
+
+      if (quantidadeServico > 0 && valorServico > 0) {
+        itens.push({
+          descricao: String(venda.servico || "Serviço adicional").trim() || "Serviço adicional",
+          quantidade: quantidadeServico,
+          unitario: valorServico,
+          total: quantidadeServico * valorServico
+        });
+      }
+
+      const corpoItens = document.getElementById("itensVendaFiscal");
+      if (corpoItens) {
+        corpoItens.innerHTML = itens.length
+          ? itens.map(item => `
+              <tr>
+                <td>${String(item.descricao).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>
+                <td>${item.quantidade}</td>
+                <td>${moeda(item.unitario)}</td>
+                <td>${moeda(item.total)}</td>
+                <td>NCM/tributação pendentes</td>
+              </tr>
+            `).join("")
+          : '<tr><td colspan="5">Nenhum item fiscal detalhado.</td></tr>';
+      }
+
+      texto("valorSubtotal", moeda(venda.subtotal));
+      texto("valorDesconto", moeda(venda.desconto));
+      texto("valorTotal", moeda(venda.totalCalculado || venda.valor));
+
+      texto("osNumero", venda.numero);
+      texto("osData", dataBr(venda.dataCompra));
+      texto("osVendedor", venda.vendedor);
+      texto("pagamentoForma", venda.pagamento);
+      texto("pagamentoParcelas", venda.parcelasCartao);
+      texto("pagamentoEntrada", moeda(venda.entrada));
+      texto("pagamentoSaldo", moeda(venda.restante));
+    }
+
+    firebase.auth().onAuthStateChanged(function(usuario) {
+      if (!usuario) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      carregarPrevia();
+    });
+  </script>
+</body>
+</html>
