@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha Completa do Cliente - Óticas Ventura</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(52,151,235,.18), transparent 28%),
+        linear-gradient(135deg, #062449, #0b4c86);
+      color: #17324b;
+    }
+
+    body { padding: 16px; }
+
+    button { font: inherit; }
+
+    .ficha-wrapper {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: 0 18px 50px rgba(0,0,0,.22);
+    }
+
+    .ficha-topo {
+      padding: 22px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      color: #fff;
+      background: linear-gradient(135deg, #082b54, #0d5d9f);
+    }
+
+    .ficha-marca {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .ficha-marca img {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      flex: 0 0 auto;
+      border: 3px solid rgba(255,255,255,.35);
+      border-radius: 50%;
+    }
+
+    .ficha-topo h1 {
+      margin: 0;
+      color: #fff;
+      font-size: 29px;
+    }
+
+    .ficha-topo p {
+      margin: 5px 0 0;
+      color: #d9ecfb;
+      font-size: 14px;
+    }
+
+    .acoes-topo {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 13px;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    button:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-voltar { color: #234760; background: #eaf2f8; }
+    .btn-whatsapp { background: #239a55; }
+    .btn-imprimir { background: #6f42c1; }
+
+    .ficha-conteudo {
+      padding: 19px 20px 24px;
+      background: #fff;
+    }
+
+    .ficha-carregando,
+    .ficha-erro,
+    .ficha-vazio {
+      padding: 28px 18px;
+      border: 1px dashed #b9cbd9;
+      border-radius: 14px;
+      background: #f8fbfe;
+      color: #60788f;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .resumo-cards {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0,1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .resumo-card {
+      min-width: 0;
+      padding: 15px 10px;
+      border: 1px solid #d7e3ee;
+      border-radius: 13px;
+      background: #fff;
+      box-shadow: 0 7px 18px rgba(13,77,132,.07);
+      text-align: center;
+    }
+
+    .resumo-card span {
+      display: block;
+      min-height: 31px;
+      margin-bottom: 5px;
+      color: #60788f;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .resumo-card strong {
+      display: block;
+      color: #0d4d84;
+      font-size: 23px;
+      overflow-wrap: anywhere;
+    }
+
+    .secao {
+      margin-bottom: 16px;
+      padding: 17px;
+      border: 1px solid #d9e5ef;
+      border-radius: 15px;
+      background: #f8fbfe;
+    }
+
+    .secao:last-child { margin-bottom: 0; }
+
+    .secao h2 {
+      margin: 0 0 13px;
+      color: #0d4d84;
+      font-size: 20px;
+    }
+
+    .dados-grade {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 10px;
+    }
+
+    .dado {
+      min-width: 0;
+      padding: 11px 12px;
+      border: 1px solid #dce7f0;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .dado span {
+      display: block;
+      margin-bottom: 4px;
+      color: #6a8093;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .dado strong {
+      display: block;
+      color: #294c68;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .dado.largo { grid-column: span 3; }
+
+    .historico-lista,
+    .receitas-lista {
+      display: grid;
+      gap: 11px;
+    }
+
+    .historico-card,
+    .receita-bloco {
+      padding: 14px;
+      border: 1px solid #dce6ee;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .historico-topo {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .historico-topo strong,
+    .historico-topo span {
+      display: block;
+    }
+
+    .historico-topo > div > strong {
+      color: #123f66;
+      font-size: 17px;
+    }
+
+    .historico-topo > div > span {
+      margin-top: 3px;
+      color: #71879a;
+      font-size: 12px;
+    }
+
+    .historico-grade {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 7px 14px;
+      color: #526c82;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .historico-grade strong { color: #284b68; }
+
+    .historico-observacao,
+    .receita-observacao {
+      margin: 11px 0 0;
+      padding-top: 10px;
+      border-top: 1px solid #edf2f6;
+      color: #526c82;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .status-os {
+      flex: 0 0 auto;
+      padding: 6px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .status-os.recebido { color: #31516d; background: #eaf2f8; }
+    .status-os.producao { color: #815800; background: #fff4d7; }
+    .status-os.pronto { color: #176b3a; background: #e4f6eb; }
+    .status-os.entregue { color: #fff; background: #239a55; }
+
+    .saldo-aberto { color: #a35f00; }
+    .saldo-quitado { color: #21864a; }
+    .pedido-valor { color: #0d5d9f; }
+
+    .receita-cabecalho {
+      margin-bottom: 10px;
+      color: #123f66;
+      font-weight: 800;
+    }
+
+    .receita-tabela-wrapper {
+      overflow-x: auto;
+      border: 1px solid #d9e5ef;
+      border-radius: 9px;
+    }
+
+    .receita-tabela {
+      width: 100%;
+      min-width: 430px;
+      border-collapse: collapse;
+    }
+
+    .receita-tabela th,
+    .receita-tabela td {
+      padding: 9px;
+      border-bottom: 1px solid #e3ebf2;
+      text-align: center;
+    }
+
+    .receita-tabela th {
+      color: #fff;
+      background: #0d5d9f;
+      font-size: 12px;
+    }
+
+    .receita-tabela td {
+      color: #294c68;
+      font-size: 13px;
+    }
+
+    .receita-medidas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 22px;
+      margin-top: 10px;
+      color: #526c82;
+      font-size: 13px;
+    }
+
+    .receita-medidas strong { color: #284b68; }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 900px) {
+      .resumo-cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .dados-grade,
+      .historico-grade { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .dado.largo { grid-column: span 2; }
+    }
+
+    @media (max-width: 650px) {
+      body { padding: 9px; }
+
+      .ficha-topo {
+        padding: 18px 15px;
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .ficha-marca img {
+        width: 55px;
+        height: 55px;
+      }
+
+      .ficha-topo h1 { font-size: 24px; }
+
+      .acoes-topo {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .acoes-topo button { width: 100%; }
+
+      .ficha-conteudo { padding: 13px; }
+      .resumo-cards { grid-template-columns: 1fr 1fr; }
+      .dados-grade,
+      .historico-grade { grid-template-columns: 1fr; }
+      .dado.largo { grid-column: span 1; }
+      .historico-topo { flex-direction: column; }
+    }
+
+    @media print {
+      html, body { background: #fff; }
+      body { padding: 0; }
+      .ficha-wrapper { max-width: none; border-radius: 0; box-shadow: none; }
+      .acoes-topo { display: none !important; }
+      .ficha-topo { padding: 14px 18px; background: #fff; color: #17324b; border-bottom: 2px solid #0d5d9f; }
+      .ficha-topo h1 { color: #0d5d9f; }
+      .ficha-topo p { color: #526c82; }
+      .ficha-marca img { width: 55px; height: 55px; border-color: #d9e5ef; }
+      .ficha-conteudo { padding: 14px 0; }
+      .secao, .historico-card, .receita-bloco, .resumo-card {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="ficha-wrapper">
+    <header class="ficha-topo">
+      <div class="ficha-marca">
+        <img src="logo.jpg" alt="Logo Óticas Ventura">
+        <div>
+          <h1>📄 Ficha Completa do Cliente</h1>
+          <p id="fichaNomeTopo">Carregando cliente...</p>
+        </div>
+      </div>
+
+      <div class="acoes-topo">
+        <button type="button" class="btn-voltar" onclick="voltarParaClientes()">← Voltar aos clientes</button>
+        <button type="button" class="btn-whatsapp" id="botaoWhatsAppFicha" onclick="abrirWhatsAppFichaCliente()">💬 WhatsApp</button>
+        <button type="button" class="btn-imprimir" onclick="imprimirFichaCliente()">🖨 Imprimir ficha</button>
+      </div>
+    </header>
+
+    <div class="ficha-conteudo">
+      <div class="ficha-carregando" id="fichaCarregando">⏳ Carregando ficha completa...</div>
+
+      <div id="fichaClienteConteudo" hidden>
+        <section class="resumo-cards">
+          <div class="resumo-card"><span>Total comprado</span><strong id="fichaTotalComprado">R$ 0,00</strong></div>
+          <div class="resumo-card"><span>Total pago</span><strong id="fichaTotalPago">R$ 0,00</strong></div>
+          <div class="resumo-card"><span>Saldo pendente</span><strong id="fichaSaldo">R$ 0,00</strong></div>
+          <div class="resumo-card"><span>Ordens de Serviço</span><strong id="fichaQuantidadeOS">0</strong></div>
+          <div class="resumo-card"><span>Receitas encontradas</span><strong id="fichaQuantidadeReceitas">0</strong></div>
+        </section>
+
+        <section class="secao">
+          <h2>👤 Dados pessoais</h2>
+
+          <div class="dados-grade">
+            <div class="dado"><span>Nome</span><strong id="fichaNome">-</strong></div>
+            <div class="dado"><span>Telefone</span><strong id="fichaTelefone">-</strong></div>
+            <div class="dado"><span>CPF/CNPJ</span><strong id="fichaCpf">-</strong></div>
+            <div class="dado"><span>E-mail</span><strong id="fichaEmail">-</strong></div>
+            <div class="dado"><span>Nascimento</span><strong id="fichaNascimento">-</strong></div>
+            <div class="dado"><span>CEP</span><strong id="fichaCep">-</strong></div>
+            <div class="dado"><span>Retorno</span><strong id="fichaRetorno">-</strong></div>
+            <div class="dado"><span>Endereço</span><strong id="fichaEndereco">-</strong></div>
+            <div class="dado"><span>Número</span><strong id="fichaNumeroEndereco">-</strong></div>
+            <div class="dado"><span>Complemento</span><strong id="fichaComplemento">-</strong></div>
+            <div class="dado"><span>Bairro</span><strong id="fichaBairro">-</strong></div>
+            <div class="dado"><span>Cidade</span><strong id="fichaCidade">-</strong></div>
+            <div class="dado"><span>UF</span><strong id="fichaUf">-</strong></div>
+            <div class="dado largo"><span>Observações</span><strong id="fichaObservacoes">-</strong></div>
+          </div>
+        </section>
+
+        <section class="secao">
+          <h2>👓 Receita mais recente</h2>
+          <div id="fichaReceitaAtual"></div>
+        </section>
+
+        <section class="secao">
+          <h2>📋 Histórico de Ordens de Serviço</h2>
+          <div class="historico-lista" id="fichaListaOS"></div>
+        </section>
+
+        <section class="secao">
+          <h2>📄 Histórico de receitas</h2>
+          <div class="receitas-lista" id="fichaListaReceitas"></div>
+        </section>
+
+        <section class="secao">
+          <h2>📦 Pedidos cadastrados</h2>
+          <div class="historico-lista" id="fichaListaPedidos"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="app.js?v=20"></script>
+</body>
+</html>
