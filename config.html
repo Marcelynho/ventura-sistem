@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Central Administrativa - Óticas Ventura</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(52, 151, 235, 0.18), transparent 28%),
+        linear-gradient(135deg, #062449, #0b4c86);
+      color: #17324b;
+    }
+
+    body {
+      padding: 28px;
+    }
+
+    .config-wrapper {
+      width: 100%;
+      max-width: 1050px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+    }
+
+    .config-topo {
+      padding: 26px 30px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #082b54, #0d5d9f);
+    }
+
+    .config-topo h1 {
+      margin: 0;
+      color: #ffffff;
+      font-size: 34px;
+    }
+
+    .config-conteudo {
+      padding: 28px 30px 32px;
+      background: #ffffff;
+    }
+
+    .secao {
+      margin-bottom: 24px;
+      padding: 20px;
+      border: 1px solid #d9e5ef;
+      border-radius: 16px;
+      background: #f8fbfe;
+    }
+
+    .secao h2 {
+      margin: 0 0 16px;
+      color: #0d4d84;
+      font-size: 20px;
+    }
+
+    .grade {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    input,
+    select,
+    button {
+      font: inherit;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-width: 0;
+      padding: 12px 13px;
+      border: 1px solid #cfdce8;
+      border-radius: 10px;
+      background: #ffffff;
+      color: #18334d;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #6c8194;
+      opacity: 1;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #1a84d8;
+      box-shadow: 0 0 0 3px rgba(26, 132, 216, 0.12);
+    }
+
+    .fiscal-subtitulo {
+      margin: 20px 0 12px;
+      color: #0d4d84;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .aviso-fiscal {
+      margin: 0 0 14px;
+      padding: 12px 14px;
+      border: 1px solid #b8d8ef;
+      border-radius: 11px;
+      background: #eef7ff;
+      color: #365a76;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #ffffff;
+      background: #1687e8;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .btn-verde {
+      background: #239a55;
+    }
+
+    .btn-roxo {
+      background: #6f42c1;
+    }
+
+    .acoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    #statusBackup {
+      min-height: 24px;
+      margin: 14px 0 0;
+      color: #0d4d84;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 14px;
+      }
+
+      .config-topo {
+        padding: 22px 18px;
+      }
+
+      .config-topo h1 {
+        font-size: 28px;
+      }
+
+      .config-conteudo {
+        padding: 20px 16px 24px;
+      }
+
+      .grade {
+        grid-template-columns: 1fr;
+      }
+
+      .acoes button {
+        width: 100%;
+      }
+    }
+  
+    .atalhos-admin{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:24px}
+    .atalho-admin{min-height:118px;padding:18px;border:1px solid #d9e5ef;border-radius:16px;background:#fff;color:#17324b;text-align:left;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.08);transition:.2s}
+    .atalho-admin:hover{transform:translateY(-2px);border-color:#9dc9ec}.atalho-admin.ativo{border-color:#1687e8;box-shadow:0 0 0 3px rgba(22,135,232,.12)}
+    .atalho-admin span{display:block;margin-bottom:10px;font-size:28px}.atalho-admin strong{display:block;margin-bottom:5px;color:#0d4d84;font-size:16px}.atalho-admin small{color:#6c8194;line-height:1.4}
+    .painel-extra{display:none;margin-bottom:24px;padding:20px;border:1px solid #d9e5ef;border-radius:16px;background:#f8fbfe}.painel-extra.ativo{display:block}
+    .painel-extra h2{margin:0 0 14px;color:#0d4d84;font-size:20px}.perfil-resumo{margin-bottom:16px;padding:14px;border-radius:12px;background:#fff;border:1px solid #d9e5ef}
+    .perfil-resumo strong,.perfil-resumo span{display:block}.perfil-resumo span{margin-top:4px;color:#6c8194;font-size:13px}.status-admin{min-height:22px;margin-top:12px;color:#0d4d84;font-weight:700}
+    @media(max-width:760px){.atalhos-admin{grid-template-columns:1fr}}
+
+  
+    .boas-vindas-admin{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:22px;
+      padding:20px;
+      border-radius:18px;
+      color:#ffffff;
+      background:linear-gradient(135deg,#0b4c86,#1687e8);
+      box-shadow:0 12px 28px rgba(0,0,0,.16);
+    }
+
+    .boas-vindas-admin h2{
+      margin:0 0 6px;
+      font-size:24px;
+      color:#ffffff;
+    }
+
+    .boas-vindas-admin p{
+      margin:3px 0;
+      color:#dcefff;
+      font-size:14px;
+    }
+
+    .boas-vindas-avatar{
+      width:72px;
+      height:72px;
+      flex:0 0 72px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:rgba(255,255,255,.16);
+      border:2px solid rgba(255,255,255,.3);
+      color:#ffffff;
+      font-size:30px;
+      font-weight:800;
+    }
+
+    @media(max-width:620px){
+      .boas-vindas-admin{
+        align-items:flex-start;
+        padding:17px;
+      }
+
+      .boas-vindas-admin h2{
+        font-size:20px;
+      }
+
+      .boas-vindas-avatar{
+        width:56px;
+        height:56px;
+        flex-basis:56px;
+        font-size:24px;
+      }
+    }
+
+
+    .perfil-foto-area{display:flex;align-items:center;gap:16px;margin:14px 0 18px;padding:16px;border:1px solid #d9e5ef;border-radius:14px;background:#fff}
+    .perfil-foto-preview{width:82px;height:82px;flex:0 0 82px;overflow:hidden;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#1687e8,#20a7ff);color:#fff;font-size:30px;font-weight:800;border:3px solid #dcecf8}
+    .perfil-foto-preview img{width:100%;height:100%;object-fit:cover}
+    .perfil-foto-info strong{display:block;margin-bottom:5px;color:#17324b}
+    .perfil-foto-info small{display:block;margin-bottom:10px;color:#6c8194;line-height:1.4}
+    @media(max-width:620px){.perfil-foto-area{align-items:flex-start}}
+    
+    .logo-sistema-area{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      margin:18px 0;
+      padding:18px;
+      border:1px solid #d9e5ef;
+      border-radius:16px;
+      background:#fff;
+    }
+    .logo-sistema-preview{
+      width:110px;
+      height:110px;
+      flex:0 0 110px;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      border:3px solid #dcecf8;
+      border-radius:18px;
+      background:#eef7ff;
+      color:#0d4d84;
+      font-size:13px;
+      font-weight:700;
+      text-align:center;
+    }
+    .logo-sistema-preview img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      background:#fff;
+    }
+    .logo-sistema-info strong{
+      display:block;
+      margin-bottom:6px;
+      color:#17324b;
+      font-size:16px;
+    }
+    .logo-sistema-info small{
+      display:block;
+      margin-bottom:12px;
+      color:#6c8194;
+      line-height:1.45;
+    }
+    .logo-sistema-acoes{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    @media(max-width:620px){
+      .logo-sistema-area{align-items:flex-start;flex-direction:column}
+      .logo-sistema-preview{width:100%;height:150px}
+      .logo-sistema-acoes button{width:100%}
+    }
+
+  
+    .seguranca-email-box{
+      margin-top:16px;
+      padding:18px;
+      border:1px solid #d9e5ef;
+      border-radius:14px;
+      background:#ffffff;
+    }
+
+    .seguranca-email-box h3{
+      margin:0 0 8px;
+      color:#0d4d84;
+      font-size:17px;
+    }
+
+    .seguranca-email-box p{
+      margin:0 0 14px;
+      color:#60788f;
+      font-size:14px;
+      line-height:1.45;
+    }
+
+    .aviso-seguranca{
+      margin-top:12px;
+      padding:11px 13px;
+      border-radius:10px;
+      background:#fff7df;
+      color:#795b00;
+      font-size:13px;
+      line-height:1.45;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <main class="config-wrapper">
+
+    <header class="config-topo">
+      <h1>⚙️ Central Administrativa</h1>
+      <p style="margin:8px 0 0;color:#d9ecfb">Gerencie sua conta, empresa, segurança e backups.</p>
+    </header>
+
+    <div class="config-conteudo">
+
+      <section class="boas-vindas-admin">
+        <div>
+          <h2>👋 Bem-vindo, <span id="nomeBoasVindas">Usuário</span></h2>
+          <p>Administrador</p>
+          <p>Último acesso: <span id="ultimoAcessoAdmin">Carregando...</span></p>
+        </div>
+
+        <div class="boas-vindas-avatar" id="avatarBoasVindas">U</div>
+      </section>
+
+
+      <div class="atalhos-admin">
+        <button type="button" class="atalho-admin ativo" onclick="abrirArea('conta',this)"><span>👤</span><strong>Minha Conta</strong><small>Nome, e-mail e senha.</small></button>
+        <button type="button" class="atalho-admin" onclick="abrirArea('empresa',this)"><span>🏢</span><strong>Empresa</strong><small>Dados da Óticas Ventura.</small></button>
+        <button type="button" class="atalho-admin" onclick="abrirArea('usuarios',this)"><span>👥</span><strong>Usuários</strong><small>Funcionários e permissões.</small></button>
+        <button type="button" class="atalho-admin" onclick="abrirArea('seguranca',this)"><span>🔐</span><strong>Segurança</strong><small>Alteração de e-mail e senha.</small></button>
+        <button type="button" class="atalho-admin" onclick="abrirArea('backup',this)"><span>💾</span><strong>Backup</strong><small>Exportar e restaurar dados.</small></button>
+        <button type="button" class="atalho-admin" onclick="abrirArea('sobre',this)"><span>ℹ️</span><strong>Sobre</strong><small>Versão do sistema.</small></button>
+      </div>
+      <section class="painel-extra ativo" id="area-conta">
+        <h2>👤 Minha Conta</h2>
+        <div class="perfil-resumo"><strong id="nomeResumoAdmin">Carregando...</strong><span id="emailResumoAdmin">Carregando...</span><span>Administrador</span></div>
+        <div class="perfil-foto-area">
+          <div class="perfil-foto-preview" id="fotoPerfilPreview">U</div>
+          <div class="perfil-foto-info">
+            <strong>Foto de perfil</strong>
+            <small>Escolha uma foto. Ela será reduzida antes de ser salva.</small>
+            <input type="file" id="arquivoFotoPerfil" accept="image/*" style="display:none">
+            <button type="button" onclick="document.getElementById('arquivoFotoPerfil').click()">📷 Escolher foto</button>
+          </div>
+        </div>
+        <div class="grade">
+          <input id="nomeAdmin" placeholder="Nome de exibição">
+          <input id="emailAdmin" placeholder="E-mail" readonly>
+          <input id="telefoneAdmin" type="tel" placeholder="Telefone / WhatsApp">
+        </div>
+        <div class="acoes"><button type="button" class="btn-verde" id="btnSalvarNome" onclick="salvarNomeAdmin()">💾 Salvar perfil</button><button type="button" onclick="enviarSenhaAdmin()">🔐 Alterar senha</button></div>
+        <p class="status-admin" id="statusContaAdmin"></p>
+      </section>
+      <section class="painel-extra" id="area-usuarios"><h2>👥 Usuários</h2><p>Área preparada para uma próxima etapa. Por enquanto, os usuários continuam seguros no Firebase Authentication.</p></section>
+      <section class="painel-extra" id="area-seguranca">
+        <h2>🔐 Segurança</h2>
+        <p>Sua sessão está protegida pelo Firebase Authentication.</p>
+
+        <div class="seguranca-email-box">
+          <h3>Alterar e-mail de acesso</h3>
+          <p>Digite o novo e-mail da ótica e confirme usando sua senha atual.</p>
+
+          <div class="grade">
+            <input id="novoEmailAcesso" type="email" autocomplete="email" placeholder="Novo e-mail da ótica">
+            <input id="senhaAtualEmail" type="password" autocomplete="current-password" placeholder="Senha atual">
+          </div>
+
+          <div class="acoes">
+            <button type="button" class="btn-verde" id="btnAlterarEmailAcesso" onclick="alterarEmailAcesso()">
+              ✉️ Alterar e-mail de acesso
+            </button>
+          </div>
+
+          <div class="aviso-seguranca">
+            Após confirmar, o Firebase poderá enviar uma mensagem de verificação para o novo e-mail.
+            Abra essa mensagem para concluir a troca.
+          </div>
+        </div>
+
+        <div class="acoes">
+          <button type="button" onclick="enviarSenhaAdmin()">📧 Enviar e-mail para alterar senha</button>
+        </div>
+
+        <p class="status-admin" id="statusSegurancaAdmin"></p>
+      </section>
+      <section class="painel-extra" id="area-sobre"><h2>ℹ️ Sobre o Ventura System</h2><p><strong>Ventura System — Versão 2.0</strong></p><p>Sistema de gestão da Óticas Ventura.</p></section>
+
+
+      <section class="secao" id="area-backup">
+        <h2>Backup do sistema</h2>
+
+        <input
+          type="file"
+          id="arquivoBackup"
+          accept=".json"
+          style="display:none"
+        >
+
+        <div class="acoes">
+          <button type="button" class="btn-verde" onclick="fazerBackup()">
+            💾 Fazer backup
+          </button>
+
+          <button
+            type="button"
+            class="btn-roxo"
+            onclick="document.getElementById('arquivoBackup').click()"
+          >
+            📂 Restaurar backup
+          </button>
+        </div>
+
+        <p id="statusBackup"></p>
+      </section>
+
+      <section class="secao" id="area-empresa">
+        <h2>🏢 Dados da empresa</h2>
+
+
+        <div class="logo-sistema-area">
+          <div class="logo-sistema-preview" id="logoSistemaPreview">
+            <img src="logo.jpg" alt="Logo atual do sistema">
+          </div>
+
+          <div class="logo-sistema-info">
+            <strong>Logo do sistema e das impressões</strong>
+            <small>
+              Escolha uma imagem PNG, JPG ou WEBP. Ela será reduzida automaticamente
+              e usada no menu, no topo do sistema e nas impressões da Ordem de Serviço.
+            </small>
+
+            <input
+              type="file"
+              id="arquivoLogoSistema"
+              accept="image/png,image/jpeg,image/webp"
+              style="display:none"
+            >
+
+            <div class="logo-sistema-acoes">
+              <button type="button" onclick="document.getElementById('arquivoLogoSistema').click()">
+                🖼 Escolher nova logo
+              </button>
+
+              <button type="button" class="btn-verde" id="btnSalvarLogoSistema" onclick="salvarLogoSistema()">
+                💾 Salvar logo
+              </button>
+
+              <button type="button" class="btn-roxo" onclick="restaurarLogoPadrao()">
+                ↩ Restaurar padrão
+              </button>
+            </div>
+
+            <p class="status-admin" id="statusLogoSistema"></p>
+          </div>
+        </div>
+
+
+        <div class="grade">
+          <input id="nomeLoja" placeholder="Nome da empresa">
+          <input id="cnpjLoja" placeholder="CNPJ">
+
+          <input id="cepLoja" placeholder="CEP">
+          <input id="enderecoLoja" placeholder="Rua / Endereço">
+
+          <input id="numeroLoja" placeholder="Número">
+          <input id="complementoLoja" placeholder="Complemento">
+
+          <input id="bairroLoja" placeholder="Bairro">
+          <input id="cidadeLoja" placeholder="Cidade">
+
+          <input id="ufLoja" placeholder="Estado (UF)" maxlength="2">
+          <input id="telefoneLoja" placeholder="Telefone da loja">
+
+          <input id="whatsappLoja" placeholder="WhatsApp da loja">
+          <input id="emailLoja" type="email" placeholder="E-mail da loja">
+
+          <input id="siteLoja" placeholder="Site (opcional)">
+        </div>
+
+        <div class="fiscal-subtitulo">🧾 Preparação fiscal da empresa</div>
+        <p class="aviso-fiscal">
+          Estes campos deixam o sistema preparado para a futura integração de NF-e/NFC-e.
+          Preencha os códigos tributários somente depois da confirmação do contador.
+          Nenhum documento fiscal oficial será emitido nesta etapa.
+        </p>
+
+        <div class="grade">
+          <input id="razaoSocialLoja" placeholder="Razão social">
+          <input id="nomeFantasiaLoja" placeholder="Nome fantasia">
+
+          <input id="inscricaoEstadualLoja" placeholder="Inscrição estadual">
+          <input id="inscricaoMunicipalLoja" placeholder="Inscrição municipal (opcional)">
+
+          <select id="regimeTributarioLoja">
+            <option value="">Regime tributário — confirmar com o contador</option>
+            <option value="Simples Nacional">Simples Nacional</option>
+            <option value="Lucro Presumido">Lucro Presumido</option>
+            <option value="Lucro Real">Lucro Real</option>
+          </select>
+
+          <input id="crtLoja" placeholder="CRT — informar exatamente como o contador orientar">
+
+          <input id="cnaeLoja" placeholder="CNAE principal">
+          <input id="emailFiscalLoja" type="email" placeholder="E-mail fiscal">
+
+          <input id="responsavelFiscalLoja" placeholder="Responsável fiscal / contador">
+          <select id="ambienteFiscalLoja">
+            <option value="nao_configurado">Ambiente fiscal: não configurado</option>
+            <option value="homologacao">Homologação (testes)</option>
+            <option value="producao">Produção</option>
+          </select>
+        </div>
+
+        <div class="acoes">
+          <button type="button" class="btn-verde" onclick="salvarConfig()">
+            💾 Salvar dados da empresa
+          </button>
+        </div>
+
+        <p class="status-admin" id="statusEmpresa"></p>
+      </section>
+
+    </div>
+
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="app.js?v=20"></script>
+
+  <script>
+
+    function abrirArea(nome,botao){
+      document.querySelectorAll('.atalho-admin').forEach(function(i){i.classList.remove('ativo')});
+      document.querySelectorAll('.painel-extra').forEach(function(p){p.classList.remove('ativo')});
+      if(botao)botao.classList.add('ativo');
+      const area=document.getElementById('area-'+nome);if(!area)return;
+      if(area.classList.contains('secao')){area.scrollIntoView({behavior:'smooth',block:'start'})}else{area.classList.add('ativo');area.scrollIntoView({behavior:'smooth',block:'start'})}
+    }
+    function nomeAmigavelAdmin(u){if(u&&u.displayName&&u.displayName.trim())return u.displayName.trim();const e=u&&u.email?u.email:'Usuário';return e.split('@')[0].replace(/[._-]+/g,' ').replace(/\b\w/g,function(l){return l.toUpperCase()})}
+    function preencherContaAdmin(u){
+      if(!u) return;
+
+      const n = nomeAmigavelAdmin(u);
+      const e = u.email || "";
+
+      const nomeAdmin = document.getElementById("nomeAdmin");
+      const emailAdmin = document.getElementById("emailAdmin");
+      const nomeResumo = document.getElementById("nomeResumoAdmin");
+      const emailResumo = document.getElementById("emailResumoAdmin");
+      const nomeBoasVindas = document.getElementById("nomeBoasVindas");
+      const avatarBoasVindas = document.getElementById("avatarBoasVindas");
+      const ultimoAcesso = document.getElementById("ultimoAcessoAdmin");
+
+      if(nomeAdmin) nomeAdmin.value = u.displayName || n;
+      if(emailAdmin) emailAdmin.value = e;
+      if(nomeResumo) nomeResumo.textContent = n;
+      if(emailResumo) emailResumo.textContent = e;
+      if(nomeBoasVindas) nomeBoasVindas.textContent = n;
+      if(avatarBoasVindas) avatarBoasVindas.textContent = n.charAt(0).toUpperCase();
+
+      if(ultimoAcesso){
+        const dataLogin = u.metadata && u.metadata.lastSignInTime
+          ? new Date(u.metadata.lastSignInTime)
+          : new Date();
+
+        ultimoAcesso.textContent = dataLogin.toLocaleString("pt-BR", {
+          dateStyle: "short",
+          timeStyle: "short"
+        });
+      }
+
+      carregarDadosExtrasPerfil(u);
+    }
+
+    function carregarUsuarioDaCentral(){
+      const usuarioLocal = firebase.auth().currentUser;
+
+      if(usuarioLocal){
+        preencherContaAdmin(usuarioLocal);
+        return;
+      }
+
+      try{
+        const usuarioPai = window.parent
+          && window.parent !== window
+          && window.parent.firebase
+          && window.parent.firebase.auth
+          ? window.parent.firebase.auth().currentUser
+          : null;
+
+        if(usuarioPai){
+          preencherContaAdmin(usuarioPai);
+          return;
+        }
+      }catch(erro){
+        console.warn("Não foi possível ler o usuário da janela principal.", erro);
+      }
+
+      firebase.auth().onAuthStateChanged(function(usuario){
+        if(usuario){
+          preencherContaAdmin(usuario);
+        }
+      });
+    }
+
+    let fotoPerfilBase64 = "";
+
+    async function carregarDadosExtrasPerfil(usuario){
+      try{
+        const snap = await db.collection("usuarios").doc(usuario.uid).get();
+        if(!snap.exists) return;
+
+        const dados = snap.data() || {};
+        const telefone = document.getElementById("telefoneAdmin");
+        const preview = document.getElementById("fotoPerfilPreview");
+
+        if(telefone) telefone.value = dados.telefone || "";
+
+        if(dados.fotoPerfil && preview){
+          fotoPerfilBase64 = dados.fotoPerfil;
+          preview.innerHTML = '<img src="' + dados.fotoPerfil + '" alt="Foto de perfil">';
+        }
+      }catch(erro){
+        console.warn("Não foi possível carregar telefone e foto.", erro);
+      }
+    }
+
+    function reduzirImagemPerfil(arquivo){
+      return new Promise(function(resolve,reject){
+        const leitor = new FileReader();
+
+        leitor.onload = function(evento){
+          const imagem = new Image();
+
+          imagem.onload = function(){
+            const tamanho = 240;
+            const canvas = document.createElement("canvas");
+            canvas.width = tamanho;
+            canvas.height = tamanho;
+
+            const ctx = canvas.getContext("2d");
+            const lado = Math.min(imagem.width, imagem.height);
+            const origemX = (imagem.width - lado) / 2;
+            const origemY = (imagem.height - lado) / 2;
+
+            ctx.drawImage(imagem, origemX, origemY, lado, lado, 0, 0, tamanho, tamanho);
+            resolve(canvas.toDataURL("image/jpeg", 0.78));
+          };
+
+          imagem.onerror = reject;
+          imagem.src = evento.target.result;
+        };
+
+        leitor.onerror = reject;
+        leitor.readAsDataURL(arquivo);
+      });
+    }
+
+    async function selecionarFotoPerfil(evento){
+      const arquivo = evento.target.files[0];
+      if(!arquivo) return;
+
+      if(!arquivo.type.startsWith("image/")){
+        alert("Escolha um arquivo de imagem.");
+        evento.target.value = "";
+        return;
+      }
+
+      try{
+        fotoPerfilBase64 = await reduzirImagemPerfil(arquivo);
+        document.getElementById("fotoPerfilPreview").innerHTML =
+          '<img src="' + fotoPerfilBase64 + '" alt="Foto de perfil">';
+      }catch(erro){
+        console.error(erro);
+        alert("Não foi possível preparar a foto.");
+      }
+    }
+
+    async function salvarNomeAdmin(){
+      const u = firebase.auth().currentUser;
+      const n = document.getElementById("nomeAdmin").value.trim();
+      const telefone = document.getElementById("telefoneAdmin").value.trim();
+      const s = document.getElementById("statusContaAdmin");
+      const b = document.getElementById("btnSalvarNome");
+
+      if(!u){
+        s.textContent = "⚠️ Usuário não encontrado.";
+        return;
+      }
+
+      if(n.length < 3){
+        s.textContent = "⚠️ Digite um nome com pelo menos 3 letras.";
+        return;
+      }
+
+      b.disabled = true;
+      b.textContent = "Salvando...";
+
+      try{
+        await u.updateProfile({displayName:n});
+
+        await db.collection("usuarios").doc(u.uid).set({
+          nome:n,
+          email:u.email || "",
+          telefone:telefone,
+          fotoPerfil:fotoPerfilBase64 || "",
+          cargo:"Administrador",
+          atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+        }, {merge:true});
+
+        await u.reload();
+        preencherContaAdmin(firebase.auth().currentUser);
+        s.textContent = "✅ Perfil atualizado com sucesso.";
+      }catch(e){
+        console.error(e);
+        s.textContent = "❌ Não foi possível salvar agora.";
+      }finally{
+        b.disabled = false;
+        b.textContent = "💾 Salvar perfil";
+      }
+    }
+
+
+    function mensagemErroAlterarEmail(codigo){
+      const mensagens = {
+        "auth/wrong-password": "A senha atual está incorreta.",
+        "auth/invalid-credential": "A senha atual está incorreta ou a sessão expirou.",
+        "auth/email-already-in-use": "Esse e-mail já está sendo usado por outra conta.",
+        "auth/invalid-email": "Digite um e-mail válido.",
+        "auth/requires-recent-login": "Por segurança, saia do sistema, entre novamente e repita a alteração.",
+        "auth/too-many-requests": "Muitas tentativas. Aguarde alguns minutos e tente novamente.",
+        "auth/network-request-failed": "Falha de internet. Verifique a conexão e tente novamente."
+      };
+
+      return mensagens[codigo] || "Não foi possível alterar o e-mail agora.";
+    }
+
+    async function alterarEmailAcesso(){
+      const usuario = firebase.auth().currentUser;
+      const novoEmailCampo = document.getElementById("novoEmailAcesso");
+      const senhaCampo = document.getElementById("senhaAtualEmail");
+      const status = document.getElementById("statusSegurancaAdmin");
+      const botao = document.getElementById("btnAlterarEmailAcesso");
+
+      const novoEmail = String(novoEmailCampo?.value || "").trim().toLowerCase();
+      const senhaAtual = String(senhaCampo?.value || "");
+
+      if(!usuario || !usuario.email){
+        status.textContent = "⚠️ Usuário conectado não encontrado.";
+        return;
+      }
+
+      if(!novoEmail || !novoEmail.includes("@")){
+        status.textContent = "⚠️ Digite um novo e-mail válido.";
+        novoEmailCampo?.focus();
+        return;
+      }
+
+      if(novoEmail === String(usuario.email).toLowerCase()){
+        status.textContent = "⚠️ O novo e-mail é igual ao e-mail atual.";
+        return;
+      }
+
+      if(!senhaAtual){
+        status.textContent = "⚠️ Digite sua senha atual para confirmar.";
+        senhaCampo?.focus();
+        return;
+      }
+
+      if(!confirm("Confirma a alteração do acesso de " + usuario.email + " para " + novoEmail + "?")){
+        return;
+      }
+
+      botao.disabled = true;
+      botao.textContent = "Alterando...";
+      status.textContent = "⏳ Confirmando sua identidade...";
+
+      try{
+        const credencial = firebase.auth.EmailAuthProvider.credential(
+          usuario.email,
+          senhaAtual
+        );
+
+        await usuario.reauthenticateWithCredential(credencial);
+
+        status.textContent = "⏳ Preparando a alteração do e-mail...";
+
+        if(typeof usuario.verifyBeforeUpdateEmail === "function"){
+          await usuario.verifyBeforeUpdateEmail(novoEmail);
+
+          status.textContent =
+            "✅ Verificação enviada para " + novoEmail +
+            ". Abra o e-mail e clique no link para concluir a troca.";
+        }else{
+          await usuario.updateEmail(novoEmail);
+
+          await db.collection("usuarios").doc(usuario.uid).set({
+            email: novoEmail,
+            atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+          }, {merge:true});
+
+          await usuario.reload();
+          preencherContaAdmin(firebase.auth().currentUser);
+
+          status.textContent =
+            "✅ E-mail alterado com sucesso. Na próxima entrada, use " + novoEmail + ".";
+        }
+
+        novoEmailCampo.value = "";
+        senhaCampo.value = "";
+      }catch(erro){
+        console.error("Erro ao alterar e-mail:", erro);
+        status.textContent = "❌ " + mensagemErroAlterarEmail(erro.code);
+      }finally{
+        botao.disabled = false;
+        botao.textContent = "✉️ Alterar e-mail de acesso";
+      }
+    }
+
+    async function enviarSenhaAdmin(){const u=firebase.auth().currentUser,s1=document.getElementById('statusContaAdmin'),s2=document.getElementById('statusSegurancaAdmin');if(!u||!u.email)return;if(!confirm('Enviar um e-mail para alterar a senha de '+u.email+'?'))return;try{await firebase.auth().sendPasswordResetEmail(u.email);if(s1)s1.textContent='✅ E-mail de alteração de senha enviado.';if(s2)s2.textContent='✅ E-mail de alteração de senha enviado.'}catch(e){console.error(e);if(s1)s1.textContent='❌ Não foi possível enviar o e-mail.';if(s2)s2.textContent='❌ Não foi possível enviar o e-mail.'}}
+
+    async function salvarConfig() {
+      const status = document.getElementById("statusEmpresa");
+
+      const dados = {
+        nomeLoja: document.getElementById("nomeLoja").value.trim(),
+        cnpjLoja: document.getElementById("cnpjLoja").value.trim(),
+        cepLoja: document.getElementById("cepLoja").value.trim(),
+        enderecoLoja: document.getElementById("enderecoLoja").value.trim(),
+        numeroLoja: document.getElementById("numeroLoja").value.trim(),
+        complementoLoja: document.getElementById("complementoLoja").value.trim(),
+        bairroLoja: document.getElementById("bairroLoja").value.trim(),
+        cidadeLoja: document.getElementById("cidadeLoja").value.trim(),
+        ufLoja: document.getElementById("ufLoja").value.trim().toUpperCase(),
+        telefoneLoja: document.getElementById("telefoneLoja").value.trim(),
+        whatsappLoja: document.getElementById("whatsappLoja").value.trim(),
+        emailLoja: document.getElementById("emailLoja").value.trim(),
+        siteLoja: document.getElementById("siteLoja").value.trim(),
+        razaoSocialLoja: document.getElementById("razaoSocialLoja").value.trim(),
+        nomeFantasiaLoja: document.getElementById("nomeFantasiaLoja").value.trim(),
+        inscricaoEstadualLoja: document.getElementById("inscricaoEstadualLoja").value.trim(),
+        inscricaoMunicipalLoja: document.getElementById("inscricaoMunicipalLoja").value.trim(),
+        regimeTributarioLoja: document.getElementById("regimeTributarioLoja").value,
+        crtLoja: document.getElementById("crtLoja").value,
+        cnaeLoja: document.getElementById("cnaeLoja").value.trim(),
+        emailFiscalLoja: document.getElementById("emailFiscalLoja").value.trim(),
+        responsavelFiscalLoja: document.getElementById("responsavelFiscalLoja").value.trim(),
+        ambienteFiscalLoja: document.getElementById("ambienteFiscalLoja").value
+      };
+
+      if (!dados.nomeLoja || !dados.cnpjLoja) {
+        status.textContent = "⚠️ Preencha o nome da empresa e o CNPJ.";
+        return;
+      }
+
+      status.textContent = "⏳ Salvando dados da empresa...";
+
+      try {
+        localStorage.setItem("configLoja", JSON.stringify(dados));
+
+        await db.collection("configuracoes")
+          .doc("empresa")
+          .set({
+            ...dados,
+            atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+
+        status.textContent = "✅ Dados da empresa salvos com sucesso.";
+      } catch (erro) {
+        console.error(erro);
+        status.textContent = "❌ Não foi possível salvar os dados agora.";
+      }
+    }
+
+    function preencherCamposEmpresa(dados) {
+      if (!dados) return;
+
+      [
+        "nomeLoja","cnpjLoja","cepLoja","enderecoLoja","numeroLoja",
+        "complementoLoja","bairroLoja","cidadeLoja","ufLoja",
+        "telefoneLoja","whatsappLoja","emailLoja","siteLoja",
+        "razaoSocialLoja","nomeFantasiaLoja","inscricaoEstadualLoja",
+        "inscricaoMunicipalLoja","regimeTributarioLoja","crtLoja",
+        "cnaeLoja","emailFiscalLoja","responsavelFiscalLoja","ambienteFiscalLoja"
+      ].forEach(function(id) {
+        const campo = document.getElementById(id);
+        if (!campo) return;
+        campo.value = dados[id] || (id === "ambienteFiscalLoja" ? "nao_configurado" : "");
+      });
+    }
+
+    async function carregarDadosEmpresa() {
+      try {
+        const snap = await db.collection("configuracoes").doc("empresa").get();
+
+        if (snap.exists) {
+          preencherCamposEmpresa(snap.data());
+          return;
+        }
+      } catch (erro) {
+        console.warn("Não foi possível carregar a empresa pelo Firebase.", erro);
+      }
+
+      const local = JSON.parse(localStorage.getItem("configLoja") || "null");
+      if (local) preencherCamposEmpresa(local);
+    }
+
+    async function buscarCepEmpresa() {
+      const campoCep = document.getElementById("cepLoja");
+      const status = document.getElementById("statusEmpresa");
+      const cep = String(campoCep.value || "").replace(/\D/g, "");
+
+      if (!cep) return;
+
+      if (cep.length !== 8) {
+        status.textContent = "⚠️ Digite um CEP válido com 8 números.";
+        return;
+      }
+
+      status.textContent = "⏳ Buscando CEP...";
+
+      try {
+        const resposta = await fetch("https://viacep.com.br/ws/" + cep + "/json/");
+        const dados = await resposta.json();
+
+        if (dados.erro) {
+          status.textContent = "⚠️ CEP não encontrado.";
+          return;
+        }
+
+        document.getElementById("cepLoja").value = dados.cep || campoCep.value;
+        document.getElementById("enderecoLoja").value = dados.logradouro || "";
+        document.getElementById("bairroLoja").value = dados.bairro || "";
+        document.getElementById("cidadeLoja").value = dados.localidade || "";
+        document.getElementById("ufLoja").value = dados.uf || "";
+
+        status.textContent = "✅ Endereço preenchido pelo CEP.";
+        document.getElementById("numeroLoja").focus();
+      } catch (erro) {
+        console.error(erro);
+        status.textContent = "❌ Não foi possível consultar o CEP.";
+      }
+    }
+
+    async function buscarColecaoBackup(nome) {
+      const snap = await db.collection(nome).get();
+      let dados = [];
+
+      snap.forEach(doc => {
+        dados.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+
+      return dados;
+    }
+
+    function esperarLogin() {
+      return new Promise((resolve) => {
+        firebase.auth().onAuthStateChanged((user) => {
+          resolve(user);
+        });
+      });
+    }
+
+    async function fazerBackup() {
+      const status = document.getElementById("statusBackup");
+
+      status.innerHTML = "⏳ Gerando backup...";
+
+      const user = await esperarLogin();
+
+      if (!user) {
+        status.innerHTML = "⚠️ Faça login primeiro.";
+        return;
+      }
+
+      try {
+        const backup = {
+          clientes: await buscarColecaoBackup("clientes"),
+          pedidos: await buscarColecaoBackup("pedidos"),
+          ordens: await buscarColecaoBackup("ordens"),
+          financeiro: await buscarColecaoBackup("financeiro"),
+          caixas: await buscarColecaoBackup("caixas"),
+          historicoCaixa: await buscarColecaoBackup("historicoCaixa"),
+          receituarios: await buscarColecaoBackup("receituarios"),
+          notas_fiscais: await buscarColecaoBackup("notas_fiscais")
+        };
+
+        const arquivo = new Blob(
+          [JSON.stringify(backup, null, 2)],
+          { type: "application/json" }
+        );
+
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(arquivo);
+        link.download = "ventura-backup.json";
+        link.click();
+
+        status.innerHTML = "✅ Backup criado com sucesso.";
+      } catch (e) {
+        console.error(e);
+        status.innerHTML = "❌ " + e.message;
+      }
+    }
+
+    window.onload = function () {
+      carregarUsuarioDaCentral();
+
+      const seletorFoto = document.getElementById("arquivoFotoPerfil");
+      if(seletorFoto){
+        seletorFoto.addEventListener("change", selecionarFotoPerfil);
+      }
+
+      const cepEmpresa = document.getElementById("cepLoja");
+      if (cepEmpresa) {
+        cepEmpresa.addEventListener("blur", buscarCepEmpresa);
+      }
+      carregarDadosEmpresa();
+
+      document
+        .getElementById("arquivoBackup")
+        .addEventListener("change", restaurarBackup);
+    };
+
+    async function restaurarBackup(event) {
+      const status = document.getElementById("statusBackup");
+      const arquivo = event.target.files[0];
+
+      if (!arquivo) return;
+
+      const confirmar = confirm(
+        "ATENÇÃO: restaurar backup pode sobrescrever dados atuais. Deseja continuar?"
+      );
+
+      if (!confirmar) {
+        status.innerHTML = "⚠️ Restauração cancelada.";
+        return;
+      }
+
+      status.innerHTML = "⏳ Restaurando backup... aguarde.";
+
+      try {
+        const texto = await arquivo.text();
+        const backup = JSON.parse(texto);
+
+        async function restaurarColecao(nome, dados) {
+          if (!Array.isArray(dados)) return;
+
+          for (const item of dados) {
+            const id = item.id;
+            const copia = { ...item };
+            delete copia.id;
+
+            if (id) {
+              await db.collection(nome).doc(id).set(copia);
+            }
+          }
+        }
+
+        await restaurarColecao("clientes", backup.clientes);
+        await restaurarColecao("pedidos", backup.pedidos);
+        await restaurarColecao("ordens", backup.ordens);
+        await restaurarColecao("caixas", backup.caixas);
+        await restaurarColecao("financeiro", backup.financeiro);
+        await restaurarColecao("historicoCaixa", backup.historicoCaixa);
+        await restaurarColecao("notas_fiscais", backup.notas_fiscais);
+        await restaurarColecao("receituarios", backup.receituarios);
+
+        status.innerHTML = "✅ Backup restaurado com sucesso.";
+        alert("Backup restaurado com sucesso!");
+      } catch (e) {
+        console.error(e);
+        status.innerHTML = "❌ Erro ao restaurar backup: " + e.message;
+      }
+    }
+  </script>
+
+</body>
+</html>
