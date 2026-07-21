@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Clientes - Óticas Ventura</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(52, 151, 235, 0.18), transparent 28%),
+        linear-gradient(135deg, #062449, #0b4c86);
+      color: #17324b;
+    }
+
+    body {
+      padding: 16px;
+    }
+
+    .clientes-wrapper {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 22px;
+      background: #ffffff;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+    }
+
+    .clientes-topo {
+      padding: 20px 26px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #082b54, #0d5d9f);
+    }
+
+    .clientes-topo h1 {
+      margin: 0;
+      font-size: 30px;
+      color: #ffffff;
+    }
+
+    .clientes-conteudo {
+      padding: 18px 20px 22px;
+      background: #ffffff;
+    }
+
+    .secao {
+      margin-bottom: 16px;
+      padding: 16px;
+      border: 1px solid #d9e5ef;
+      border-radius: 15px;
+      background: #f8fbfe;
+    }
+
+    .secao h2 {
+      margin: 0 0 12px;
+      color: #0d4d84;
+      font-size: 19px;
+    }
+
+    .grade {
+      display: grid;
+      gap: 12px;
+    }
+
+    .grade-2,
+    .grade-4 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    input,
+    textarea,
+    button {
+      font: inherit;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      min-width: 0;
+      padding: 11px 12px;
+      border: 1px solid #cfdce8;
+      border-radius: 10px;
+      background: #ffffff;
+      color: #18334d;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 82px;
+      resize: vertical;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #6c8194;
+      opacity: 1;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #1a84d8;
+      box-shadow: 0 0 0 3px rgba(26, 132, 216, 0.12);
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #ffffff;
+      background: #1687e8;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .btn-salvar {
+      min-width: 180px;
+      background: #239a55;
+    }
+
+    .linha-busca {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .filtros {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px !important;
+    }
+
+    .filtros button {
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 8px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .acoes-formulario {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
+
+    .cards-resumo {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+
+    .cards-resumo > div {
+      padding: 11px 8px;
+      border: 1px solid #d7e3ee;
+      border-radius: 11px;
+      background: #ffffff;
+      color: #18334d;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .tabela-wrapper {
+      width: 100%;
+      max-width: 100%;
+      margin-top: 12px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      border: 1px solid #d9e5ef;
+      border-radius: 12px;
+      background: #ffffff;
+    }
+
+    #listaClientes {
+      width: 100%;
+      min-width: 560px;
+      table-layout: fixed;
+      border-collapse: collapse;
+      background: #ffffff;
+      color: #17324b;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #e3ebf2;
+      text-align: left;
+      vertical-align: middle;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    th {
+      background: #0d5d9f;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+
+    tr:nth-child(even) td {
+      background: #f7fafc;
+    }
+
+    #listaClientes th:nth-child(3),
+    #listaClientes td:nth-child(3),
+    #listaClientes th:nth-child(4),
+    #listaClientes td:nth-child(4),
+    #listaClientes th:nth-child(5),
+    #listaClientes td:nth-child(5) {
+      display: none;
+    }
+
+    #listaClientes th:nth-child(1),
+    #listaClientes td:nth-child(1) { width: 25%; }
+
+    #listaClientes th:nth-child(2),
+    #listaClientes td:nth-child(2) { width: 20%; }
+
+    #listaClientes th:nth-child(6),
+    #listaClientes td:nth-child(6) { width: 17%; }
+
+    #listaClientes th:nth-child(7),
+    #listaClientes td:nth-child(7) { width: 16%; }
+
+    #listaClientes th:nth-child(8),
+    #listaClientes td:nth-child(8) {
+      width: 150px;
+      min-width: 150px;
+    }
+
+    #listaClientes td:nth-child(8) button,
+    #listaClientes td:nth-child(8) a {
+      display: block;
+      width: 100%;
+      margin: 4px 0;
+      padding: 8px 6px;
+      border-radius: 8px;
+      text-align: center;
+      white-space: normal;
+      font-size: 12px;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        padding: 10px;
+      }
+
+      .clientes-topo {
+        padding: 18px 16px;
+      }
+
+      .clientes-topo h1 {
+        font-size: 27px;
+      }
+
+      .clientes-conteudo {
+        padding: 14px;
+      }
+
+      .filtros {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .cards-resumo {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .grade-2,
+      .grade-4 {
+        grid-template-columns: 1fr;
+      }
+
+      .filtros,
+      .cards-resumo {
+        grid-template-columns: 1fr;
+      }
+
+      .acoes-formulario {
+        justify-content: stretch;
+      }
+
+      .acoes-formulario button {
+        width: 100%;
+      }
+
+      #listaClientes {
+        min-width: 520px;
+      }
+    }
+
+    .cliente-link-ficha {
+      display: inline;
+      width: auto;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      color: #0d5d9f;
+      background: transparent;
+      font-weight: 800;
+      text-align: left;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .cliente-link-ficha:hover {
+      filter: none;
+      transform: none;
+      color: #1687e8;
+    }
+
+    #listaClientes td:nth-child(8) .btn-ficha-cliente {
+      background: #6f42c1;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <main class="clientes-wrapper">
+
+    <header class="clientes-topo">
+      <h1>👥 Cadastro de Clientes</h1>
+    </header>
+
+    <div class="clientes-conteudo">
+
+      <section class="secao">
+        <h2>Buscar cliente</h2>
+
+        <div class="linha-busca">
+          <input
+            id="buscarCliente"
+            type="text"
+            placeholder="Buscar cliente por nome, telefone, CPF ou CNPJ"
+          >
+        </div>
+
+        <div class="filtros">
+          <button type="button" onclick="filtroStatus='todos'; mostrarClientes()">Todos</button>
+
+          <button type="button" id="btnVencidos" onclick="filtroStatus='vencido'; mostrarClientes()">
+            🔴 Vencidos
+          </button>
+
+          <button type="button" id="btnHoje" onclick="filtroStatus='hoje'; mostrarClientes()">
+            🟡 Vence hoje
+          </button>
+
+          <button type="button" onclick="filtroStatus='sem'; mostrarClientes()">
+            ⚪ Sem retorno
+          </button>
+
+          <button type="button" onclick="filtroStatus='prazo'; mostrarClientes()">
+            🟢 No prazo
+          </button>
+        </div>
+      </section>
+
+      <section class="secao">
+        <h2>Dados do cliente</h2>
+
+        <div class="grade grade-4">
+          <input id="nomeCliente" type="text" placeholder="Nome do cliente">
+          <input id="telefoneCliente" type="text" placeholder="Telefone">
+          <input id="cpfCliente" type="text" placeholder="CPF ou CNPJ">
+          <input id="nascimentoCliente" type="date">
+        </div>
+
+        <div class="grade grade-4" style="margin-top:14px;">
+          <input id="emailCliente" type="email" placeholder="E-mail (opcional)">
+          <input id="cepCliente" type="text" placeholder="CEP">
+          <input id="enderecoCliente" type="text" placeholder="Rua / Endereço">
+          <input id="numeroEnderecoCliente" type="text" placeholder="Número">
+        </div>
+
+        <div class="grade grade-4" style="margin-top:14px;">
+          <input id="complementoCliente" type="text" placeholder="Complemento">
+          <input id="bairroCliente" type="text" placeholder="Bairro">
+          <input id="cidadeCliente" type="text" placeholder="Cidade">
+          <input id="ufCliente" type="text" maxlength="2" placeholder="UF">
+        </div>
+
+        <div style="margin-top:14px;">
+          <textarea id="obsCliente" placeholder="Observações"></textarea>
+        </div>
+
+        <div class="acoes-formulario">
+          <button type="button" class="btn-salvar" onclick="salvarCliente()">
+            💾 Salvar cliente
+          </button>
+        </div>
+      </section>
+
+      <section class="secao">
+        <h2>Clientes cadastrados</h2>
+
+        <div class="cards-resumo">
+          <div>Total: <span id="totalClientes">0</span></div>
+          <div>🔴 Vencidos: <span id="totalVencidosCard">0</span></div>
+          <div>🟡 Hoje: <span id="totalHojeCard">0</span></div>
+          <div>⚪ Sem retorno: <span id="totalSemCard">0</span></div>
+          <div>🟢 No prazo: <span id="totalPrazoCard">0</span></div>
+        </div>
+
+        <input
+          type="text"
+          id="buscaCliente"
+          placeholder="Buscar por nome, telefone, CPF ou CNPJ"
+          onkeyup="mostrarClientes()"
+        >
+
+        <div class="tabela-wrapper">
+          <table id="listaClientes">
+            <tr>
+              <th>Nome</th>
+              <th>Telefone</th>
+              <th>Endereço</th>
+              <th>Bairro</th>
+              <th>Cidade</th>
+              <th>Retorno</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="app.js?v=20"></script>
+
+</body>
+</html>
