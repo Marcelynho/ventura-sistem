@@ -179,14 +179,33 @@
     setTimeout(() => URL.revokeObjectURL(url), 1500);
   }
 
+  function obterDocumentoModalCompartilhamento() {
+    try {
+      if (
+        window.top &&
+        window.top !== window &&
+        window.top.document &&
+        window.top.location.origin === window.location.origin
+      ) {
+        return window.top.document;
+      }
+    } catch (erro) {
+      // Em caso de bloqueio entre janelas, usa a própria página do módulo.
+    }
+
+    return document;
+  }
+
   function fecharModalCompartilhamento() {
-    const modal = document.getElementById("modalCompartilharPdfVentura");
+    const documentoModal = obterDocumentoModalCompartilhamento();
+    const modal = documentoModal.getElementById("modalCompartilharPdfVentura");
     if (modal) modal.remove();
   }
 
   function mostrarPreparandoPDF() {
     fecharModalCompartilhamento();
-    const fundo = document.createElement("div");
+    const documentoModal = obterDocumentoModalCompartilhamento();
+    const fundo = documentoModal.createElement("div");
     fundo.id = "modalCompartilharPdfVentura";
     fundo.innerHTML = `
       <div class="ventura-pdf-modal" role="dialog" aria-modal="true" aria-label="Preparando PDF">
@@ -195,13 +214,13 @@
         <p>Aguarde alguns segundos.</p>
       </div>`;
     aplicarEstiloModal(fundo);
-    document.body.appendChild(fundo);
+    documentoModal.body.appendChild(fundo);
   }
 
   function aplicarEstiloModal(fundo) {
-    fundo.style.cssText = "position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(3,18,37,.76);backdrop-filter:blur(4px)";
+    fundo.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;z-index:999999;display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:18px;background:rgba(3,18,37,.76);backdrop-filter:blur(4px);overflow:auto";
     const modal = fundo.querySelector(".ventura-pdf-modal");
-    if (modal) modal.style.cssText = "width:100%;max-width:430px;padding:25px;border-radius:20px;background:#fff;color:#17324b;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.38);font-family:Arial,Helvetica,sans-serif";
+    if (modal) modal.style.cssText = "width:100%;max-width:430px;max-height:calc(100vh - 36px);overflow:auto;box-sizing:border-box;margin:auto;padding:25px;border-radius:20px;background:#fff;color:#17324b;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.38);font-family:Arial,Helvetica,sans-serif";
     const icone = fundo.querySelector(".ventura-pdf-icone");
     if (icone) icone.style.cssText = "font-size:42px;margin-bottom:8px";
     const titulo = fundo.querySelector("h2");
@@ -213,7 +232,8 @@
   function abrirModalCompartilhamento(blob, nomeArquivo, titulo, mensagem) {
     fecharModalCompartilhamento();
 
-    const fundo = document.createElement("div");
+    const documentoModal = obterDocumentoModalCompartilhamento();
+    const fundo = documentoModal.createElement("div");
     fundo.id = "modalCompartilharPdfVentura";
     fundo.innerHTML = `
       <div class="ventura-pdf-modal" role="dialog" aria-modal="true" aria-label="PDF pronto">
@@ -276,7 +296,7 @@
     const botaoFechar = fundo.querySelector('[data-acao="fechar"]');
     if (botaoFechar) botaoFechar.addEventListener("click", fecharModalCompartilhamento);
 
-    document.body.appendChild(fundo);
+    documentoModal.body.appendChild(fundo);
   }
 
   async function executarCompartilhamento(gerador) {
