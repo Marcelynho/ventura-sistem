@@ -163,19 +163,19 @@
 
     .acoes {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 9px;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
       margin-top: 0;
     }
 
     .acoes button {
       width: 100%;
       min-width: 0;
-      min-height: 42px;
-      padding: 9px 10px;
-      font-size: 13px;
-      line-height: 1.2;
-      white-space: normal;
+      min-height: 38px;
+      padding: 7px 5px;
+      font-size: 11.5px;
+      line-height: 1.1;
+      white-space: nowrap;
     }
 
     .lista-os-topo {
@@ -297,10 +297,6 @@
         grid-template-columns: 1fr;
       }
 
-      .acoes {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
       .linha-busca button,
       .acoes button {
         width: 100%;
@@ -309,6 +305,19 @@
       .lista-os-topo {
         align-items: flex-start;
         flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .acoes {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .acoes button {
+        min-height: 42px;
+        padding: 8px 7px;
+        font-size: 12px;
       }
     }
 
@@ -608,13 +617,13 @@
         <h2>Ações da OS</h2>
 
         <div class="acoes">
-          <button type="button" class="btn-verde" onclick="salvarOS()">💾 Salvar OS</button>
-          <button type="button" class="btn-cinza" onclick="imprimirOSCompleta()">🖨 Via da Loja</button>
-          <button type="button" class="btn-roxo" onclick="imprimirOSCliente()">🧾 Via do Cliente</button>
-          <button type="button" class="btn-roxo" onclick="gerarNotaFiscalOS()">🧾 Prévia fiscal</button>
-          <button type="button" class="btn-verde" onclick="compartilharOSAtualPDF()">📤 PDF da OS</button>
-          <button type="button" class="btn-roxo" onclick="compartilharReciboAtualPDF()">📲 Compartilhar recibo</button>
-          <button type="button" class="btn-verde" onclick="finalizarEEnviar()">📲 Finalizar + WhatsApp</button>
+          <button type="button" class="btn-verde" onclick="salvarOS()" title="Salvar ordem de serviço" aria-label="Salvar ordem de serviço">💾 Salvar</button>
+          <button type="button" class="btn-cinza" onclick="imprimirOSCompleta()" title="Imprimir via da loja" aria-label="Imprimir via da loja">🖨 Via Loja</button>
+          <button type="button" class="btn-roxo" onclick="imprimirOSCliente()" title="Imprimir via do cliente" aria-label="Imprimir via do cliente">🧾 Via Cliente</button>
+          <button type="button" class="btn-roxo" onclick="gerarNotaFiscalOS()" title="Preparar prévia fiscal" aria-label="Preparar prévia fiscal">🧾 Prévia Fiscal</button>
+          <button type="button" class="btn-verde" onclick="compartilharOSAtualPDF()" title="Compartilhar OS em PDF" aria-label="Compartilhar OS em PDF">📤 PDF da OS</button>
+          <button type="button" class="btn-roxo" onclick="compartilharReciboAtualPDF()" title="Compartilhar recibo" aria-label="Compartilhar recibo">📲 Recibo</button>
+          <button type="button" class="btn-verde" onclick="finalizarEEnviar()" title="Finalizar e abrir WhatsApp" aria-label="Finalizar e abrir WhatsApp">📲 WhatsApp</button>
         </div>
       </section>
 
