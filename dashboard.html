@@ -2034,13 +2034,23 @@
         "";
 
       abrirModulo("os.html", function (frame) {
-        const documento = frame.contentDocument || frame.contentWindow.document;
+        const janelaOS = frame.contentWindow;
+
+        // Abre diretamente a OS escolhida na busca, sem parar na lista geral.
+        if (item.id && typeof janelaOS.editarOS === "function") {
+          janelaOS.editarOS(item.id);
+          return;
+        }
+
+        // Compatibilidade: se a abertura direta não estiver disponível,
+        // mantém a busca filtrada como alternativa.
+        const documento = frame.contentDocument || janelaOS.document;
         const campoBusca = documento.getElementById("buscaOS");
 
         if (campoBusca) campoBusca.value = chave;
 
-        if (typeof frame.contentWindow.buscarOS === "function") {
-          frame.contentWindow.buscarOS();
+        if (typeof janelaOS.buscarOS === "function") {
+          janelaOS.buscarOS();
         }
       });
     }
@@ -2271,15 +2281,21 @@
         "";
 
       abrirModulo("os.html", function (frame) {
-        const documento =
-          frame.contentDocument || frame.contentWindow.document;
+        const janelaOS = frame.contentWindow;
 
+        // Abre diretamente a OS escolhida no resumo diário.
+        if (os.id && typeof janelaOS.editarOS === "function") {
+          janelaOS.editarOS(os.id);
+          return;
+        }
+
+        const documento = frame.contentDocument || janelaOS.document;
         const campoBusca = documento.getElementById("buscaOS");
 
         if (campoBusca) campoBusca.value = chave;
 
-        if (typeof frame.contentWindow.buscarOS === "function") {
-          frame.contentWindow.buscarOS();
+        if (typeof janelaOS.buscarOS === "function") {
+          janelaOS.buscarOS();
         }
       });
     }
