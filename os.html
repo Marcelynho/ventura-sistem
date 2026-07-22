@@ -153,22 +153,74 @@
       background: #6f42c1;
     }
 
-    .acoes {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
+    .secao-acoes-os {
+      padding: 16px 18px;
     }
 
-    .linha-lista {
+    .secao-acoes-os h2 {
+      margin-bottom: 12px;
+    }
+
+    .acoes {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 0;
+    }
+
+    .acoes button {
+      width: 100%;
+      min-width: 0;
+      min-height: 42px;
+      padding: 9px 10px;
+      font-size: 13px;
+      line-height: 1.2;
+      white-space: normal;
+    }
+
+    .lista-os-topo {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
       align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .lista-os-titulo {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .lista-os-titulo h2 {
+      margin: 0;
+    }
+
+    .os-total-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 10px;
+      border: 1px solid #b9d8f1;
+      border-radius: 999px;
+      background: #eaf6ff;
+      color: #0d5d9f;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .btn-atualizar-lista {
+      flex: 0 0 auto;
+      min-height: 38px;
+      padding: 8px 12px;
+      font-size: 12px;
     }
 
     #listaOS {
-      margin-top: 18px;
+      margin-top: 10px;
     }
 
     .campo-destaque {
@@ -245,10 +297,43 @@
         grid-template-columns: 1fr;
       }
 
+      .acoes {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .linha-busca button,
-      .acoes button,
-      .linha-lista button {
+      .acoes button {
         width: 100%;
+      }
+
+      .lista-os-topo {
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .secao-acoes-os {
+        padding: 14px;
+      }
+
+      .acoes {
+        gap: 8px;
+      }
+
+      .acoes button {
+        min-height: 44px;
+        padding: 8px 7px;
+        font-size: 11.5px;
+      }
+
+      .lista-os-topo,
+      .btn-atualizar-lista {
+        width: 100%;
+      }
+
+      .btn-atualizar-lista {
+        min-height: 40px;
       }
     }
 
@@ -519,34 +604,28 @@
         <textarea id="observacoesOS" placeholder="Observações" style="width:100%;min-height:90px;padding:12px;border:1px solid #cfdce8;border-radius:10px;font:inherit;"></textarea>
       </section>
 
-      <section class="secao">
+      <section class="secao secao-acoes-os">
         <h2>Ações da OS</h2>
 
         <div class="acoes">
-          <button type="button" class="btn-verde" onclick="salvarOS()">
-            💾 Salvar OS
-          </button>
-
+          <button type="button" class="btn-verde" onclick="salvarOS()">💾 Salvar OS</button>
           <button type="button" class="btn-cinza" onclick="imprimirOSCompleta()">🖨 Via da Loja</button>
           <button type="button" class="btn-roxo" onclick="imprimirOSCliente()">🧾 Via do Cliente</button>
-          <button type="button" class="btn-verde" onclick="compartilharOSAtualPDF()">📤 Compartilhar OS em PDF</button>
+          <button type="button" class="btn-roxo" onclick="gerarNotaFiscalOS()">🧾 Prévia fiscal</button>
+          <button type="button" class="btn-verde" onclick="compartilharOSAtualPDF()">📤 PDF da OS</button>
           <button type="button" class="btn-roxo" onclick="compartilharReciboAtualPDF()">📲 Compartilhar recibo</button>
-
-          <button type="button" class="btn-verde" onclick="finalizarEEnviar()">
-            📲 Finalizar + WhatsApp
-          </button>
-
-          <button type="button" class="btn-roxo" onclick="gerarNotaFiscalOS()">
-            🧾 Preparar prévia fiscal
-          </button>
+          <button type="button" class="btn-verde" onclick="finalizarEEnviar()">📲 Finalizar + WhatsApp</button>
         </div>
       </section>
 
       <section class="secao">
-        <h2>Lista de ordens de serviço</h2>
+        <div class="lista-os-topo">
+          <div class="lista-os-titulo">
+            <h2>Lista de ordens de serviço</h2>
+            <span id="quantidadeOSTotal" class="os-total-badge" aria-live="polite">Carregando...</span>
+          </div>
 
-        <div class="linha-lista">
-          <button type="button" onclick="listarOS()">
+          <button type="button" class="btn-atualizar-lista" onclick="listarOS()">
             🔄 Atualizar lista
           </button>
         </div>
@@ -561,7 +640,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="app.js?v=23"></script>
+  <script src="app.js?v=24"></script>
   <script src="pdf-share.js?v=5"></script>
 
   <script>
