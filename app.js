@@ -2850,9 +2850,11 @@ async function editarOS(id) {
 
 async function listarOS() {
   const listaDiv = document.getElementById("listaOS");
+  const contadorOS = document.getElementById("quantidadeOSTotal");
   if (!listaDiv) return;
 
   listaDiv.innerHTML = "Carregando...";
+  if (contadorOS) contadorOS.textContent = "Carregando...";
 
   try {
     const snapshot = await db.collection("ordens").get();
@@ -2860,6 +2862,13 @@ async function listarOS() {
       id: doc.id,
       ...doc.data()
     }));
+
+    if (contadorOS) {
+      const total = registros.length;
+      contadorOS.textContent = total === 1
+        ? "1 OS no sistema"
+        : total + " OS no sistema";
+    }
 
     registros.sort((a, b) => {
       const numeroA = Number(String(a.numero || "").replace(/\D/g, "")) || 0;
@@ -2926,6 +2935,7 @@ async function listarOS() {
   } catch (erro) {
     console.error("Erro ao listar as ordens:", erro);
     listaDiv.innerHTML = "Não foi possível carregar a lista.";
+    if (contadorOS) contadorOS.textContent = "Total indisponível";
   }
 }
 
