@@ -1062,9 +1062,38 @@ async function salvarOS() {
 
   const pagamentosValidos = pagamentosInformados.filter(item => item.valor > 0 && item.forma);
   const valorEntrada = pagamentosValidos.reduce((total, item) => total + item.valor, 0);
+  const numeroOSAtual = String(document.getElementById("numeroOS")?.value || "").trim();
+  const clienteOSAtual = String(document.getElementById("clienteOS")?.value || "").trim();
+
+  if (!numeroOSAtual) {
+    alert("Informe o número da OS antes de salvar.");
+    return;
+  }
+
+  if (!clienteOSAtual) {
+    alert("Informe ou selecione o cliente antes de salvar.");
+    return;
+  }
+
+  if (valorTotal <= 0) {
+    alert("Informe um valor total válido para a venda.");
+    return;
+  }
 
   if (valorEntrada - valorTotal > 0.01) {
     alert("A soma dos pagamentos não pode ser maior que o valor total da venda.");
+    return;
+  }
+
+  // Protege contra OS duplicada, inclusive se o botão for acionado novamente.
+  const duplicadas = await db.collection("ordens")
+    .where("numero", "==", numeroOSAtual)
+    .limit(5)
+    .get();
+
+  const existeOutraOS = duplicadas.docs.some(doc => doc.id !== window.osEditandoId);
+  if (existeOutraOS) {
+    alert("Já existe uma Ordem de Serviço com o número " + numeroOSAtual + ". Verifique antes de salvar.");
     return;
   }
 
@@ -1177,8 +1206,6 @@ document.getElementById("valorOS").value = "";
   if (campo) campo.value = "";
 });
 if (typeof alternarPagamento2OS === "function") alternarPagamento2OS(false);
-
-    alert("OS salva com sucesso!");
 }
 async function obterEmpresaOS(){
   try{
@@ -2195,8 +2222,41 @@ function calcularRestante() {
 
   const entradaCampo = document.getElementById("entradaOS");
   const restanteCampo = document.getElementById("restanteOS");
+  const aviso = document.getElementById("avisoPagamentoOS");
+
   if (entradaCampo) entradaCampo.value = entrada > 0 ? entrada.toFixed(2).replace(".", ",") : "";
   if (restanteCampo) restanteCampo.value = valor > 0 ? Math.max(valor - entrada, 0).toFixed(2).replace(".", ",") : "";
+
+  if (!aviso) return;
+
+  aviso.className = "aviso-pagamento-os";
+  aviso.textContent = "";
+
+  if (valor <= 0) return;
+
+  const diferenca = valor - entrada;
+
+  if (entrada - valor > 0.01) {
+    aviso.classList.add("erro");
+    aviso.textContent = "⚠️ A soma dos pagamentos ultrapassa o total da venda em R$ " +
+      (entrada - valor).toFixed(2).replace(".", ",") + ".";
+    return;
+  }
+
+  if (Math.abs(diferenca) <= 0.01) {
+    aviso.classList.add("ok");
+    aviso.textContent = "✅ Pagamento fechado. Total da venda totalmente pago.";
+    return;
+  }
+
+  aviso.classList.add("atencao");
+  if (entrada <= 0.01) {
+    aviso.textContent = "⚠️ Nenhum pagamento informado. Saldo integral em aberto: R$ " +
+      valor.toFixed(2).replace(".", ",") + ".";
+  } else {
+    aviso.textContent = "⚠️ Pagamento parcial. Saldo em aberto: R$ " +
+      diferenca.toFixed(2).replace(".", ",") + ".";
+  }
 }
 async function deletarFinanceiro(id) {
   if (!confirm("Deseja deletar este lançamento?")) return;
@@ -2988,6 +3048,168 @@ async function editarOS(id) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+window.registrosOSCache = [];
+
+function normalizarFiltroOS(valor) {
+  return String(valor || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+function normalizarDataFiltroOS(valor) {
+  const texto = String(valor || "").trim();
+  const iso = texto.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) return iso[1] + "-" + iso[2] + "-" + iso[3];
+
+  const br = texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (br) return br[3] + "-" + br[2] + "-" + br[1];
+
+  return "";
+}
+
+function classeStatusListaOS(status) {
+  const normalizado = normalizarFiltroOS(status);
+  if (normalizado === "recebido") return "status-os-recebido";
+  if (normalizado === "em producao") return "status-os-producao";
+  if (normalizado === "enviado ao laboratorio") return "status-os-laboratorio";
+  if (normalizado === "pronto para retirada") return "status-os-pronto";
+  if (normalizado === "entregue") return "status-os-entregue";
+  return "status-os-recebido";
+}
+
+function ordenarRegistrosOS(registros) {
+  return [...registros].sort((a, b) => {
+    const numeroA = Number(String(a.numero || "").replace(/\D/g, "")) || 0;
+    const numeroB = Number(String(b.numero || "").replace(/\D/g, "")) || 0;
+
+    if (numeroA !== numeroB) return numeroB - numeroA;
+
+    const dataA = normalizarDataFiltroOS(a.dataCompra);
+    const dataB = normalizarDataFiltroOS(b.dataCompra);
+    return dataB.localeCompare(dataA);
+  });
+}
+
+function renderizarListaOS(registros, totalGeral) {
+  const listaDiv = document.getElementById("listaOS");
+  const contadorOS = document.getElementById("quantidadeOSTotal");
+  if (!listaDiv) return;
+
+  if (contadorOS) {
+    if (registros.length === totalGeral) {
+      contadorOS.textContent = totalGeral === 1
+        ? "1 OS no sistema"
+        : totalGeral + " OS no sistema";
+    } else {
+      contadorOS.textContent = registros.length + " de " + totalGeral + " OS";
+    }
+  }
+
+  let html = "";
+
+  registros.forEach(os => {
+    const restante = valorNumeroOS(os.restante);
+    const estaQuitada = restante <= 0;
+    const statusAtual = os.status || "Recebido";
+    const status = [
+      "Recebido",
+      "Em produção",
+      "Enviado ao laboratório",
+      "Pronto para retirada",
+      "Entregue"
+    ];
+
+    const opcoes = status.map(item =>
+      `<option value="${escaparHTMLOS(item)}" ${item === statusAtual ? "selected" : ""}>${escaparHTMLOS(item)}</option>`
+    ).join("");
+
+    const vendedor = os.vendedor
+      ? `<br><b>Vendedor:</b> ${escaparHTMLOS(os.vendedor)}`
+      : "";
+
+    const dataCompra = normalizarDataFiltroOS(os.dataCompra);
+    const dataFormatada = dataCompra
+      ? dataCompra.split("-").reverse().join("/")
+      : "";
+
+    html += `
+      <article class="os-lista-item">
+        <div class="os-lista-dados">
+          <b>OS:</b> ${escaparHTMLOS(os.numero)}<br>
+          <b>Cliente:</b> ${escaparHTMLOS(os.cliente)}<br>
+          <b>Telefone:</b> ${escaparHTMLOS(os.telefone)}
+          ${vendedor}
+          ${dataFormatada ? `<br><b>Data:</b> ${escaparHTMLOS(dataFormatada)}` : ""}
+          <br><b>Pagamento:</b> ${
+            estaQuitada
+              ? '<span style="color:#21864a;font-weight:bold;">✅ Quitada</span>'
+              : '<span style="color:#d97706;font-weight:bold;">Em aberto - R$ ' + restante.toFixed(2).replace(".", ",") + '</span>'
+          }
+          <br><b>Andamento:</b>
+          <span class="status-os-badge ${classeStatusListaOS(statusAtual)}">${escaparHTMLOS(statusAtual)}</span>
+        </div>
+
+        <div class="os-lista-acoes">
+          <button type="button" class="btn-os-editar" onclick="editarOS('${os.id}')">✏ Editar</button>
+
+          ${!estaQuitada ? `
+            <button type="button" class="btn-os-receber" onclick="receberSaldoOS('${os.id}')">💰 Receber</button>
+          ` : ""}
+
+          <button type="button" class="btn-os-imprimir" onclick="imprimirOSPorId('${os.id}', 'cliente')">🖨 Imprimir</button>
+          <button type="button" class="btn-os-imprimir" onclick="compartilharOSPorId('${os.id}')">📤 PDF da OS</button>
+          <button type="button" class="btn-os-imprimir" onclick="compartilharReciboPorId('${os.id}')">📲 Recibo</button>
+
+          <select id="status-lista-${os.id}" aria-label="Status da OS ${escaparHTMLOS(os.numero)}">
+            ${opcoes}
+          </select>
+
+          <button type="button" class="btn-os-status" onclick="atualizarStatusOS('${os.id}')">🔄 Status</button>
+          <button type="button" class="btn-os-deletar" onclick="deletarOSPorId('${os.id}', '${escaparHTMLOS(os.numero)}')">🗑 Deletar</button>
+        </div>
+      </article>
+    `;
+  });
+
+  listaDiv.innerHTML = html || '<div style="padding:18px;text-align:center;color:#60788f;font-weight:700;">Nenhuma OS encontrada com esses filtros.</div>';
+}
+
+function filtrarListaOS() {
+  const busca = normalizarFiltroOS(document.getElementById("filtroBuscaOS")?.value);
+  const status = normalizarFiltroOS(document.getElementById("filtroStatusOS")?.value);
+  const vendedor = normalizarFiltroOS(document.getElementById("filtroVendedorOS")?.value);
+  const data = normalizarDataFiltroOS(document.getElementById("filtroDataOS")?.value);
+
+  const origem = Array.isArray(window.registrosOSCache) ? window.registrosOSCache : [];
+
+  const filtrados = origem.filter(os => {
+    const textoBusca = normalizarFiltroOS([
+      os.numero,
+      os.cliente,
+      os.telefone
+    ].join(" "));
+
+    if (busca && !textoBusca.includes(busca)) return false;
+    if (status && normalizarFiltroOS(os.status || "Recebido") !== status) return false;
+    if (vendedor && !normalizarFiltroOS(os.vendedor).includes(vendedor)) return false;
+    if (data && normalizarDataFiltroOS(os.dataCompra) !== data) return false;
+
+    return true;
+  });
+
+  renderizarListaOS(ordenarRegistrosOS(filtrados), origem.length);
+}
+
+function limparFiltrosOS() {
+  ["filtroBuscaOS", "filtroStatusOS", "filtroVendedorOS", "filtroDataOS"].forEach(id => {
+    const campo = document.getElementById(id);
+    if (campo) campo.value = "";
+  });
+  filtrarListaOS();
+}
+
 async function listarOS() {
   const listaDiv = document.getElementById("listaOS");
   const contadorOS = document.getElementById("quantidadeOSTotal");
@@ -3003,75 +3225,8 @@ async function listarOS() {
       ...doc.data()
     }));
 
-    if (contadorOS) {
-      const total = registros.length;
-      contadorOS.textContent = total === 1
-        ? "1 OS no sistema"
-        : total + " OS no sistema";
-    }
-
-    registros.sort((a, b) => {
-      const numeroA = Number(String(a.numero || "").replace(/\D/g, "")) || 0;
-      const numeroB = Number(String(b.numero || "").replace(/\D/g, "")) || 0;
-      return numeroB - numeroA;
-    });
-
-    let html = "";
-
-    registros.forEach(os => {
-      const restante = valorNumeroOS(os.restante);
-      const estaQuitada = restante <= 0;
-      const statusAtual = os.status || "Recebido";
-      const status = [
-        "Recebido",
-        "Em produção",
-        "Enviado ao laboratório",
-        "Pronto para retirada",
-        "Entregue"
-      ];
-
-      const opcoes = status.map(item =>
-        `<option value="${escaparHTMLOS(item)}" ${item === statusAtual ? "selected" : ""}>${escaparHTMLOS(item)}</option>`
-      ).join("");
-
-      html += `
-        <article class="os-lista-item">
-          <div class="os-lista-dados">
-            <b>OS:</b> ${escaparHTMLOS(os.numero)}<br>
-            <b>Cliente:</b> ${escaparHTMLOS(os.cliente)}<br>
-            <b>Telefone:</b> ${escaparHTMLOS(os.telefone)}<br>
-            <b>Pagamento:</b> ${
-              estaQuitada
-                ? '<span style="color:#21864a;font-weight:bold;">✅ Quitada</span>'
-                : '<span style="color:#d97706;font-weight:bold;">Em aberto - R$ ' + restante.toFixed(2).replace(".", ",") + '</span>'
-            }<br>
-            <b>Andamento:</b> ${escaparHTMLOS(statusAtual)}
-          </div>
-
-          <div class="os-lista-acoes">
-            <button type="button" class="btn-os-editar" onclick="editarOS('${os.id}')">✏ Editar</button>
-
-            ${!estaQuitada ? `
-              <button type="button" class="btn-os-receber" onclick="receberSaldoOS('${os.id}')">💰 Receber</button>
-            ` : ""}
-
-            <button type="button" class="btn-os-imprimir" onclick="imprimirOSPorId('${os.id}', 'cliente')">🖨 Imprimir</button>
-            <button type="button" class="btn-os-imprimir" onclick="compartilharOSPorId('${os.id}')">📤 PDF da OS</button>
-            <button type="button" class="btn-os-imprimir" onclick="compartilharReciboPorId('${os.id}')">📲 Recibo</button>
-
-            <select id="status-lista-${os.id}" aria-label="Status da OS ${escaparHTMLOS(os.numero)}">
-              ${opcoes}
-            </select>
-
-            <button type="button" class="btn-os-status" onclick="atualizarStatusOS('${os.id}')">🔄 Status</button>
-
-            <button type="button" class="btn-os-deletar" onclick="deletarOSPorId('${os.id}', '${escaparHTMLOS(os.numero)}')">🗑 Deletar</button>
-          </div>
-        </article>
-      `;
-    });
-
-    listaDiv.innerHTML = html || "Nenhuma OS encontrada.";
+    window.registrosOSCache = registros;
+    filtrarListaOS();
   } catch (erro) {
     console.error("Erro ao listar as ordens:", erro);
     listaDiv.innerHTML = "Não foi possível carregar a lista.";

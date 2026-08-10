@@ -223,6 +223,79 @@
       margin-top: 10px;
     }
 
+    .filtros-os {
+      display: grid;
+      grid-template-columns: minmax(210px, 1.4fr) minmax(180px, 1fr) minmax(150px, .8fr) minmax(145px, .7fr) auto;
+      gap: 9px;
+      margin: 12px 0 6px;
+      padding: 12px;
+      border: 1px solid #d7e4ef;
+      border-radius: 12px;
+      background: #f8fbfe;
+    }
+
+    .filtros-os input,
+    .filtros-os select {
+      width: 100%;
+      min-width: 0;
+      min-height: 40px;
+      margin: 0;
+    }
+
+    .btn-limpar-filtros-os {
+      min-height: 40px;
+      padding: 8px 13px;
+      background: #5c6f82;
+      white-space: nowrap;
+    }
+
+    .aviso-pagamento-os {
+      display: none;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .aviso-pagamento-os.ok {
+      display: block;
+      border: 1px solid #a8d9bb;
+      background: #effaf3;
+      color: #176b3a;
+    }
+
+    .aviso-pagamento-os.atencao {
+      display: block;
+      border: 1px solid #efd38b;
+      background: #fff9e8;
+      color: #805800;
+    }
+
+    .aviso-pagamento-os.erro {
+      display: block;
+      border: 1px solid #efb0b0;
+      background: #fff1f1;
+      color: #a32121;
+    }
+
+    .status-os-badge {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 3px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .status-os-recebido { background:#eef4ff; color:#315fd1; }
+    .status-os-producao { background:#fff7dc; color:#946200; }
+    .status-os-laboratorio { background:#f2ecff; color:#6f42c1; }
+    .status-os-pronto { background:#eaf8ef; color:#21864a; }
+    .status-os-entregue { background:#e7f7f7; color:#176b6b; }
+
     .campo-destaque {
       background: #eef7ff;
       border-color: #a9cfee;
@@ -306,6 +379,10 @@
         align-items: flex-start;
         flex-wrap: wrap;
       }
+
+      .filtros-os {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
     @media (max-width: 700px) {
@@ -343,6 +420,14 @@
 
       .btn-atualizar-lista {
         min-height: 40px;
+      }
+
+      .filtros-os {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-limpar-filtros-os {
+        width: 100%;
       }
     }
 
@@ -767,6 +852,7 @@
             <input id="entradaOS" class="campo-destaque" placeholder="Total pago agora" readonly>
             <input id="restanteOS" class="campo-destaque" placeholder="Restante" readonly>
           </div>
+          <div id="avisoPagamentoOS" class="aviso-pagamento-os" aria-live="polite"></div>
         </div>
       </section>
 
@@ -804,7 +890,7 @@
         <h2>Ações da OS</h2>
 
         <div class="acoes">
-          <button type="button" class="btn-verde" onclick="salvarOSInterface()" title="Salvar ordem de serviço" aria-label="Salvar ordem de serviço">💾 Salvar</button>
+          <button id="btnSalvarOS" type="button" class="btn-verde" onclick="salvarOSInterface()" title="Salvar ordem de serviço" aria-label="Salvar ordem de serviço">💾 Salvar</button>
           <button type="button" class="btn-cinza" onclick="imprimirOSCompleta()" title="Imprimir via da loja" aria-label="Imprimir via da loja">🖨 Via Loja</button>
           <button type="button" class="btn-roxo" onclick="imprimirOSCliente()" title="Imprimir via do cliente" aria-label="Imprimir via do cliente">🧾 Via Cliente</button>
           <button type="button" class="btn-roxo" onclick="gerarNotaFiscalOS()" title="Preparar prévia fiscal" aria-label="Preparar prévia fiscal">🧾 Prévia Fiscal</button>
@@ -828,6 +914,24 @@
           </button>
         </div>
 
+        <div class="filtros-os" aria-label="Filtros das ordens de serviço">
+          <input id="filtroBuscaOS" type="search" placeholder="🔎 OS, cliente ou telefone" oninput="filtrarListaOS()">
+
+          <select id="filtroStatusOS" onchange="filtrarListaOS()">
+            <option value="">Todos os status</option>
+            <option value="Recebido">Recebido</option>
+            <option value="Em produção">Em produção</option>
+            <option value="Enviado ao laboratório">Enviado ao laboratório</option>
+            <option value="Pronto para retirada">Pronto para retirada</option>
+            <option value="Entregue">Entregue</option>
+          </select>
+
+          <input id="filtroVendedorOS" type="search" placeholder="Vendedor" oninput="filtrarListaOS()">
+          <input id="filtroDataOS" type="date" title="Filtrar pela data da compra" onchange="filtrarListaOS()">
+
+          <button type="button" class="btn-limpar-filtros-os" onclick="limparFiltrosOS()">✕ Limpar</button>
+        </div>
+
         <div id="listaOS"></div>
       </section>
 
@@ -838,7 +942,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="app.js?v=25"></script>
+  <script src="app.js?v=26"></script>
   <script src="pdf-share.js?v=6"></script>
 
   <script>
@@ -886,14 +990,42 @@
     }
 
     const salvarOSOriginalInterface = typeof window.salvarOS === "function" ? window.salvarOS : null;
+    let salvandoOSInterface = false;
+
     async function salvarOSInterface(){
-      if(!salvarOSOriginalInterface) return;
+      if(!salvarOSOriginalInterface || salvandoOSInterface) return;
+
+      const botaoSalvar=document.getElementById("btnSalvarOS");
+      const textoOriginal=botaoSalvar?.innerHTML || "💾 Salvar";
       const tinhaDados=["numeroOS","clienteOS","lenteOS","valorOS"].some(id=>String(document.getElementById(id)?.value || "").trim());
-      await salvarOSOriginalInterface();
-      const ficouVazio=["numeroOS","clienteOS","lenteOS","valorOS"].every(id=>!String(document.getElementById(id)?.value || "").trim());
-      if(tinhaDados && ficouVazio){
-        if(typeof listarOS === "function") await listarOS();
-        fecharFormularioOS();
+
+      salvandoOSInterface=true;
+      if(botaoSalvar){
+        botaoSalvar.disabled=true;
+        botaoSalvar.innerHTML="⏳ Salvando...";
+        botaoSalvar.style.opacity=".72";
+        botaoSalvar.style.cursor="wait";
+      }
+
+      try{
+        await salvarOSOriginalInterface();
+
+        const ficouVazio=["numeroOS","clienteOS","lenteOS","valorOS"].every(id=>!String(document.getElementById(id)?.value || "").trim());
+        if(tinhaDados && ficouVazio){
+          if(typeof listarOS === "function") await listarOS();
+          fecharFormularioOS();
+        }
+      }catch(erro){
+        console.error("Erro ao salvar a OS:", erro);
+        alert("Não foi possível concluir o salvamento da OS. Tente novamente.");
+      }finally{
+        salvandoOSInterface=false;
+        if(botaoSalvar){
+          botaoSalvar.disabled=false;
+          botaoSalvar.innerHTML=textoOriginal;
+          botaoSalvar.style.opacity="";
+          botaoSalvar.style.cursor="";
+        }
       }
     }
 
