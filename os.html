@@ -437,6 +437,87 @@
       }
     }
 
+    /* Interface compacta da OS */
+    .barra-nova-os {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+    }
+
+    .btn-nova-os {
+      min-width: 230px;
+      background: #1687e8;
+    }
+
+    .cabecalho-formulario-os {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 2px 2px 14px;
+    }
+
+    .cabecalho-formulario-os h2 {
+      margin: 0;
+      color: #0d4d84;
+      font-size: 21px;
+    }
+
+    .btn-fechar-os {
+      background: #6c7f90;
+      padding: 9px 13px;
+      font-size: 13px;
+    }
+
+    .detalhes-os {
+      margin-top: 14px;
+      border: 1px solid #d9e5ef;
+      border-radius: 12px;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    .detalhes-os > summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 12px 14px;
+      color: #0d4d84;
+      font-weight: 800;
+      background: #eef6fc;
+      user-select: none;
+    }
+
+    .detalhes-os > summary::-webkit-details-marker { display: none; }
+    .detalhes-os > summary::after { content: "＋"; float: right; }
+    .detalhes-os[open] > summary::after { content: "−"; }
+
+    .detalhes-os-corpo {
+      padding: 14px;
+    }
+
+    .detalhes-os .fiscal-detalhamento {
+      margin: 0;
+      border: 0;
+      border-radius: 0;
+      background: #ffffff;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 700px) {
+      .barra-nova-os,
+      .barra-nova-os .btn-nova-os {
+        width: 100%;
+      }
+
+      .cabecalho-formulario-os {
+        align-items: stretch;
+        flex-direction: column;
+      }
+    }
+
   </style>
 </head>
 
@@ -450,6 +531,16 @@
     </header>
 
     <div class="os-conteudo">
+
+      <div class="barra-nova-os">
+        <button type="button" class="btn-nova-os" onclick="abrirFormularioOS(false)">➕ Nova Ordem de Serviço</button>
+      </div>
+
+      <div id="formularioOSContainer" hidden>
+        <div class="cabecalho-formulario-os">
+          <h2 id="tituloFormularioOS">Nova Ordem de Serviço</h2>
+          <button type="button" class="btn-fechar-os" onclick="fecharFormularioOS()">✕ Fechar</button>
+        </div>
 
       <section class="secao">
         <h2>Buscar cliente</h2>
@@ -489,19 +580,24 @@
           </select>
         </div>
 
-        <div class="grade grade-4" style="margin-top:14px;">
-          <input id="emailOS" type="email" placeholder="E-mail do cliente">
-          <input id="cepOS" placeholder="CEP">
-          <input id="enderecoOS" placeholder="Rua / Endereço">
-          <input id="numeroEnderecoOS" placeholder="Número">
-        </div>
+        <details class="detalhes-os">
+          <summary>Mais detalhes do cliente</summary>
+          <div class="detalhes-os-corpo">
+            <div class="grade grade-4">
+              <input id="emailOS" type="email" placeholder="E-mail do cliente">
+              <input id="cepOS" placeholder="CEP">
+              <input id="enderecoOS" placeholder="Rua / Endereço">
+              <input id="numeroEnderecoOS" placeholder="Número">
+            </div>
 
-        <div class="grade grade-4" style="margin-top:14px;">
-          <input id="complementoOS" placeholder="Complemento">
-          <input id="bairroOS" placeholder="Bairro">
-          <input id="cidadeOS" placeholder="Cidade">
-          <input id="ufOS" maxlength="2" placeholder="UF">
-        </div>
+            <div class="grade grade-4" style="margin-top:14px;">
+              <input id="complementoOS" placeholder="Complemento">
+              <input id="bairroOS" placeholder="Bairro">
+              <input id="cidadeOS" placeholder="Cidade">
+              <input id="ufOS" maxlength="2" placeholder="UF">
+            </div>
+          </div>
+        </details>
       </section>
 
       <section class="secao">
@@ -513,6 +609,9 @@
           <input id="valorOS" placeholder="Valor total da venda" oninput="calcularRestante(); atualizarResumoFiscalOS()">
         </div>
 
+        <details class="detalhes-os">
+          <summary>🧾 Detalhamento fiscal (opcional)</summary>
+          <div class="detalhes-os-corpo">
         <div class="fiscal-detalhamento">
           <h3>🧾 Detalhamento para a futura nota fiscal</h3>
           <p>Separe o valor da lente, da armação e de eventual serviço. O total calculado deve ser igual ao valor total da venda.</p>
@@ -542,6 +641,9 @@
             Informe os valores separados para preparar a prévia fiscal.
           </div>
         </div>
+
+          </div>
+        </details>
 
         <div class="grade grade-3" style="margin-top:14px;">
           <input
@@ -587,25 +689,28 @@
       </section>
 
       <section class="secao">
-        <h2>Dados do exame</h2>
+        <details class="detalhes-os" style="margin-top:0;">
+          <summary>👓 Dados do exame (opcional)</summary>
+          <div class="detalhes-os-corpo">
+            <div class="grade grade-3">
+              <input id="odEsferico" placeholder="OD Esférico">
+              <input id="odCilindrico" placeholder="OD Cilíndrico">
+              <input id="odEixo" placeholder="OD Eixo">
+            </div>
 
-        <div class="grade grade-3">
-          <input id="odEsferico" placeholder="OD Esférico">
-          <input id="odCilindrico" placeholder="OD Cilíndrico">
-          <input id="odEixo" placeholder="OD Eixo">
-        </div>
+            <div class="grade grade-3" style="margin-top:14px;">
+              <input id="oeEsferico" placeholder="OE Esférico">
+              <input id="oeCilindrico" placeholder="OE Cilíndrico">
+              <input id="oeEixo" placeholder="OE Eixo">
+            </div>
 
-        <div class="grade grade-3" style="margin-top:14px;">
-          <input id="oeEsferico" placeholder="OE Esférico">
-          <input id="oeCilindrico" placeholder="OE Cilíndrico">
-          <input id="oeEixo" placeholder="OE Eixo">
-        </div>
-
-        <div class="grade grade-3" style="margin-top:14px;">
-          <input id="dnpOS" placeholder="DNP">
-          <input id="alturaOS" placeholder="Altura">
-          <input id="addOS" placeholder="ADD">
-        </div>
+            <div class="grade grade-3" style="margin-top:14px;">
+              <input id="dnpOS" placeholder="DNP">
+              <input id="alturaOS" placeholder="Altura">
+              <input id="addOS" placeholder="ADD">
+            </div>
+          </div>
+        </details>
       </section>
 
       <section class="secao">
@@ -617,7 +722,7 @@
         <h2>Ações da OS</h2>
 
         <div class="acoes">
-          <button type="button" class="btn-verde" onclick="salvarOS()" title="Salvar ordem de serviço" aria-label="Salvar ordem de serviço">💾 Salvar</button>
+          <button type="button" class="btn-verde" onclick="salvarOSInterface()" title="Salvar ordem de serviço" aria-label="Salvar ordem de serviço">💾 Salvar</button>
           <button type="button" class="btn-cinza" onclick="imprimirOSCompleta()" title="Imprimir via da loja" aria-label="Imprimir via da loja">🖨 Via Loja</button>
           <button type="button" class="btn-roxo" onclick="imprimirOSCliente()" title="Imprimir via do cliente" aria-label="Imprimir via do cliente">🧾 Via Cliente</button>
           <button type="button" class="btn-roxo" onclick="gerarNotaFiscalOS()" title="Preparar prévia fiscal" aria-label="Preparar prévia fiscal">🧾 Prévia Fiscal</button>
@@ -626,6 +731,8 @@
           <button type="button" class="btn-verde" onclick="finalizarEEnviar()" title="Finalizar e abrir WhatsApp" aria-label="Finalizar e abrir WhatsApp">📲 WhatsApp</button>
         </div>
       </section>
+
+      </div>
 
       <section class="secao">
         <div class="lista-os-topo">
@@ -653,6 +760,70 @@
   <script src="pdf-share.js?v=5"></script>
 
   <script>
+    function limparFormularioOSInterface() {
+      const ids = [
+        "buscaClienteOS","numeroOS","vendedorOS","previsaoEntregaOS","clienteOS","telefoneOS","cpfOS",
+        "emailOS","cepOS","enderecoOS","numeroEnderecoOS","complementoOS","bairroOS","cidadeOS","ufOS",
+        "lenteOS","armacaoOS","valorOS","entradaOS","restanteOS","pagamentoOS","parcelasCartao",
+        "valorLenteOS","valorArmacaoOS","servicoOS","valorServicoOS","descontoOS",
+        "odEsferico","odCilindrico","odEixo","oeEsferico","oeCilindrico","oeEixo","dnpOS","alturaOS","addOS","observacoesOS"
+      ];
+      ids.forEach(function(id){
+        const campo=document.getElementById(id);
+        if(campo) campo.value="";
+      });
+      ["quantidadeLenteOS","quantidadeArmacaoOS","quantidadeServicoOS"].forEach(function(id){
+        const campo=document.getElementById(id);
+        if(campo) campo.value="1";
+      });
+      const data=document.getElementById("dataCompraOS");
+      if(data) data.value=new Date().toISOString().split("T")[0];
+      const status=document.getElementById("statusOS");
+      if(status) status.value="Recebido";
+      window.osEditandoId=null;
+      window.clienteOSId="";
+      if(typeof mostrarParcelas === "function") mostrarParcelas();
+      if(typeof atualizarResumoFiscalOS === "function") atualizarResumoFiscalOS();
+    }
+
+    function abrirFormularioOS(modoEdicao){
+      const container=document.getElementById("formularioOSContainer");
+      const titulo=document.getElementById("tituloFormularioOS");
+      if(!container) return;
+      if(!modoEdicao) limparFormularioOSInterface();
+      if(titulo) titulo.textContent=modoEdicao ? "Editar Ordem de Serviço" : "Nova Ordem de Serviço";
+      container.hidden=false;
+      container.scrollIntoView({behavior:"smooth",block:"start"});
+    }
+
+    function fecharFormularioOS(){
+      const container=document.getElementById("formularioOSContainer");
+      if(container) container.hidden=true;
+      window.osEditandoId=null;
+    }
+
+    const salvarOSOriginalInterface = typeof window.salvarOS === "function" ? window.salvarOS : null;
+    async function salvarOSInterface(){
+      if(!salvarOSOriginalInterface) return;
+      const tinhaDados=["numeroOS","clienteOS","lenteOS","valorOS"].some(id=>String(document.getElementById(id)?.value || "").trim());
+      await salvarOSOriginalInterface();
+      const ficouVazio=["numeroOS","clienteOS","lenteOS","valorOS"].every(id=>!String(document.getElementById(id)?.value || "").trim());
+      if(tinhaDados && ficouVazio){
+        if(typeof listarOS === "function") await listarOS();
+        fecharFormularioOS();
+      }
+    }
+
+    if(typeof window.editarOS === "function") {
+      const editarOSOriginalInterface=window.editarOS;
+      window.editarOS=async function(id){
+        abrirFormularioOS(true);
+        await editarOSOriginalInterface(id);
+        const container=document.getElementById("formularioOSContainer");
+        if(container) container.scrollIntoView({behavior:"smooth",block:"start"});
+      };
+    }
+
     document.addEventListener("DOMContentLoaded", function(){
       const campo = document.getElementById("dataCompraOS");
       if (campo && !campo.value) campo.value = new Date().toISOString().split("T")[0];

@@ -152,6 +152,46 @@
       opacity: 1;
     }
 
+    .barra-novo-registro {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 18px;
+    }
+
+    .btn-novo-registro {
+      min-width: 200px;
+      background: #1687e8;
+    }
+
+    .cabecalho-formulario-recolhivel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .cabecalho-formulario-recolhivel h2 {
+      margin: 0;
+    }
+
+    .btn-fechar-formulario {
+      background: #6c7f90;
+      padding: 9px 12px;
+      font-size: 13px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 700px) {
+      .barra-novo-registro,
+      .barra-novo-registro .btn-novo-registro {
+        width: 100%;
+      }
+    }
+
     @media (max-width: 800px) {
       body {
         padding: 14px;
@@ -192,8 +232,19 @@
 
     <div class="pedidos-conteudo">
 
+      <div class="barra-novo-registro">
+        <button type="button" class="btn-novo-registro" onclick="abrirFormularioPedido(false)">
+          ➕ Novo pedido
+        </button>
+      </div>
+
+      <div id="formularioPedidoContainer" hidden>
       <section class="secao">
-        <h2>Buscar cliente</h2>
+        <div class="cabecalho-formulario-recolhivel">
+          <h2 id="tituloFormularioPedido">Novo pedido</h2>
+          <button type="button" class="btn-fechar-formulario" onclick="fecharFormularioPedido()">✕ Fechar</button>
+        </div>
+        <h2 style="font-size:16px; margin-top:4px;">Buscar cliente</h2>
 
         <div class="linha-busca">
           <input
@@ -238,12 +289,13 @@
           <button
             type="button"
             class="btn-salvar"
-            onclick="salvarPedido()"
+            onclick="salvarPedidoInterface()"
           >
             💾 Salvar pedido
           </button>
         </div>
       </section>
+      </div>
 
       <section class="secao">
         <h2>Pedidos cadastrados</h2>
@@ -262,6 +314,51 @@
 
 
 <script>
+function limparFormularioPedidoInterface(){
+  ["buscaClientePedido","nomePedido","lentePedido","armacaoPedido","valorPedido"].forEach(function(id){
+    const campo=document.getElementById(id);
+    if(campo) campo.value="";
+  });
+  window.clientePedidoId="";
+  window.clientePedidoTelefone="";
+  window.clientePedidoCpf="";
+  window.pedidoEditandoId=null;
+}
+
+function abrirFormularioPedido(modoEdicao){
+  const container=document.getElementById("formularioPedidoContainer");
+  const titulo=document.getElementById("tituloFormularioPedido");
+  if(!container) return;
+  if(!modoEdicao) limparFormularioPedidoInterface();
+  if(titulo) titulo.textContent=modoEdicao ? "Editar pedido" : "Novo pedido";
+  container.hidden=false;
+  container.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function fecharFormularioPedido(){
+  const container=document.getElementById("formularioPedidoContainer");
+  if(container) container.hidden=true;
+  window.pedidoEditandoId=null;
+}
+
+const salvarPedidoOriginalInterface = typeof window.salvarPedido === "function" ? window.salvarPedido : null;
+async function salvarPedidoInterface(){
+  if(!salvarPedidoOriginalInterface) return;
+  await salvarPedidoOriginalInterface();
+  const campos=["nomePedido","lentePedido","armacaoPedido","valorPedido"].map(id=>document.getElementById(id)?.value || "");
+  if(campos.every(v=>!v)) fecharFormularioPedido();
+}
+
+if(typeof window.editarPedido === "function") {
+  const editarPedidoOriginalInterface=window.editarPedido;
+  window.editarPedido=async function(id){
+    abrirFormularioPedido(true);
+    await editarPedidoOriginalInterface(id);
+    const container=document.getElementById("formularioPedidoContainer");
+    if(container) container.scrollIntoView({behavior:"smooth",block:"start"});
+  };
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
  ['lentePedido','armacaoPedido'].forEach(id=>{
    const s=document.getElementById(id);

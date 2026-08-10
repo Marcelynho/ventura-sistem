@@ -333,6 +333,49 @@
       background: #6f42c1;
     }
 
+    /* Interface compacta: o cadastro só abre quando necessário */
+    .barra-novo-registro {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .btn-novo-registro {
+      background: #1687e8;
+      min-width: 220px;
+    }
+
+    .cabecalho-formulario-recolhivel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .cabecalho-formulario-recolhivel h2 {
+      margin: 0;
+    }
+
+    .btn-fechar-formulario {
+      background: #6c7f90;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 700px) {
+      .barra-novo-registro,
+      .barra-novo-registro .btn-novo-registro {
+        width: 100%;
+      }
+    }
+
   </style>
 </head>
 
@@ -345,6 +388,12 @@
     </header>
 
     <div class="clientes-conteudo">
+
+      <div class="barra-novo-registro">
+        <button type="button" class="btn-novo-registro" onclick="abrirFormularioCliente(false)">
+          ➕ Cadastrar novo cliente
+        </button>
+      </div>
 
       <section class="secao">
         <h2>Buscar cliente</h2>
@@ -378,8 +427,11 @@
         </div>
       </section>
 
-      <section class="secao">
-        <h2>Dados do cliente</h2>
+      <section class="secao" id="formularioClienteSecao" hidden>
+        <div class="cabecalho-formulario-recolhivel">
+          <h2 id="tituloFormularioCliente">Dados do cliente</h2>
+          <button type="button" class="btn-fechar-formulario" onclick="fecharFormularioCliente()">✕ Fechar</button>
+        </div>
 
         <div class="grade grade-4">
           <input id="nomeCliente" type="text" placeholder="Nome do cliente">
@@ -407,7 +459,7 @@
         </div>
 
         <div class="acoes-formulario">
-          <button type="button" class="btn-salvar" onclick="salvarCliente()">
+          <button type="button" class="btn-salvar" onclick="salvarClienteInterface()">
             💾 Salvar cliente
           </button>
         </div>
@@ -455,6 +507,55 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="app.js?v=20"></script>
+  <script>
+    function limparFormularioClienteInterface() {
+      [
+        "nomeCliente", "telefoneCliente", "cpfCliente", "nascimentoCliente",
+        "emailCliente", "cepCliente", "enderecoCliente", "numeroEnderecoCliente",
+        "complementoCliente", "bairroCliente", "cidadeCliente", "ufCliente", "obsCliente"
+      ].forEach(function(id) {
+        const campo = document.getElementById(id);
+        if (campo) campo.value = "";
+      });
+      window.clienteEditandoId = null;
+    }
+
+    function abrirFormularioCliente(modoEdicao) {
+      const secao = document.getElementById("formularioClienteSecao");
+      const titulo = document.getElementById("tituloFormularioCliente");
+      if (!secao) return;
+      if (!modoEdicao) limparFormularioClienteInterface();
+      if (titulo) titulo.textContent = modoEdicao ? "Editar cliente" : "Cadastrar novo cliente";
+      secao.hidden = false;
+      secao.scrollIntoView({ behavior: "smooth", block: "start" });
+      const primeiro = document.getElementById("nomeCliente");
+      if (primeiro) setTimeout(function(){ primeiro.focus(); }, 250);
+    }
+
+    function fecharFormularioCliente() {
+      const secao = document.getElementById("formularioClienteSecao");
+      if (secao) secao.hidden = true;
+      window.clienteEditandoId = null;
+    }
+
+    const salvarClienteOriginalInterface = typeof window.salvarCliente === "function" ? window.salvarCliente : null;
+    async function salvarClienteInterface() {
+      if (!salvarClienteOriginalInterface) return;
+      if (typeof garantirCaixaAberto === "function" && !(await garantirCaixaAberto())) return;
+      await salvarClienteOriginalInterface();
+      fecharFormularioCliente();
+    }
+
+    if (typeof window.editarCliente === "function") {
+      const editarClienteOriginalInterface = window.editarCliente;
+      window.editarCliente = async function(id) {
+        abrirFormularioCliente(true);
+        await editarClienteOriginalInterface(id);
+        const secao = document.getElementById("formularioClienteSecao");
+        if (secao) secao.scrollIntoView({ behavior: "smooth", block: "start" });
+      };
+    }
+  </script>
 
 </body>
 </html>
