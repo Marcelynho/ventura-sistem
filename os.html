@@ -502,6 +502,51 @@
       background: #ffffff;
     }
 
+    .pagamento-os-box {
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid #cfe0ee;
+      border-radius: 14px;
+      background: #ffffff;
+    }
+
+    .pagamento-os-topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .pagamento-os-topo strong {
+      color: #0d4d84;
+      font-size: 15px;
+    }
+
+    .pagamento-os-topo small {
+      color: #60788e;
+    }
+
+    .btn-dividir-pagamento {
+      margin-top: 12px;
+      padding: 9px 12px;
+      background: #0d6fb8;
+      font-size: 13px;
+    }
+
+    .btn-remover-pagamento {
+      margin-top: 10px;
+      padding: 8px 11px;
+      background: #6c7f90;
+      font-size: 12px;
+    }
+
+    .pagamento-os-resumo {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed #c9d9e6;
+    }
+
     [hidden] {
       display: none !important;
     }
@@ -645,46 +690,83 @@
           </div>
         </details>
 
-        <div class="grade grade-3" style="margin-top:14px;">
-          <input
-            id="entradaOS"
-            placeholder="Entrada"
-            oninput="calcularRestante()"
-          >
+        <div class="pagamento-os-box">
+          <div class="pagamento-os-topo">
+            <div>
+              <strong>Pagamento</strong><br>
+              <small>Use uma forma ou divida o recebimento em duas formas.</small>
+            </div>
+          </div>
 
-          <input
-            id="restanteOS"
-            class="campo-destaque"
-            placeholder="Restante"
-          >
+          <div class="grade grade-3">
+            <input id="valorPagamento1OS" inputmode="decimal" placeholder="Valor - pagamento 1" oninput="calcularRestante()">
 
-          <select id="pagamentoOS" onchange="mostrarParcelas()">
-            <option value="">Forma de pagamento</option>
-            <option value="Pix">Pix</option>
-            <option value="Dinheiro">Dinheiro</option>
-            <option value="Cartão de Crédito">Cartão de Crédito</option>
-            <option value="Cartão de Débito">Cartão de Débito</option>
-            <option value="Parcelado">Parcelado</option>
-          </select>
-        </div>
+            <select id="pagamentoOS" onchange="mostrarParcelas(); calcularRestante()">
+              <option value="">Forma - pagamento 1</option>
+              <option value="Pix">Pix</option>
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Cartão de Crédito">Cartão de Crédito</option>
+              <option value="Cartão de Débito">Cartão de Débito</option>
+              <option value="Parcelado">Parcelado</option>
+            </select>
 
-        <div class="grade grade-2" style="margin-top:14px;">
-          <select id="parcelasCartao" style="display:none;">
-            <option value="">Parcelamento</option>
-            <option value="avista">À vista</option>
-            <option value="1x">1x</option>
-            <option value="2x">2x</option>
-            <option value="3x">3x</option>
-            <option value="4x">4x</option>
-            <option value="5x">5x</option>
-            <option value="6x">6x</option>
-            <option value="7x">7x</option>
-            <option value="8x">8x</option>
-            <option value="9x">9x</option>
-            <option value="10x">10x</option>
-            <option value="11x">11x</option>
-            <option value="12x">12x</option>
-          </select>
+            <select id="parcelasCartao" style="display:none;">
+              <option value="">Parcelamento</option>
+              <option value="avista">À vista</option>
+              <option value="1x">1x</option>
+              <option value="2x">2x</option>
+              <option value="3x">3x</option>
+              <option value="4x">4x</option>
+              <option value="5x">5x</option>
+              <option value="6x">6x</option>
+              <option value="7x">7x</option>
+              <option value="8x">8x</option>
+              <option value="9x">9x</option>
+              <option value="10x">10x</option>
+              <option value="11x">11x</option>
+              <option value="12x">12x</option>
+            </select>
+          </div>
+
+          <button id="btnAdicionarPagamento2OS" type="button" class="btn-dividir-pagamento" onclick="alternarPagamento2OS(true)">➕ Dividir pagamento</button>
+
+          <div id="pagamento2OSContainer" hidden style="margin-top:14px;">
+            <div class="grade grade-3">
+              <input id="valorPagamento2OS" inputmode="decimal" placeholder="Valor - pagamento 2" oninput="calcularRestante()">
+
+              <select id="pagamento2OS" onchange="mostrarParcelasPagamento2OS(); calcularRestante()">
+                <option value="">Forma - pagamento 2</option>
+                <option value="Pix">Pix</option>
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                <option value="Cartão de Débito">Cartão de Débito</option>
+                <option value="Parcelado">Parcelado</option>
+              </select>
+
+              <select id="parcelasCartao2OS" style="display:none;">
+                <option value="">Parcelamento</option>
+                <option value="avista">À vista</option>
+                <option value="1x">1x</option>
+                <option value="2x">2x</option>
+                <option value="3x">3x</option>
+                <option value="4x">4x</option>
+                <option value="5x">5x</option>
+                <option value="6x">6x</option>
+                <option value="7x">7x</option>
+                <option value="8x">8x</option>
+                <option value="9x">9x</option>
+                <option value="10x">10x</option>
+                <option value="11x">11x</option>
+                <option value="12x">12x</option>
+              </select>
+            </div>
+            <button type="button" class="btn-remover-pagamento" onclick="alternarPagamento2OS(false)">✕ Remover 2º pagamento</button>
+          </div>
+
+          <div class="grade grade-2 pagamento-os-resumo">
+            <input id="entradaOS" class="campo-destaque" placeholder="Total pago agora" readonly>
+            <input id="restanteOS" class="campo-destaque" placeholder="Restante" readonly>
+          </div>
         </div>
       </section>
 
@@ -756,15 +838,15 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="app.js?v=24"></script>
-  <script src="pdf-share.js?v=5"></script>
+  <script src="app.js?v=25"></script>
+  <script src="pdf-share.js?v=6"></script>
 
   <script>
     function limparFormularioOSInterface() {
       const ids = [
         "buscaClienteOS","numeroOS","vendedorOS","previsaoEntregaOS","clienteOS","telefoneOS","cpfOS",
         "emailOS","cepOS","enderecoOS","numeroEnderecoOS","complementoOS","bairroOS","cidadeOS","ufOS",
-        "lenteOS","armacaoOS","valorOS","entradaOS","restanteOS","pagamentoOS","parcelasCartao",
+        "lenteOS","armacaoOS","valorOS","valorPagamento1OS","valorPagamento2OS","entradaOS","restanteOS","pagamentoOS","pagamento2OS","parcelasCartao","parcelasCartao2OS",
         "valorLenteOS","valorArmacaoOS","servicoOS","valorServicoOS","descontoOS",
         "odEsferico","odCilindrico","odEixo","oeEsferico","oeCilindrico","oeEixo","dnpOS","alturaOS","addOS","observacoesOS"
       ];
@@ -782,6 +864,7 @@
       if(status) status.value="Recebido";
       window.osEditandoId=null;
       window.clienteOSId="";
+      if(typeof alternarPagamento2OS === "function") alternarPagamento2OS(false);
       if(typeof mostrarParcelas === "function") mostrarParcelas();
       if(typeof atualizarResumoFiscalOS === "function") atualizarResumoFiscalOS();
     }
@@ -829,18 +912,6 @@
       if (campo && !campo.value) campo.value = new Date().toISOString().split("T")[0];
       if (typeof atualizarResumoFiscalOS === "function") atualizarResumoFiscalOS();
     });
-    document
-      .getElementById("pagamentoOS")
-      .addEventListener("change", function () {
-        const parcelas = document.getElementById("parcelasCartao");
-
-        if (this.value === "Cartão de Crédito") {
-          parcelas.style.display = "block";
-        } else {
-          parcelas.style.display = "none";
-          parcelas.value = "";
-        }
-      });
   </script>
 
 </body>

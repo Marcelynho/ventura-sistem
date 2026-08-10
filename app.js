@@ -1046,15 +1046,35 @@ alert("Cliente encontrado!");
 }
 async function salvarOS() {
   if (!(await garantirCaixaAberto())) return;
-  const valorTotal = Number(
-  String(document.getElementById("valorOS").value || 0).replace(",", ".")
-);
+  const valorTotal = valorNumeroOS(document.getElementById("valorOS")?.value);
+  const pagamentosInformados = obterPagamentosOSDosCampos();
 
-const valorEntrada = Number(
-  String(document.getElementById("entradaOS").value || 0).replace(",", ".")
-);
+  for (const item of pagamentosInformados) {
+    if (item.valor > 0 && !item.forma) {
+      alert("Selecione a forma de pagamento para cada valor informado.");
+      return;
+    }
+    if (item.forma && item.valor <= 0) {
+      alert("Informe o valor de cada forma de pagamento selecionada.");
+      return;
+    }
+  }
 
-const valorRestante = Math.max(valorTotal - valorEntrada, 0);
+  const pagamentosValidos = pagamentosInformados.filter(item => item.valor > 0 && item.forma);
+  const valorEntrada = pagamentosValidos.reduce((total, item) => total + item.valor, 0);
+
+  if (valorEntrada - valorTotal > 0.01) {
+    alert("A soma dos pagamentos não pode ser maior que o valor total da venda.");
+    return;
+  }
+
+  const valorRestante = Math.max(valorTotal - valorEntrada, 0);
+  const pagamentoLegado = pagamentosValidos.length > 1
+    ? "Pagamento dividido"
+    : (pagamentosValidos[0]?.forma || "");
+  const parcelasLegado = pagamentosValidos.length === 1
+    ? (pagamentosValidos[0]?.parcelas || "")
+    : "";
     const dadosOS = {
         numero: document.getElementById("numeroOS").value,
         dataCompra: document.getElementById("dataCompraOS")?.value || "",
@@ -1077,8 +1097,13 @@ const valorRestante = Math.max(valorTotal - valorEntrada, 0);
         valor: valorTotal,
 entrada: valorEntrada,
 restante: valorRestante,
-        pagamento: document.getElementById("pagamentoOS").value,
-      parcelasCartao: document.getElementById("parcelasCartao")?.value || "",
+        pagamento: pagamentoLegado,
+      parcelasCartao: parcelasLegado,
+      pagamentos: pagamentosValidos.map(item => ({
+        valor: item.valor,
+        forma: item.forma,
+        parcelas: item.parcelas || ""
+      })),
       telefone: document.getElementById("telefoneOS").value,
 cpf: document.getElementById("cpfOS").value,
 email: document.getElementById("emailOS")?.value || "",
@@ -1112,18 +1137,22 @@ if (window.osEditandoId) {
 
 localStorage.setItem("ultimaOS", JSON.stringify(dadosOS));
    const ordemRef = await db.collection("ordens").add(dadosOS);
-  await db.collection("caixas").add({
-    ordemId: ordemRef.id,
-  tipo: "entrada",
-  descricao: "OS " + dadosOS.numero + " - " + dadosOS.cliente,
-  valor: Number(dadosOS.entrada || 0),
-  pagamento: dadosOS.pagamento || "",
-  origem: "ordem_servico",
-  os: dadosOS.numero,
-  cliente: dadosOS.cliente,
-    data: new Date().toLocaleDateString("pt-BR"),
-  criadoEm: new Date()
-});
+  for (const itemPagamento of (dadosOS.pagamentos || [])) {
+    if (Number(itemPagamento.valor || 0) <= 0) continue;
+    await db.collection("caixas").add({
+      ordemId: ordemRef.id,
+      tipo: "entrada",
+      descricao: "OS " + dadosOS.numero + " - " + dadosOS.cliente,
+      valor: Number(itemPagamento.valor || 0),
+      pagamento: itemPagamento.forma || "",
+      parcelas: itemPagamento.parcelas || "",
+      origem: "ordem_servico",
+      os: dadosOS.numero,
+      cliente: dadosOS.cliente,
+      data: new Date().toLocaleDateString("pt-BR"),
+      criadoEm: new Date()
+    });
+  }
     alert("OS salva com sucesso!");
 }
   document.getElementById("numeroOS").value = "";
@@ -1139,9 +1168,15 @@ document.getElementById("valorOS").value = "";
   const campo = document.getElementById(id);
   if (campo) campo.value = "1";
 });
-document.getElementById("entradaOS").value = "";
-document.getElementById("restanteOS").value = "";
-document.getElementById("pagamentoOS").value = "";
+["valorPagamento1OS","valorPagamento2OS","entradaOS","restanteOS"].forEach(id => {
+  const campo = document.getElementById(id);
+  if (campo) campo.value = "";
+});
+["pagamentoOS","pagamento2OS","parcelasCartao","parcelasCartao2OS"].forEach(id => {
+  const campo = document.getElementById(id);
+  if (campo) campo.value = "";
+});
+if (typeof alternarPagamento2OS === "function") alternarPagamento2OS(false);
 
     alert("OS salva com sucesso!");
 }
@@ -1242,6 +1277,7 @@ async function buscarOS() {
     document.getElementById("entradaOS").value = os.entrada || "";
     document.getElementById("restanteOS").value = os.restante || "";
     document.getElementById("pagamentoOS").value = os.pagamento || "";
+    if (typeof preencherPagamentosOS === "function") preencherPagamentosOS(os);
 
     document.getElementById("odEsferico").value = os.odEsferico || "";
     document.getElementById("odCilindrico").value = os.odCilindrico || "";
@@ -2058,11 +2094,109 @@ document.getElementById("obsReceita").value = receita.observacoes || "";
 }
 });
 }
-function calcularRestante() {
-  const valor = Number(document.getElementById("valorOS").value) || 0;
-  const entrada = Number(document.getElementById("entradaOS").value) || 0;
+function obterPagamentosOSDosCampos() {
+  const pegar = (id) => document.getElementById(id)?.value || "";
+  const visivel2 = !document.getElementById("pagamento2OSContainer")?.hidden;
 
-  document.getElementById("restanteOS").value = Math.max(valor - entrada, 0);
+  const itens = [{
+    valor: valorNumeroOS(pegar("valorPagamento1OS")),
+    forma: pegar("pagamentoOS"),
+    parcelas: pegar("parcelasCartao")
+  }];
+
+  if (visivel2 || pegar("valorPagamento2OS") || pegar("pagamento2OS")) {
+    itens.push({
+      valor: valorNumeroOS(pegar("valorPagamento2OS")),
+      forma: pegar("pagamento2OS"),
+      parcelas: pegar("parcelasCartao2OS")
+    });
+  }
+
+  return itens;
+}
+
+function mostrarParcelasPagamento2OS() {
+  const pagamento = document.getElementById("pagamento2OS")?.value || "";
+  const parcelas = document.getElementById("parcelasCartao2OS");
+  if (!parcelas) return;
+  if (pagamento === "Cartão de Crédito") {
+    parcelas.style.display = "block";
+  } else {
+    parcelas.style.display = "none";
+    parcelas.value = "";
+  }
+}
+
+function alternarPagamento2OS(exibir) {
+  const container = document.getElementById("pagamento2OSContainer");
+  const botao = document.getElementById("btnAdicionarPagamento2OS");
+  if (!container) return;
+
+  container.hidden = !exibir;
+  if (botao) botao.hidden = !!exibir;
+
+  if (!exibir) {
+    ["valorPagamento2OS","pagamento2OS","parcelasCartao2OS"].forEach(id => {
+      const campo = document.getElementById(id);
+      if (campo) campo.value = "";
+    });
+    mostrarParcelasPagamento2OS();
+  }
+  calcularRestante();
+}
+
+function preencherPagamentosOS(os) {
+  const lista = Array.isArray(os?.pagamentos) ? os.pagamentos.filter(Boolean) : [];
+  const p1 = lista[0] || {
+    valor: valorNumeroOS(os?.entrada),
+    forma: os?.pagamento === "Pagamento dividido" ? "" : (os?.pagamento || ""),
+    parcelas: os?.parcelasCartao || ""
+  };
+  const p2 = lista[1] || null;
+
+  const set = (id, valor) => {
+    const campo = document.getElementById(id);
+    if (campo) campo.value = valor ?? "";
+  };
+
+  set("valorPagamento1OS", p1?.valor || "");
+  set("pagamentoOS", p1?.forma || "");
+  set("parcelasCartao", p1?.parcelas || "");
+
+  alternarPagamento2OS(!!p2);
+  if (p2) {
+    set("valorPagamento2OS", p2.valor || "");
+    set("pagamento2OS", p2.forma || "");
+    set("parcelasCartao2OS", p2.parcelas || "");
+  }
+
+  mostrarParcelas();
+  mostrarParcelasPagamento2OS();
+  calcularRestante();
+}
+
+function descricaoPagamentosOS(os) {
+  const lista = Array.isArray(os?.pagamentos) ? os.pagamentos.filter(item => Number(item?.valor || 0) > 0) : [];
+  if (!lista.length) {
+    const forma = String(os?.pagamento || "").trim();
+    const parcelas = String(os?.parcelasCartao || "").trim();
+    return [forma, parcelas].filter(Boolean).join(" ") || "-";
+  }
+  return lista.map(item => {
+    const valor = valorNumeroOS(item.valor).toFixed(2).replace(".", ",");
+    return `R$ ${valor} - ${item.forma || "Não informado"}${item.parcelas ? " (" + item.parcelas + ")" : ""}`;
+  }).join(" + ");
+}
+
+function calcularRestante() {
+  const valor = valorNumeroOS(document.getElementById("valorOS")?.value);
+  const pagamentos = obterPagamentosOSDosCampos();
+  const entrada = pagamentos.reduce((total, item) => total + Math.max(valorNumeroOS(item.valor), 0), 0);
+
+  const entradaCampo = document.getElementById("entradaOS");
+  const restanteCampo = document.getElementById("restanteOS");
+  if (entradaCampo) entradaCampo.value = entrada > 0 ? entrada.toFixed(2).replace(".", ",") : "";
+  if (restanteCampo) restanteCampo.value = valor > 0 ? Math.max(valor - entrada, 0).toFixed(2).replace(".", ",") : "";
 }
 async function deletarFinanceiro(id) {
   if (!confirm("Deseja deletar este lançamento?")) return;
@@ -2309,7 +2443,7 @@ function gerarNotaFiscalOS() {
 
   dadosNota.geradoEm = new Date().toISOString();
   localStorage.setItem("dadosNotaFiscal", JSON.stringify(dadosNota));
-  window.location.href = "notafiscal.html?v=2.3";
+  window.location.href = "notafiscal.html?v=2.4";
 }
 function mostrarParcelas() {
   const pagamento = document.getElementById("pagamentoOS")?.value || "";
@@ -2578,8 +2712,13 @@ function dadosOSDosCampos() {
     valor: g("valorOS"),
     entrada: g("entradaOS"),
     restante: g("restanteOS"),
-    pagamento: g("pagamentoOS"),
-    parcelasCartao: g("parcelasCartao"),
+    pagamento: obterPagamentosOSDosCampos().filter(item => item.valor > 0 && item.forma).length > 1
+      ? "Pagamento dividido"
+      : g("pagamentoOS"),
+    parcelasCartao: obterPagamentosOSDosCampos().filter(item => item.valor > 0 && item.forma).length === 1
+      ? g("parcelasCartao")
+      : "",
+    pagamentos: obterPagamentosOSDosCampos().filter(item => item.valor > 0 && item.forma),
     odEsferico: g("odEsferico"),
     odCilindrico: g("odCilindrico"),
     odEixo: g("odEixo"),
@@ -2712,7 +2851,7 @@ async function gerarImpressaoOSComDados(os, tipo) {
         <p><b>Total:</b> R$ ${e(os.valor)}</p>
         <p><b>Entrada:</b> R$ ${e(os.entrada)}</p>
         <p><b>Restante:</b> R$ ${e(os.restante)}</p>
-        <p><b>Forma:</b> ${e(os.pagamento)} ${e(os.parcelasCartao)}</p>
+        <p><b>Forma(s):</b> ${e(descricaoPagamentosOS(os))}</p>
       </div>
 
       ${os.observacoes ? `
@@ -2832,6 +2971,7 @@ async function editarOS(id) {
   preencher("restanteOS", os.restante);
   preencher("pagamentoOS", os.pagamento);
   preencher("parcelasCartao", os.parcelasCartao);
+  if (typeof preencherPagamentosOS === "function") preencherPagamentosOS(os);
   preencher("odEsferico", os.odEsferico);
   preencher("odCilindrico", os.odCilindrico);
   preencher("odEixo", os.odEixo);
@@ -3370,7 +3510,7 @@ function preencherFichaCliente(dados) {
               <span><strong>Lente:</strong> ${escaparHTMLCliente(os.lente || "-")}</span>
               <span><strong>Armação:</strong> ${escaparHTMLCliente(os.armacao || "-")}</span>
               <span><strong>Previsão:</strong> ${escaparHTMLCliente(dataBRFicha(os.previsaoEntrega))}</span>
-              <span><strong>Pagamento:</strong> ${escaparHTMLCliente(os.pagamento || "-")}</span>
+              <span><strong>Pagamento:</strong> ${escaparHTMLCliente(typeof descricaoPagamentosOS === "function" ? descricaoPagamentosOS(os) : (os.pagamento || "-"))}</span>
               <span><strong>Total:</strong> R$ ${dinheiroFicha(valor)}</span>
               <span><strong>Pago:</strong> R$ ${dinheiroFicha(pago)}</span>
               <span class="${saldo > 0 ? "saldo-aberto" : "saldo-quitado"}">

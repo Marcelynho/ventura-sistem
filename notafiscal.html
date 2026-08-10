@@ -289,8 +289,17 @@
       texto("osNumero", venda.numero);
       texto("osData", dataBr(venda.dataCompra));
       texto("osVendedor", venda.vendedor);
-      texto("pagamentoForma", venda.pagamento);
-      texto("pagamentoParcelas", venda.parcelasCartao);
+      const pagamentos = Array.isArray(venda.pagamentos)
+        ? venda.pagamentos.filter(item => Number(item && item.valor || 0) > 0)
+        : [];
+      const descricaoPagamentos = pagamentos.length
+        ? pagamentos.map(item => {
+            const valor = moeda(item.valor);
+            return valor + " - " + (item.forma || "Não informado") + (item.parcelas ? " (" + item.parcelas + ")" : "");
+          }).join(" + ")
+        : (venda.pagamento || "");
+      texto("pagamentoForma", descricaoPagamentos);
+      texto("pagamentoParcelas", pagamentos.length > 1 ? "" : venda.parcelasCartao);
       texto("pagamentoEntrada", moeda(venda.entrada));
       texto("pagamentoSaldo", moeda(venda.restante));
     }

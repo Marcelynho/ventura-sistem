@@ -1057,15 +1057,42 @@
       return String(valor || "").trim() || "Não informado";
     }
 
+    function descricaoPagamentosRelatorio(os) {
+      const pagamentos = Array.isArray(os && os.pagamentos)
+        ? os.pagamentos.filter(function (item) { return Number(item && item.valor || 0) > 0; })
+        : [];
+
+      if (!pagamentos.length) return os.pagamento || "-";
+
+      return pagamentos.map(function (item) {
+        return dinheiroRelatorio(item.valor) + " - " + (item.forma || "Não informado") +
+          (item.parcelas ? " (" + item.parcelas + ")" : "");
+      }).join(" + ");
+    }
+
     function mapaPagamentoRelatorio() {
       const mapa = new Map();
 
       estadoRelatorioVendas.filtradas.forEach(function (os) {
+        const pagamentos = Array.isArray(os.pagamentos)
+          ? os.pagamentos.filter(function (item) { return Number(item && item.valor || 0) > 0; })
+          : [];
+
+        if (pagamentos.length) {
+          pagamentos.forEach(function (item) {
+            const forma = normalizarPagamentoRelatorio(item.forma);
+            const atual = mapa.get(forma) || { quantidade: 0, total: 0 };
+            atual.quantidade++;
+            atual.total += Number(item.valor || 0);
+            mapa.set(forma, atual);
+          });
+          return;
+        }
+
         const forma = normalizarPagamentoRelatorio(os.pagamento);
         const atual = mapa.get(forma) || { quantidade: 0, total: 0 };
-
         atual.quantidade++;
-        atual.total += valorVendaRelatorio(os);
+        atual.total += recebidoVendaRelatorio(os);
         mapa.set(forma, atual);
       });
 
@@ -1334,7 +1361,7 @@
                   <td>${escaparRelatorio(os.numero || "-")}</td>
                   <td>${escaparRelatorio(os.cliente || "-")}</td>
                   <td>${escaparRelatorio(os.vendedor || "-")}</td>
-                  <td>${escaparRelatorio(os.pagamento || "-")}</td>
+                  <td>${escaparRelatorio(descricaoPagamentosRelatorio(os))}</td>
                   <td>${escaparRelatorio(os.status || "Recebido")}</td>
                   <td class="numero">${dinheiroRelatorio(valorVendaRelatorio(os))}</td>
                   <td class="numero">${dinheiroRelatorio(recebidoVendaRelatorio(os))}</td>

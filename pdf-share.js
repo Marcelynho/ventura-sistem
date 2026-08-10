@@ -390,6 +390,21 @@
     `;
   }
 
+  function descricaoPagamentosCompartilhamento(os) {
+    const lista = Array.isArray(os?.pagamentos)
+      ? os.pagamentos.filter(item => Number(item?.valor || 0) > 0)
+      : [];
+
+    if (!lista.length) {
+      return [os?.pagamento || "-", os?.parcelasCartao || ""].filter(Boolean).join(" ");
+    }
+
+    return lista.map(item => {
+      const valor = valorMoedaCompartilhamento(item.valor);
+      return `${valor} - ${item.forma || "Não informado"}${item.parcelas ? " (" + item.parcelas + ")" : ""}`;
+    }).join(" + ");
+  }
+
   async function montarHtmlOS(os, tipoDocumento) {
     const empresa = await obterEmpresaCompartilhamento();
     const e = escaparHTMLCompartilhamento;
@@ -413,7 +428,7 @@
       <div class="box-pdf">
         <h2>Declaração de recebimento</h2>
         <p>Recebemos de <b>${e(os.cliente || "-")}</b> o valor de <b>${e(valorMoedaCompartilhamento(os.entrada))}</b>, referente à Ordem de Serviço nº <b>${e(os.numero || "-")}</b>.</p>
-        <p><b>Forma de pagamento:</b> ${e(os.pagamento || "-")} ${e(os.parcelasCartao || "")}</p>
+        <p><b>Forma de pagamento:</b> ${e(descricaoPagamentosCompartilhamento(os))}</p>
         <p><b>Saldo restante:</b> ${e(valorMoedaCompartilhamento(os.restante))}</p>
       </div>` : "";
 
@@ -447,7 +462,7 @@
             <p class="total-pdf"><b>Total:</b> ${e(valorMoedaCompartilhamento(os.valor))}</p>
             <p><b>Entrada:</b> ${e(valorMoedaCompartilhamento(os.entrada))}</p>
             <p><b>Restante:</b> ${e(valorMoedaCompartilhamento(os.restante))}</p>
-            <p><b>Forma:</b> ${e(os.pagamento || "-")} ${e(os.parcelasCartao || "")}</p>
+            <p><b>Forma(s):</b> ${e(descricaoPagamentosCompartilhamento(os))}</p>
           </div>
           ${os.observacoes ? `<div class="box-pdf"><h2>Observações</h2><p>${e(os.observacoes)}</p></div>` : ""}
         `}
