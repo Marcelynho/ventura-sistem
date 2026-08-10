@@ -1665,7 +1665,10 @@
         }
       };
 
-      frame.src = pagina;
+      // Evita que o navegador reutilize uma versão antiga dos módulos no iframe.
+      // O parâmetro de versão muda a cada abertura, mas não altera o funcionamento da página.
+      const separadorVersao = String(pagina || "").includes("?") ? "&" : "?";
+      frame.src = pagina + separadorVersao + "v=" + Date.now();
 
       document.querySelectorAll(".menu button").forEach(function(botao) {
         botao.classList.remove("ativo");
